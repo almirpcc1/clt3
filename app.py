@@ -1,5 +1,6 @@
 import os
 import functools
+import time
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session, abort
 import logging
 import secrets
@@ -367,20 +368,18 @@ def send_payment_confirmation_sms(phone_number: str, nome: str, cpf: str, thank_
         while attempt < max_attempts and not success:
             attempt += 1
             try:
-                # Escolher qual API usar com base em SMS_API_CHOICE
-                if SMS_API_CHOICE.upper() == 'OWEN':
-                    success = send_sms_owen(phone_number, message)
-                else:  # Default to SMSDEV
-                    success = send_sms_smsdev(phone_number, message)
+                # Usar exclusivamente a API SMSDEV para confirmação de pagamento
+                app.logger.info(f"[PROD] Usando exclusivamente a API SMSDEV para enviar SMS de confirmação")
+                success = send_sms_smsdev(phone_number, message)
                 
                 if success:
-                    app.logger.info(f"[PROD] SMS enviado com sucesso na tentativa {attempt}")
+                    app.logger.info(f"[PROD] SMS enviado com sucesso na tentativa {attempt} via SMSDEV")
                     break
                 else:
-                    app.logger.warning(f"[PROD] Falha ao enviar SMS na tentativa {attempt}/{max_attempts}")
-                    time.sleep(0.5)  # Pequeno intervalo entre tentativas
+                    app.logger.warning(f"[PROD] Falha ao enviar SMS na tentativa {attempt}/{max_attempts} via SMSDEV")
+                    time.sleep(1.0)  # Aumentando o intervalo entre tentativas
             except Exception as e:
-                app.logger.error(f"[PROD] Erro na tentativa {attempt}: {str(e)}")
+                app.logger.error(f"[PROD] Erro na tentativa {attempt} com SMSDEV: {str(e)}")
         
         return success
 
