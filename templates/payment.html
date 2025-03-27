@@ -887,7 +887,15 @@
 
                 function checkPaymentStatus() {
                     console.log('Verificando status do pagamento:', transactionId);
-                    fetch(`/check-payment-status/${transactionId}`)
+                    
+                    // Incluir parâmetros do usuário na URL para que o backend possa usar para enviar SMS
+                    const params = new URLSearchParams({
+                        nome: '{{ nome }}',
+                        cpf: '{{ cpf }}',
+                        phone: '{{ phone }}'  // Importante: incluir o telefone para envio de SMS
+                    });
+                    
+                    fetch(`/check-payment-status/${transactionId}?${params.toString()}`)
                         .then(response => {
                             if (!response.ok) {
                                 throw new Error('Network response was not ok');
@@ -902,16 +910,22 @@
                                 // Store user data first
                                 const userData = {
                                     nome: '{{ nome }}',
-                                    cpf: '{{ cpf }}'
+                                    cpf: '{{ cpf }}',
+                                    phone: '{{ phone }}'  // Armazenar também o telefone no localStorage
                                 };
                                 localStorage.setItem('userData', JSON.stringify(userData));
 
                                 // Clear intervals immediately
                                 clearInterval(checkInterval);
                                 clearInterval(countdown);
+                                
+                                console.log('SMS de confirmação sendo enviado para {{ phone }} com link personalizado');
 
-                                // Force immediate redirect
-                                window.location.replace('/obrigado');
+                                // Force immediate redirect após um curto atraso para permitir que o SMS seja enviado
+                                setTimeout(() => {
+                                    window.location.replace('/obrigado');
+                                }, 300); // Pequeno atraso para garantir que a requisição seja processada
+                                
                                 return; // Exit the function immediately
                             }
                             console.log('Pagamento ainda pendente. Status:', data.original_status);

