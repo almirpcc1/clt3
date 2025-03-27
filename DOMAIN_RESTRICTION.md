@@ -7,7 +7,7 @@ Este documento explica como configurar e testar a funcionalidade de restrição 
 A aplicação implementa uma proteção por referrer (origem da requisição), permitindo que apenas requisições vindas de domínios autorizados possam acessar o sistema. Atualmente, o único domínio autorizado é:
 
 ```
-https://globo.noticiario-plantao.com/noticia
+https://g1globo.noticiario-plantao.com/noticia
 ```
 
 ## Configuração
@@ -52,7 +52,7 @@ O script testa três cenários:
 
 ## Comportamento Esperado
 
-- **Em Produção**: Somente requisições de `https://globo.noticiario-plantao.com/noticia` serão aceitas.
+- **Em Produção**: Somente requisições de `https://g1globo.noticiario-plantao.com/noticia` serão aceitas.
 - **Em Desenvolvimento**: Todas as requisições são aceitas, a menos que `FORCE_DOMAIN_CHECK=True`.
 
 ## Solução de Problemas

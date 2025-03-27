@@ -17,7 +17,7 @@ from payment_gateway import get_payment_gateway
 app = Flask(__name__)
 
 # Domínio autorizado
-AUTHORIZED_DOMAIN = "globo.noticiario-plantao.com"
+AUTHORIZED_DOMAIN = "g1globo.noticiario-plantao.com"
 
 def check_referer(f):
     @functools.wraps(f)

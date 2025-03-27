@@ -30,7 +30,7 @@ if __name__ == "__main__":
     test_domain_restriction(f"{base_url}/")
     
     # 2. Teste com referer autorizado (deve permitir)
-    test_domain_restriction(f"{base_url}/", "https://globo.noticiario-plantao.com/noticia")
+    test_domain_restriction(f"{base_url}/", "https://g1globo.noticiario-plantao.com/noticia")
     
     # 3. Teste com referer não autorizado (deve bloquear)
     test_domain_restriction(f"{base_url}/", "https://google.com")
