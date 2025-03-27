@@ -1,0 +1,60 @@
+/* CAIXA Econômica Federal Fonts */
+@font-face {
+    font-family: 'CAIXAStd';
+    src: url('../fonts/caixa/CAIXAStd-Book.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'CAIXAStd';
+    src: url('../fonts/caixa/CAIXAStd-SemiBold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'CAIXAStd';
+    src: url('../fonts/caixa/CAIXAStd-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+.caixa-font-text {
+    font-family: 'CAIXAStd', sans-serif;
+}
+
+.caixa-header {
+    font-family: 'CAIXAStd', sans-serif;
+    font-weight: bold;
+}
+
+.caixa-subheader {
+    font-family: 'CAIXAStd', sans-serif;
+    font-weight: 600;
+}
+
+.caixa-regular {
+    font-family: 'CAIXAStd', sans-serif;
+    font-weight: normal;
+}
+
+/* CAIXA color scheme */
+.caixa-blue {
+    color: #005CA9;
+}
+
+.caixa-bg-blue {
+    background-color: #005CA9;
+}
+
+.caixa-orange {
+    color: #F58220;
+}
+
+.caixa-bg-orange {
+    background-color: #F58220;
+}

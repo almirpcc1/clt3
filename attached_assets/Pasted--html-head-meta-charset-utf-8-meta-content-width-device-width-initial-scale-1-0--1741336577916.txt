@@ -1,0 +1,349 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Lorem Ipsum</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Rawline, Raleway, sans-serif;
+        }
+        
+        body {
+            background-color: white;
+            padding-top: 60px;
+            color: #333333;
+            font-size: 14px;
+            line-height: 1.1;
+        }
+        
+        h3, h4 {
+            font-size: 16px;
+            line-height: 1.1;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            width: 140px;
+        }
+        
+        .header-icons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .header-icon {
+            font-size: 18px;
+            color: #0056b3;
+        }
+        
+        .hero-image {
+            width: 100%;
+            height: auto;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+        
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            margin: 10px 0;
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+            background-color: white;
+            padding: 10px;
+            border-radius: 4px;
+            width: 100%;
+        }
+        
+        .user-info-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+        }
+        
+        .user-info-text {
+            flex: 1;
+            padding-right: 10px;
+            text-align: left;
+        }
+        
+        .user-info p {
+            margin: 1px 0;
+            color: #333333;
+        }
+        
+        .user-info p strong {
+            font-weight: 600;
+        }
+        
+        .user-info h3 {
+            font-weight: 700;
+            color: #0c326f;
+            margin-bottom: 4px;
+        }
+        
+        .user-info-image {
+            width: 50px;
+            height: auto;
+            justify-self: end;
+            align-self: start;
+            margin-left: 10px;
+            filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.2));
+        }
+        
+        .message-box {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 8px;
+            margin-top: 8px;
+            border-radius: 4px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        
+        .message-box p {
+            margin-bottom: 8px;
+            width: 100%;
+        }
+        
+        .message-box strong {
+            font-weight: 700;
+        }
+
+        .message-box .red-strong {
+            color: #a71d2a;
+            font-weight: 700;
+        }
+        
+        .countdown-timer {
+            font-weight: bold;
+            color: #ffffff;
+            margin-top: 8px;
+            background-color: #dc3545;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            text-align: center;
+        }
+
+        .tax-details {
+            margin-top: 12px;
+            padding: 8px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+        }
+
+        .tax-details h4 {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #0c326f;
+        }
+
+        .tax-details ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .tax-details li {
+            margin-bottom: 3px;
+        }
+
+        .regularize-button {
+            display: block;
+            width: 100%;
+            padding: 8px;
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-top: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .regularize-button:hover {
+            background-color: #218838;
+        }
+
+        .news-image {
+            width: 100%;
+            height: auto;
+            margin: 8px auto 0;
+            display: block;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .news-description {
+            color: #333;
+            margin-top: 12px;
+            padding: 0 4px;
+            text-align: justify;
+            width: 100%;
+        }
+
+        .footer {
+            background-color: #01205B;
+            color: white;
+            padding: 16px;
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .footer-logo {
+            width: 100px;
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                padding: 6px 8px;
+            }
+            
+            .logo {
+                width: 120px;
+            }
+            
+            .header-icons {
+                gap: 8px;
+            }
+            
+            .header-icon {
+                font-size: 16px;
+            }
+            
+            .message-box {
+                width: 100%;
+            }
+
+            .news-image {
+                max-width: 100%;
+            }
+
+            .news-description {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img alt="Lorem ipsum dolor sit amet" class="logo" src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Logo_Receita_Federal_do_Brasil.svg"/>
+        <div class="header-icons">
+            <i class="fas fa-search header-icon"></i>
+            <i class="fas fa-question-circle header-icon"></i>
+            <i class="fas fa-adjust header-icon"></i>
+        </div>
+    </div>
+    <div class="hero-image">
+        <img alt="Lorem ipsum dolor sit amet, consectetur adipiscing elit" src="https://i.ibb.co/yctbD5Zq/Aviso-funcionamento-de-loja-simples-verde-vermelho-story-do-instagram-1080-x-400-px-1-1.png">
+    </div>
+    <div class="user-info">
+        <div class="user-info-content">
+            <div class="user-info-text">
+                <h3>Lorem Ipsum</h3>
+                <p><strong>Lorem:</strong> Ipsum Dolor</p>
+                <p><strong>Sit:</strong> Amet Consectetur</p>
+            </div>
+        </div>
+        <img alt="Lorem ipsum dolor sit amet, consectetur adipiscing elit" class="news-image" src="https://thumb.mais.uol.com.br/17168881-xlarge.jpg?ver=1"/>
+        <p class="news-description" id="newsDescription"></p>
+    </div>
+    <div class="user-info">
+        <div class="user-info-content">
+            <div class="user-info-text">
+                <h3>LOREM IPSUM DOLOR</h3>
+                <p><strong>SIT:</strong> AMET CONSECTETUR</p>
+                <p><strong>ADIPISCING:</strong> 123.456.789-00</p>
+            </div>
+            <img src="https://i.ibb.co/xKfzBFbn/download-1.png" alt="Lorem ipsum dolor sit amet" class="user-info-image">
+        </div>
+        <div class="message-box">
+            <p><span class="red-strong">Lorem ipsum:</span> Dolor sit amet, consectetur adipiscing elit. <strong>Sed do eiusmod tempor incididunt</strong> ut labore et dolore magna aliqua. <span class="red-strong">Ut enim ad minim veniam,</span> quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <div class="countdown-timer" id="countdown">Lorem ipsum: 23h 40m 52s</div>
+        </div>
+        <div class="tax-details">
+            <h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit:</h4>
+            <ul>
+                <li><strong>2019:</strong> R$ 47,61</li>
+                <li><strong>2020:</strong> R$ 52,38</li>
+                <li><strong>2021:</strong> R$ 42,84</li>
+            </ul>
+            <p><strong>Lorem ipsum: R$ 142,83</strong></p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <button class="regularize-button">Lorem Ipsum</button>
+        </div>
+    </div>
+    <footer class="footer">
+        <img src="https://www.enat.receita.economia.gov.br/pt-br/area_nacional/noticias/logo-rfb/image_preview" alt="Lorem Ipsum Logo" class="footer-logo">
+        <p>© 2025 Lorem Ipsum. Dolor sit amet consectetur.</p>
+    </footer>
+    <script>
+        function startCountdown(duration, display) {
+            let timer = duration, hours, minutes, seconds;
+            setInterval(function () {
+                hours = parseInt(timer / 3600, 10);
+                minutes = parseInt((timer % 3600) / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                hours = hours < 10 ? "0" + hours : hours;
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = `Lorem ipsum: ${hours}h ${minutes}m ${seconds}s`;
+
+                if (--timer < 0) {
+                    timer = 0;
+                }
+            }, 1000);
+        }
+
+        function getNextDay() {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            return tomorrow.getDate().toString().padStart(2, '0');
+        }
+
+        window.onload = function () {
+            const countdownElement = document.getElementById('countdown');
+            const countdownDuration = 23 * 3600 + 42 * 60; // 23 hours and 42 minutes in seconds
+            startCountdown(countdownDuration, countdownElement);
+
+            const nextDay = getNextDay();
+            const newsDescription = document.getElementById('newsDescription');
+            newsDescription.innerHTML = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.`;
+        };
+    </script>
+</body>
+</html>

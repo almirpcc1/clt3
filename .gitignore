@@ -1,0 +1,56 @@
+# Arquivos compilados Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Ambiente virtual
+venv/
+ENV/
+env/
+.env
+
+# Logs e bancos de dados
+*.log
+*.sqlite
+*.db
+
+# Arquivos gerados pela IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Arquivos de configuração local
+instance/
+.webassets-cache
+
+# Arquivos de mídia e upload
+static/uploads/
+
+# Arquivos de cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Arquivos temporários
+.temp/
+.tmp/
+tmp/

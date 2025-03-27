@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuração de API SMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'gov-blue': '#1351b4',
+                        'gov-blue-dark': '#071d41',
+                        'gov-blue-light': '#2670e8',
+                        'gov-yellow': '#ffcd07',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <header class="bg-gov-blue-dark py-4">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center">
+                <div class="text-white font-bold text-xl">
+                    <span class="text-gov-yellow">gov</span><span class="text-white">.br</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-10 max-w-3xl">
+        <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+            <h1 class="text-2xl font-bold text-gov-blue-dark mb-6">Configuração de API SMS</h1>
+            
+            <form action="/update-sms-config" method="post" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Selecione a API SMS para uso:</label>
+                    <div class="space-y-3">
+                        <div class="flex items-center">
+                            <input type="radio" id="smsdev" name="sms_api" value="SMSDEV" 
+                                   {% if current_api == 'SMSDEV' %}checked{% endif %}
+                                   class="h-4 w-4 text-gov-blue focus:ring-gov-blue">
+                            <label for="smsdev" class="ml-3 block text-sm font-medium text-gray-700">
+                                SMSDEV
+                            </label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="owen" name="sms_api" value="OWEN" 
+                                   {% if current_api == 'OWEN' %}checked{% endif %}
+                                   class="h-4 w-4 text-gov-blue focus:ring-gov-blue">
+                            <label for="owen" class="ml-3 block text-sm font-medium text-gray-700">
+                                Owen SMS (Padrão)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-blue-50 rounded-lg border border-blue-100">
+                    <p class="text-sm text-blue-800">
+                        <span class="font-bold">Configuração atual: </span>{{ current_api }}
+                    </p>
+                    <p class="text-sm text-blue-800 mt-2">
+                        <span class="font-bold">Status da API SMSDEV: </span>
+                        {% if smsdev_status %}
+                            <span class="text-green-600"><i class="fas fa-check-circle"></i> Configurada</span>
+                        {% else %}
+                            <span class="text-red-600"><i class="fas fa-times-circle"></i> Não configurada</span>
+                        {% endif %}
+                    </p>
+                    <p class="text-sm text-blue-800 mt-2">
+                        <span class="font-bold">Status da API Owen SMS: </span>
+                        {% if owen_status %}
+                            <span class="text-green-600"><i class="fas fa-check-circle"></i> Configurada</span>
+                        {% else %}
+                            <span class="text-red-600"><i class="fas fa-times-circle"></i> Não configurada</span>
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div>
+                    <button type="submit" class="w-full bg-gov-blue hover:bg-gov-blue-light text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">
+                        Salvar Configuração
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h2 class="text-xl font-bold text-gov-blue-dark mb-4">Enviar SMS de Teste</h2>
+            
+            <form action="/send-test-sms" method="post" class="space-y-6">
+                <div>
+                    <label for="test-phone" class="block text-sm font-medium text-gray-700 mb-2">Número de telefone para teste:</label>
+                    <input type="text" id="test-phone" name="phone" placeholder="DDD + Número (Ex: 11999998888)" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-gov-blue focus:border-gov-blue">
+                    <p class="text-xs text-gray-500 mt-1">Formato: 11999998888 (apenas números)</p>
+                </div>
+
+                <div>
+                    <button type="submit" class="w-full bg-gov-blue hover:bg-gov-blue-light text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">
+                        Enviar SMS de Teste
+                    </button>
+                </div>
+            </form>
+
+            {% if test_result %}
+            <div class="mt-6 p-4 {% if test_success %}bg-green-50 border border-green-100{% else %}bg-red-50 border border-red-100{% endif %} rounded-lg">
+                <p class="text-sm {% if test_success %}text-green-800{% else %}text-red-800{% endif %}">
+                    {{ test_result }}
+                </p>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <footer class="bg-gov-blue-dark text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-sm">&copy; 2025 Programa Crédito do Trabalhador</p>
+                    <p class="text-xs mt-1 text-gray-400">Todos os direitos reservados</p>
+                </div>
+                <div class="text-sm">
+                    <span class="text-gov-yellow">gov</span><span class="text-white">.br</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

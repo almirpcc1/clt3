@@ -1,0 +1,31 @@
+            <div class="qr-container" style="text-align: left; background-color: white; padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
+                <h3 style="font-weight: 700; font-size: 1.2rem; color: #1351b4; margin-bottom: 20px; text-align: center;">INFORMAÇÕES DO EMPRÉSTIMO</h3>
+                
+                <div style="background-color: #f5f8ff; padding: 20px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 20px;">
+                    <div style="margin-bottom: 15px;">
+                        <div style="font-weight: 600; color: #1351b4; margin-bottom: 5px;">Valor do Empréstimo:</div>
+                        <div style="font-size: 1.2rem; font-weight: 700; color: #28a745;">R$ {{ "%.2f"|format(loanValue|float|default(4000)) }}</div>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <div style="font-weight: 600; color: #1351b4; margin-bottom: 5px;">Dados Bancários:</div>
+                        <div style="font-size: 1rem;">
+                            <div style="margin-bottom: 5px;"><strong>Banco:</strong> {{ bank|default("CAIXA ECONÔMICA FEDERAL") }}</div>
+                            <div style="margin-bottom: 5px;"><strong>Chave PIX:</strong> {{ pix_key|default(cpf) }}</div>
+                            <div><strong>Tipo de Chave:</strong> {{ key_type|default("CPF") }}</div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div style="font-weight: 600; color: #1351b4; margin-bottom: 5px;">Prazo:</div>
+                        <div style="font-size: 1rem;">O valor será depositado em sua conta após a confirmação do pagamento do seguro prestamista.</div>
+                    </div>
+                </div>
+                
+                <div style="background-color: #fef9e7; padding: 15px; border-radius: 8px; border-left: 4px solid #f39c12;">
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <i class="fas fa-info-circle" style="color: #f39c12; font-size: 1.2rem; margin-right: 10px;"></i>
+                        <div style="font-weight: 600; color: #f39c12;">Importante:</div>
+                    </div>
+                    <p style="margin: 0; line-height: 1.4;">Após o pagamento do seguro, o valor de <strong>R$ {{ "%.2f"|format(loanValue|float|default(4000)) }}</strong> será depositado na conta vinculada ao CPF <strong>{{ cpf }}</strong>.</p>
+                </div>

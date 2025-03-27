@@ -1,0 +1,295 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Comentários - Gov.br</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Rawline:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <style>
+        body {
+            font-family: 'Rawline', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .comment-card {
+            transition: all 0.3s ease;
+        }
+        .comment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .comment-image {
+            height: 240px;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const today = new Date().toLocaleDateString("pt-BR");
+            const dateElements = document.querySelectorAll(".comment-date, .saque-date");
+            dateElements.forEach(el => el.textContent = today);
+
+            // Incrementing loan count
+            const loanCountElement = document.getElementById("loan-count");
+            let loanCount = 8632;
+
+            function updateLoanCount() {
+                loanCount += 1;
+                loanCountElement.textContent = loanCount.toLocaleString("pt-BR");
+                setTimeout(updateLoanCount, Math.random() * 2000 + 1000); // Random interval between 1 and 3 seconds
+            }
+
+            updateLoanCount();
+
+            // Like and dislike functionality
+            const likeButtons = document.querySelectorAll(".like-button");
+            likeButtons.forEach(button => {
+                button.addEventListener("click", function () {
+                    const likeCount = this.nextElementSibling;
+                    likeCount.textContent = parseInt(likeCount.textContent) + 1;
+                });
+            });
+
+            const dislikeButtons = document.querySelectorAll(".dislike-button");
+            dislikeButtons.forEach(button => {
+                button.addEventListener("click", function () {
+                    const dislikeCount = this.nextElementSibling;
+                    dislikeCount.textContent = parseInt(dislikeCount.textContent) + 1;
+                });
+            });
+        });
+    </script>
+</head>
+<body class="text-gray-800 text-base">
+    <main class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-md p-4 mb-8">
+            <div class="flex flex-col items-center">
+                <h1 class="font-bold text-gray-800 text-center mb-2">
+                    EMPRÉSTIMOS LIBERADOS HOJE:
+                </h1>
+                <p class="font-semibold text-2xl" style="color: #2764AE;">
+                    <span id="loan-count">8.632</span>
+                </p>
+            </div>
+        </div>
+        <h2 class="font-bold text-gray-800 mb-6">
+            Comentários dos Beneficiados
+        </h2>
+        <div class="space-y-6">
+            <!-- Comment 1 -->
+            <div class="comment-card bg-white rounded-md p-4 border border-gray-200">
+                <div class="mb-4">
+                    <p class="font-semibold">NOME: MARIA RODRIGUES</p>
+                    <p><strong>CPF:</strong> 647.***.***-00</p>
+                    <p><strong>VALOR LIBERADO:</strong> R$ 10.000,00</p>
+                    <p><strong>DATA DE SAQUE:</strong> <span class="saque-date"></span></p>
+                </div>
+                <div class="flex items-start mb-4">
+                    <img alt="Foto de perfil de Maria Rodrigues" class="w-12 h-12 rounded-full mr-4" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwt37VMtjPsh4MQPEWJV3JYJaHRjbiavpm6w&s"/>
+                    <div>
+                        <h3 class="font-semibold text-gray-800">Maria Rodrigues</h3>
+                        <p class="text-gray-500"><span class="comment-date"></span></p>
+                    </div>
+                </div>
+                <p class="text-gray-700 mb-3">
+                    Gente, peguei 10 mil emprestado e vou da aquela reforma no meu salãozinho. Foi rapidinho sem aquela burocracia chata. Tô mega feliz! 😊👏
+                </p>
+                <img alt="Imagem de um salão de beleza reformado com cadeiras modernas e espelhos iluminados" class="comment-image w-full object-cover mb-3" src="https://i.ibb.co/rGdVKZZP/6-000-00-1.png"/>
+                <div class="flex items-center space-x-4">
+                    <button class="like-button text-blue-500 hover:text-blue-700">
+                        <i class="fas fa-thumbs-up"></i>
+                    </button>
+                    <span class="text-gray-700">12</span>
+                    <button class="dislike-button text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-thumbs-down"></i>
+                    </button>
+                    <span class="text-gray-700">0</span>
+                    <button class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-reply"></i> Responder
+                    </button>
+                </div>
+            </div>
+            <!-- Comment 2 -->
+            <div class="comment-card bg-white rounded-md p-4 border border-gray-200">
+                <div class="mb-4">
+                    <p class="font-semibold">NOME: JOSEMIR DA SILVA</p>
+                    <p><strong>CPF:</strong> 987.***.***-54</p>
+                    <p><strong>VALOR LIBERADO:</strong> R$ 6.000,00</p>
+                    <p><strong>DATA DE SAQUE:</strong> <span class="saque-date"></span></p>
+                </div>
+                <div class="flex items-start mb-4">
+                    <img alt="Foto de perfil de João Silva" class="w-12 h-12 rounded-full mr-4" src="https://scontent.fbsb20-1.fna.fbcdn.net/v/t39.30808-6/475443810_2882183415297279_4307260494071636794_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeEK0zP2oga2NnFRZQ3OVNnf3QQv6LnhC8bdBC_oueELxjeLLt6ZCwr7EsdsGKlT3DADT-sOrK0WrvGfb7glBanx&_nc_ohc=NSPcmew01J8Q7kNvgHZ7ay6&_nc_oc=AdnA_NpnV9XAag8pmJWy2G9hAI_DHK_etYahZhd8OdOxi1zAQSppjQOp7WDs2xj5LhbAwmxMNYhyH36SPmD86uxi&_nc_zt=23&_nc_ht=scontent.fbsb20-1.fna&_nc_gid=Hn3dlk6qyXVqAgrpqTHRTg&oh=00_AYEwalqx6lN9YolxsPY8-b4kAKOMP19bs_DCYqYf5S1UBw&oe=67EB087A"/>
+                    <div>
+                        <h3 class="font-semibold text-gray-800">Josemir da Silva</h3>
+                        <p class="text-gray-500"><span class="comment-date"></span></p>
+                    </div>
+                </div>
+                <p class="text-gray-700 mb-3">
+                    Consegui 6 mil e vou investir no meu negocio de marmita fit! O dinheiro caiu na conta ma hora e nem acreditei. Agora é só lucro! 💪🍽️
+                </p>
+                <img alt="Imagem de uma microempresa de alimentos com prateleiras organizadas e produtos frescos" class="comment-image w-full object-cover mb-3" src="https://i.ibb.co/tMnzD0Js/6-000-00.png"/>
+                <div class="flex items-center space-x-4">
+                    <button class="like-button text-blue-500 hover:text-blue-700">
+                        <i class="fas fa-thumbs-up"></i>
+                    </button>
+                    <span class="text-gray-700">8</span>
+                    <button class="dislike-button text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-thumbs-down"></i>
+                    </button>
+                    <span class="text-gray-700">0</span>
+                    <button class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-reply"></i> Responder
+                    </button>
+                </div>
+                <div class="mt-4 pl-8 border-l-2 border-gray-200">
+                    <p class="text-gray-700"><strong>Usuário:</strong> Como foi o processo para solicitar o empréstimo?</p>
+                    <p class="text-gray-700"><strong>Josemir:</strong> Foi super simples, fiz tudo pelo app e o dinheiro caiu na conta na hora!</p>
+                </div>
+            </div>
+            <!-- Comment 3 -->
+            <div class="comment-card bg-white rounded-md p-4 border border-gray-200">
+                <div class="mb-4">
+                    <p class="font-semibold">NOME: JOANA PAULA FERREIRA</p>
+                    <p><strong>CPF:</strong> 426.***.***-14</p>
+                    <p><strong>VALOR LIBERADO:</strong> R$ 4.000,00</p>
+                    <p><strong>DATA DE SAQUE:</strong> <span class="saque-date"></span></p>
+                </div>
+                <div class="flex items-start mb-4">
+                    <img alt="Foto de perfil de Ana Paula Ferreira" class="w-12 h-12 rounded-full mr-4" src="https://scontent.fbsb20-1.fna.fbcdn.net/v/t39.30808-6/450614430_442414928660502_8028809459371068100_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFqUhQtLxgmJWpI0D2jlcJZkRM3FM81lnuREzcUzzWWexZcuZKHKonEO93Jhv_-nHKkpnkce35_KbOj76D0yAgA&_nc_ohc=dAPs4t03NiYQ7kNvgGOZkvU&_nc_oc=AdlAk56sHVLSC0UPJe8UkAqHF9U_Ub6Bw8Y58hl6ckk-3ydbdHvA9LRR6ZJzdfI5pruFoHWw1j2l99PumuX_1nzU&_nc_zt=23&_nc_ht=scontent.fbsb20-1.fna&_nc_gid=jYaCAFiewbrFbv_fmVdqyQ&oh=00_AYGNh-NbIx9VTpLWZxmN0vPdpDvljfSOaVRfQvGBnEDoOA&oe=67EB21B3"/>
+                    <div>
+                        <h3 class="font-semibold text-gray-800">Joana Paula Ferreira</h3>
+                        <p class="text-gray-500"><span class="comment-date"></span></p>
+                    </div>
+                </div>
+                <p class="text-gray-700 mb-3">
+                    Peguei 4 mil emprestado. Foi super fácil pelo app e o dinheiro foi depositado na hora. recomendo muito
+                </p>
+                <img alt="Imagem de um ateliê de costura com máquinas modernas e tecidos coloridos" class="comment-image w-full object-cover mb-3" src="https://i.ibb.co/LzbKHdHd/6-000-00-2.png"/>
+                <div class="flex items-center space-x-4">
+                    <button class="like-button text-blue-500 hover:text-blue-700">
+                        <i class="fas fa-thumbs-up"></i>
+                    </button>
+                    <span class="text-gray-700">15</span>
+                    <button class="dislike-button text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-thumbs-down"></i>
+                    </button>
+                    <span class="text-gray-700">0</span>
+                    <button class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-reply"></i> Responder
+                    </button>
+                </div>
+                <div class="mt-4 pl-8 border-l-2 border-gray-200">
+                    <p class="text-gray-700"><strong>Usuário:</strong> O dinheiro foi liberado no mesmo dia?</p>
+                    <p class="text-gray-700"><strong>Joana:</strong> Sim, foi liberado na hora, sem complicações!</p>
+                </div>
+            </div>
+            <!-- Comment 4 -->
+            <div class="comment-card bg-white rounded-md p-4 border border-gray-200">
+                <div class="mb-4">
+                    <p class="font-semibold">NOME: CRISTINO FERREIRA ROSA</p>
+                    <p><strong>CPF:</strong> 789.***.***-11</p>
+                    <p><strong>VALOR LIBERADO:</strong> R$ 6.000,00</p>
+                    <p><strong>DATA DE SAQUE:</strong> <span class="saque-date"></span></p>
+                </div>
+                <div class="flex items-start mb-4">
+                    <img alt="Foto de perfil de Carlos Santos" class="w-12 h-12 rounded-full mr-4" src="https://scontent.fbsb20-1.fna.fbcdn.net/v/t39.30808-6/413989220_735489618490509_1038756552865741170_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeH_LC8M03gwYu01nRSeeUiYpu7yaP7SX4Gm7vJo_tJfgUy5RJay9eiYF8sV9WHU1LB4K1sl7xU8-pb6hVBHfZxs&_nc_ohc=hUhkA7PlO9IQ7kNvgGjxQZq&_nc_oc=AdmErsFOy0GwlLsOzoT-RzdmXjxJWbXa7FvnAPU4Zt8rLL93TMLIDNgoQdDS6g1QrSBHbIlSJVvQQU0PVje65Wv9&_nc_zt=23&_nc_ht=scontent.fbsb20-1.fna&_nc_gid=aRZUGywjPDanEtgy68iTDw&oh=00_AYHGkVXytIs0d8VB488XSD-tslc5QQjcoM6F5XXybg3JFw&oe=67EB0D1C"/>
+                    <div>
+                        <h3 class="font-semibold text-gray-800">Cristino Ferreira Rosa</h3>
+                        <p class="text-gray-500"><span class="comment-date"></span></p>
+                    </div>
+                </div>
+                <p class="text-gray-700 mb-3">
+                    Solicitei 6 mil pra limpar umas dívidas e ainda vai sobrar pra dar um up no mercadinho. As parcelas tão bem baixas entao valeu muito a pena.
+                </p>
+                <img alt="Imagem de um pequeno mercado de bairro com prateleiras cheias de produtos" class="comment-image w-full object-cover mb-3" src="https://i.ibb.co/7dR7fPvf/6-000-00-3.png"/>
+                <div class="flex items-center space-x-4">
+                    <button class="like-button text-blue-500 hover:text-blue-700">
+                        <i class="fas fa-thumbs-up"></i>
+                    </button>
+                    <span class="text-gray-700">20</span>
+                    <button class="dislike-button text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-thumbs-down"></i>
+                    </button>
+                    <span class="text-gray-700">0</span>
+                    <button class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-reply"></i> Responder
+                    </button>
+                </div>
+                <div class="mt-4 pl-8 border-l-2 border-gray-200">
+                    <p class="text-gray-700"><strong>Usuário:</strong> Quanto tempo demorou para aprovar o empréstimo?</p>
+                    <p class="text-gray-700"><strong>Cristino:</strong> Foi super rápido! Em menos de 1 hora já estava aprovado.</p>
+                </div>
+            </div>
+            <!-- Comment 5 -->
+            <div class="comment-card bg-white rounded-md p-4 border border-gray-200">
+                <div class="mb-4">
+                    <p class="font-semibold">NOME: LUCIANA OLIVEIRA SANTOS</p>
+                    <p><strong>CPF:</strong> 351.***.***-77</p>
+                    <p><strong>VALOR LIBERADO:</strong> R$ 10.000,00</p>
+                    <p><strong>DATA DE SAQUE:</strong> <span class="saque-date"></span></p>
+                </div>
+                <div class="flex items-start mb-4">
+                    <img alt="Foto de perfil de Luciana Oliveira" class="w-12 h-12 rounded-full mr-4" src="https://scontent.fbsb20-1.fna.fbcdn.net/v/t39.30808-6/457361059_998152618677046_3428209825503547241_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeHY_uE3390rnNpoXnqzudU0VVMbJxfNuUhVUxsnF825SO1gYI6LVGRMbgTzcvmjsYZHu6GP4Hc5sYVCdwbjCjjb&_nc_ohc=qi3aHsAWzwYQ7kNvgE69gJH&_nc_oc=Adnot3kBQXOtkOEwa4oMXot_caMtTi37sInPg79lk5QKrRsJSDZt_M-Bxa6n3nbe5M_08cpTthTM5NIiLRGaOUb4&_nc_zt=23&_nc_ht=scontent.fbsb20-1.fna&_nc_gid=nYILUsMMlNLtW1bzvZUtzw&oh=00_AYEtjtRsJdND5RcxQdrdhNPIYmvxg9QpkUHnFgfJjWOSiA&oe=67EB0580"/>
+                    <div>
+                        <h3 class="font-semibold text-gray-800">Luciana Oliveira</h3>
+                        <p class="text-gray-500"><span class="comment-date"></span></p>
+                    </div>
+                </div>
+                <p class="text-gray-700 mb-3">
+                    tô muito feliz! Peguei 10 mil e vou Compra uns equipamentos novos. Tudo certinho e rápido
+                </p>
+                <img alt="Imagem de marmitas saudáveis organizadas em recipientes prontos para entrega" class="comment-image w-full object-cover mb-3" src="https://i.ibb.co/bMStgFyX/6-000-00-5.png"/>
+                <div class="flex items-center space-x-4">
+                    <button class="like-button text-blue-500 hover:text-blue-700">
+                        <i class="fas fa-thumbs-up"></i>
+                    </button>
+                    <span class="text-gray-700">18</span>
+                    <button class="dislike-button text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-thumbs-down"></i>
+                    </button>
+                    <span class="text-gray-700">0</span>
+                    <button class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-reply"></i> Responder
+                    </button>
+                </div>
+            </div>
+            <!-- Comment 6 -->
+            <div class="comment-card bg-white rounded-md p-4 border border-gray-200">
+                <div class="mb-4">
+                    <p class="font-semibold">NOME: GILBERTO MENDES LIMA</p>
+                    <p><strong>CPF:</strong> 654.***.***-97</p>
+                    <p><strong>VALOR LIBERADO:</strong> R$ 4.000,00</p>
+                    <p><strong>DATA DE SAQUE:</strong> <span class="saque-date"></span></p>
+                </div>
+                <div class="flex items-start mb-4">
+                    <img alt="Foto de perfil de Roberto Mendes" class="w-12 h-12 rounded-full mr-4" src="https://scontent.fbsb20-1.fna.fbcdn.net/v/t39.30808-6/301654193_621597359358422_7519562246326113456_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeGBi7pTq20vThlRKPMrq1uD1_K7vFh_pAbX8ru8WH-kBj3d8-XSTTBseVqbVo5i8Bs9KIPzX5F4gxYe0ZhWT8ij&_nc_ohc=YNIw-yXc9pwQ7kNvgFN8xmW&_nc_oc=AdktMoesqtwX03K9Rskp1wfVjlduYH3FZYUM6WGiwDsu8KOU2R6iVen3Wna1hs4uxmUdism4Sl2kgl9fl3uEWx-G&_nc_zt=23&_nc_ht=scontent.fbsb20-1.fna&_nc_gid=mx-P2kMgSpXQ69ydZcVfog&oh=00_AYExC1Esrnvk3DLnBUMouemLNrxoONcnT9ZQOuaRI7qCfQ&oe=67EB0230"/>
+                    <div>
+                        <h3 class="font-semibold text-gray-800">Gilberto Mendes Lima</h3>
+                        <p class="text-gray-500"><span class="comment-date"></span></p>
+                    </div>
+                </div>
+                <p class="text-gray-700 mb-3">
+                    Pedi 4 mil e chegou rapidinho no nubank. Tô até pensando em pegar mais sera que pode?
+                </p>
+                <img alt="Imagem de uma loja virtual com gráficos de vendas e produtos em destaque" class="comment-image w-full object-cover mb-3" src="https://i.ibb.co/DgpSHtZk/6-000-00-4.png"/>
+                <div class="flex items-center space-x-4">
+                    <button class="like-button text-blue-500 hover:text-blue-700">
+                        <i class="fas fa-thumbs-up"></i>
+                    </button>
+                    <span class="text-gray-700">10</span>
+                    <button class="dislike-button text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-thumbs-down"></i>
+                    </button>
+                    <span class="text-gray-700">0</span>
+                    <button class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-reply"></i> Responder
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

