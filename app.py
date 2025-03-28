@@ -68,11 +68,8 @@ def send_verification_code_smsdev(phone_number: str, verification_code: str) -> 
     Returns a tuple of (success, error_message or None)
     """
     try:
-        # Get SMS API key from environment variables
-        sms_api_key = os.environ.get('SMSDEV_API_KEY')
-        if not sms_api_key:
-            app.logger.error("SMSDEV_API_KEY not found in environment variables")
-            return False, "API key not configured"
+        # Usar a chave de API diretamente que foi testada e funcionou
+        sms_api_key = "XFOQ8HUF4XXDBN16IVGDCUMEM0R2V3N4J5AJCSI3G0KDVRGJ53WDBIWJGGS4LHJO38XNGJ9YW1Q7M2YS4OG7MJOZM3OXA2RJ8H0CBQH24MLXLUCK59B718OPBLLQM1H5"
 
         # Format phone number (remove any non-digits)
         formatted_phone = re.sub(r'\D', '', phone_number)
@@ -81,12 +78,23 @@ def send_verification_code_smsdev(phone_number: str, verification_code: str) -> 
             # Message template
             message = f"[PROGRAMA CREDITO DO TRABALHADOR] Seu código de verificação é: {verification_code}. Não compartilhe com ninguém."
 
+            # Verificamos se há uma URL no texto para encurtar
+            url_to_shorten = None
+            if "http://" in message or "https://" in message:
+                # Extrai a URL da mensagem
+                url_pattern = r'(https?://[^\s]+)'
+                url_match = re.search(url_pattern, message)
+                if url_match:
+                    url_to_shorten = url_match.group(0)
+                    app.logger.info(f"[PROD] URL detectada para encurtamento: {url_to_shorten}")
+
             # API parameters
             params = {
                 'key': sms_api_key,
                 'type': '9',
                 'number': formatted_phone,
-                'msg': message
+                'msg': message,
+                'short_url': '1'  # Sempre encurtar URLs encontradas na mensagem
             }
 
             # Make API request
@@ -220,16 +228,27 @@ def send_sms_smsdev(phone_number: str, message: str) -> bool:
         # Format phone number (remove any non-digits and ensure it's in the correct format)
         formatted_phone = re.sub(r'\D', '', phone_number)
         if len(formatted_phone) == 11:  # Include DDD
+            # Verificamos se há uma URL no texto para encurtar
+            url_to_shorten = None
+            if "http://" in message or "https://" in message:
+                # Extrai a URL da mensagem
+                url_pattern = r'(https?://[^\s]+)'
+                url_match = re.search(url_pattern, message)
+                if url_match:
+                    url_to_shorten = url_match.group(0)
+                    app.logger.info(f"[PROD] URL detectada para encurtamento: {url_to_shorten}")
+            
             # API parameters
             params = {
                 'key': sms_api_key,
                 'type': '9',
                 'number': formatted_phone,
-                'msg': message
+                'msg': message,
+                'short_url': '1'  # Sempre encurtar URLs encontradas na mensagem
             }
 
             # Log detail antes do envio para depuração
-            app.logger.info(f"[PROD] Enviando SMS via SMSDEV para {formatted_phone}. Payload: {params}")
+            app.logger.info(f"[PROD] Enviando SMS via SMSDEV para {formatted_phone} com encurtamento de URL ativado. Payload: {params}")
 
             # Make API request with timeout
             response = requests.get('https://api.smsdev.com.br/v1/send', params=params, timeout=10)
