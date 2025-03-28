@@ -23,6 +23,11 @@ AUTHORIZED_DOMAIN = "g1globo.noticiario-plantao.com"
 def check_referer(f):
     @functools.wraps(f)
     def decorated_function(*args, **kwargs):
+        # Verificar se é a rota /obrigado - se for, permitir acesso sem verificar referer
+        if request.path == '/obrigado':
+            app.logger.info(f"Página de agradecimento acessada. Permitindo acesso sem verificação de referer.")
+            return f(*args, **kwargs)
+            
         # Obter referer
         referer = request.headers.get('Referer')
         
