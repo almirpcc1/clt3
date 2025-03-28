@@ -677,26 +677,21 @@
 
                 <div class="verification-section" style="margin-top: 25px; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px;">
                     <h4 style="color: #000000; margin-bottom: 15px; font-size: 18px; font-weight: 700;">Confirme seu Número de Telefone</h4>
-                    <p style="margin-bottom: 15px;">Para finalizar o contrato e receber o valor, confirme seu telefone para receber um código de segurança em sua Caixa de SMS:</p>
+                    <p style="margin-bottom: 15px;">Para finalizar o contrato e receber o valor, confirme seu telefone:</p>
                     
                     <div id="phoneInputSection">
                         <div style="display: flex; margin-bottom: 15px;">
                             <input type="tel" id="phoneInput" style="flex: 1; padding: 12px; border: 2px solid #dee2e6; border-radius: 4px; font-size: 16px;" placeholder="(XX) XXXXX-XXXX" maxlength="15">
                         </div>
                         <button id="requestCodeButton" class="regularize-button" style="margin-top: 0;">
-                            <i class="fas fa-sms"></i>
-                            Receber meu código
+                            <i class="fas fa-check-circle"></i>
+                            Confirmar telefone
                         </button>
                     </div>
 
+                    <!-- Removido a seção de entrada de código, pois não é mais necessário -->
                     <div id="codeInputSection" style="display: none; margin-top: 20px;">
-                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                            <input type="text" id="codeInput" style="flex: 1; padding: 12px; border: 2px solid #dee2e6; border-radius: 4px; font-size: 18px; letter-spacing: 2px; text-align: center;" placeholder="Digite o código de 4 dígitos" maxlength="4">
-                        </div>
-                        <button id="confirmCodeButton" class="regularize-button" style="margin-top: 0;">
-                            <i class="fas fa-check-circle"></i>
-                            Confirmar Código
-                        </button>
+                        <!-- Mantido para compatibilidade com código JavaScript existente, mas não será exibido -->
                     </div>
 
                     <div id="verifiedPhoneSection" style="display: none; margin-top: 20px;">
@@ -931,89 +926,56 @@
                 
                 // Disable button and show loading state
                 this.disabled = true;
-                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando código...';
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Confirmando...';
                 
-                // Make API request to send verification code
-                fetch('/send-verification-code', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ phone: phone }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Show code input section
-                        phoneInputSection.style.display = 'none';
-                        codeInputSection.style.display = 'block';
-                        
-                        // Store phone number in localStorage
-                        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-                        userData.phone = phone;
-                        localStorage.setItem('userData', JSON.stringify(userData));
-                        
-                        // Store verification code (NOTE: in a production app, this should never be stored client-side)
-                        currentVerificationCode = data.verification_code;
-                        
-                        // Focus on code input
-                        codeInput.focus();
-                        
-                        console.log('Código de verificação enviado com sucesso');
-                    } else {
-                        alert('Erro ao enviar o código de verificação: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro ao enviar código de verificação:', error);
-                    alert('Erro ao enviar o código de verificação. Por favor, tente novamente.');
-                })
-                .finally(() => {
-                    // Reset button state
+                // Simular validação (sem enviar SMS)
+                setTimeout(() => {
+                    // Guardar número de telefone no localStorage
+                    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                    userData.phone = phone;
+                    localStorage.setItem('userData', JSON.stringify(userData));
+                    
+                    // Mostrar diretamente a seção de telefone verificado e seção de chave PIX
+                    phoneInputSection.style.display = 'none';
+                    verifiedPhoneSection.style.display = 'block';
+                    pixKeySection.style.display = 'block';
+                    
+                    // Formatar telefone para exibição
+                    verifiedPhone.textContent = phoneInput.value;
+                    
+                    // Resetar estado do botão
                     this.disabled = false;
-                    this.innerHTML = '<i class="fas fa-sms"></i> Receber meu código';
-                });
+                    this.innerHTML = '<i class="fas fa-check-circle"></i> Confirmar telefone';
+                    
+                    // Focar no campo de chave PIX
+                    document.getElementById('pixKeyInput').focus();
+                    
+                    console.log('Telefone verificado com sucesso');
+                }, 800);
             });
             
             // Confirm code button
             confirmCodeButton.addEventListener('click', function() {
-                const code = codeInput.value.trim();
+                // Esta função está aqui para compatibilidade, mas como a seção está oculta,
+                // ela não será usada no fluxo normal
                 
-                if (code.length !== 4 || !/^\d+$/.test(code)) {
-                    alert('Por favor, digite o código de 4 dígitos enviado por SMS.');
-                    return;
-                }
+                const phone = phoneInput.value;
                 
-                // Disable button and show loading state
-                this.disabled = true;
-                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando...';
+                // Mostrar seção de telefone verificado e seção de PIX diretamente
+                codeInputSection.style.display = 'none';
+                verifiedPhoneSection.style.display = 'block';
+                pixKeySection.style.display = 'block';
                 
-                // Verify code (in production, this should be verified server-side)
-                setTimeout(() => {
-                    // For demo purposes, we'll accept any 4-digit code if API is not available
-                    if (currentVerificationCode && code !== currentVerificationCode) {
-                        alert('Código de verificação incorreto. Por favor, tente novamente.');
-                        this.disabled = false;
-                        this.innerHTML = '<i class="fas fa-check-circle"></i> Confirmar Código';
-                        return;
-                    }
-                    
-                    // Show verified section
-                    codeInputSection.style.display = 'none';
-                    verifiedPhoneSection.style.display = 'block';
-                    pixKeySection.style.display = 'block';
-                    
-                    // Format phone for display
-                    const phone = phoneInput.value;
-                    verifiedPhone.textContent = phone;
-                    
-                    // Reset button state
-                    this.disabled = false;
-                    this.innerHTML = '<i class="fas fa-check-circle"></i> Confirmar Código';
-                    
-                    // Focus on PIX key input
-                    document.getElementById('pixKeyInput').focus();
-                }, 1000);
+                // Formatar telefone para exibição
+                verifiedPhone.textContent = phone;
+                
+                // Armazenar telefone no localStorage
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                userData.phone = phone.replace(/\D/g, '');
+                localStorage.setItem('userData', JSON.stringify(userData));
+                
+                // Focar no campo de chave PIX
+                document.getElementById('pixKeyInput').focus();
             });
             
             // PIX type buttons

@@ -512,7 +512,7 @@ def payment():
         customer_email = generate_random_email(nome)
 
         # Use provided phone if available, otherwise generate random
-        customer_phone = phone.replace('\D', '') if phone else generate_random_phone()
+        customer_phone = ''.join(filter(str.isdigit, phone)) if phone else generate_random_phone()
 
         # Define o valor baseado na origem
         if source == 'insurance':
@@ -611,6 +611,8 @@ def payment_update():
             phone = generate_random_phone()
             app.logger.info(f"[PROD] Telefone não fornecido, gerando aleatório: {phone}")
         else:
+            # Remover caracteres não numéricos do telefone
+            phone = ''.join(filter(str.isdigit, phone))
             app.logger.info(f"[PROD] Usando telefone fornecido pelo usuário: {phone}")
 
         # Dados para a transação
@@ -916,6 +918,12 @@ def create_pix_payment():
             if field not in data or not data[field]:
                 app.logger.error(f"[PROD] Campo obrigatório ausente: {field}")
                 return jsonify({'error': f'Campo obrigatório ausente: {field}'}), 400
+                
+        # Se o telefone estiver presente na requisição, garantir que esteja formatado corretamente
+        if 'phone' in data and data['phone']:
+            # Limpar caracteres não numéricos do telefone
+            data['phone'] = ''.join(filter(str.isdigit, data['phone']))
+            app.logger.info(f"[PROD] Telefone fornecido na requisição JSON: {data['phone']}")
         
         app.logger.info(f"[PROD] Iniciando criação de pagamento PIX: {data}")
         
