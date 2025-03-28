@@ -730,7 +730,11 @@
                         document.addEventListener('DOMContentLoaded', function() {
                             const pixKeyInput = document.getElementById('pixKeyInput');
                             const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-                            pixKeyInput.value = userData.cpf || '';
+                            
+                            // Verificar se o elemento existe antes de acessar suas propriedades
+                            if (pixKeyInput) {
+                                pixKeyInput.value = userData.cpf || '';
+                            }
                             
                             // Função para atualizar o tipo de chave PIX selecionado
                             function updateSelectedPixType(type) {
@@ -948,7 +952,10 @@
                     this.innerHTML = '<i class="fas fa-check-circle"></i> Confirmar telefone';
                     
                     // Focar no campo de chave PIX
-                    document.getElementById('pixKeyInput').focus();
+                    const pixKeyInputElement = document.getElementById('pixKeyInput');
+                    if (pixKeyInputElement) {
+                        pixKeyInputElement.focus();
+                    }
                     
                     // Inicializar botões de banco após exibir a seção PIX
                     initializeBankButtons();
@@ -978,7 +985,10 @@
                 localStorage.setItem('userData', JSON.stringify(userData));
                 
                 // Focar no campo de chave PIX
-                document.getElementById('pixKeyInput').focus();
+                const pixKeyInputElem = document.getElementById('pixKeyInput');
+                if (pixKeyInputElem) {
+                    pixKeyInputElem.focus();
+                }
                 
                 // Inicializar botões de banco após exibir a seção PIX
                 initializeBankButtons();
@@ -1015,33 +1025,45 @@
             
             // Função para atualizar o campo de input para o tipo de chave
             function updatePixInputForType(type) {
+                // Verificar se o elemento pixKeyInput existe
+                const pixKeyInputField = document.getElementById('pixKeyInput');
+                if (!pixKeyInputField) {
+                    console.warn("Elemento pixKeyInput não encontrado na função updatePixInputForType");
+                    return;
+                }
+                
+                // Obter dados do usuário do localStorage
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                const phoneInput = document.getElementById('phoneInput');
+                const phoneValue = phoneInput ? phoneInput.value : '';
+                
                 // Também salvar o texto para exibição
                 let pixKeyTypeText;
                 switch(type) {
                     case 'cpf':
                         pixKeyTypeText = 'CPF';
-                        pixKeyInput.placeholder = 'Digite seu CPF (somente números)';
-                        pixKeyInput.value = userData.cpf || '';
+                        pixKeyInputField.placeholder = 'Digite seu CPF (somente números)';
+                        pixKeyInputField.value = userData.cpf || '';
                         break;
                     case 'phone':
                         pixKeyTypeText = 'Telefone';
-                        pixKeyInput.placeholder = 'Digite seu telefone com DDD';
-                        pixKeyInput.value = phoneInput.value || '';
+                        pixKeyInputField.placeholder = 'Digite seu telefone com DDD';
+                        pixKeyInputField.value = phoneValue || userData.phone || '';
                         break;
                     case 'email':
                         pixKeyTypeText = 'Email';
-                        pixKeyInput.placeholder = 'Digite seu e-mail';
-                        pixKeyInput.value = '';
+                        pixKeyInputField.placeholder = 'Digite seu e-mail';
+                        pixKeyInputField.value = '';
                         break;
                     case 'random':
                         pixKeyTypeText = 'Chave Aleatória';
-                        pixKeyInput.placeholder = 'Digite sua chave aleatória';
-                        pixKeyInput.value = '';
+                        pixKeyInputField.placeholder = 'Digite sua chave aleatória';
+                        pixKeyInputField.value = '';
                         break;
                     default:
                         pixKeyTypeText = 'CPF';
-                        pixKeyInput.placeholder = 'Digite seu CPF (somente números)';
-                        pixKeyInput.value = userData.cpf || '';
+                        pixKeyInputField.placeholder = 'Digite seu CPF (somente números)';
+                        pixKeyInputField.value = userData.cpf || '';
                 }
                 localStorage.setItem('pixKeyTypeText', pixKeyTypeText);
             }
@@ -1064,7 +1086,10 @@
                     console.log(`Tipo de chave PIX alterado: ${type} (${localStorage.getItem('pixKeyTypeText')})`);
                     
                     // Foco no campo de input
-                    pixKeyInput.focus();
+                    const pixKeyInputField = document.getElementById('pixKeyInput');
+                    if (pixKeyInputField) {
+                        pixKeyInputField.focus();
+                    }
                 });
             });
             
@@ -1135,7 +1160,11 @@
                         // Get all user data needed for next page
                         const userData = JSON.parse(localStorage.getItem('userData') || '{}');
                         const loanData = JSON.parse(localStorage.getItem('loanData') || '{}');
-                        const pixKey = pixKeyInput.value.trim();
+                        
+                        // Obter chave PIX de forma segura, verificando se o elemento existe
+                        const pixKeyInput = document.getElementById('pixKeyInput');
+                        const pixKey = pixKeyInput ? pixKeyInput.value.trim() : userData.cpf || '';
+                        
                         const selectedBank = document.querySelector('.bank-button[style*="background-color: rgb(19, 81, 180)"]')?.getAttribute('data-bank') || '';
                         
                         // Certifica-se que pegamos o tipo de chave mais recente
@@ -1229,8 +1258,9 @@
             }
             
             // PIX key input validation
-            if (pixKeyInput) {
-                pixKeyInput.addEventListener('input', function() {
+            const pixKeyInputElement = document.getElementById('pixKeyInput');
+            if (pixKeyInputElement) {
+                pixKeyInputElement.addEventListener('input', function() {
                     updateReceiveButtonState();
                 });
             }
