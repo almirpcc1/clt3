@@ -622,7 +622,7 @@
             <div class="user-info-text">
                 <h3 style="text-align: center;">CONTRATO DE EMPRÉSTIMO - CAIXA</h3>
                 <div style="margin-top: 15px; line-height: 1.6;">
-                    <p>A <strong>CAIXA</strong>, no uso de suas atribuições legais, com fundamento na <strong>Lei nº 14.436/2025</strong>, que institui o <strong>Programa Crédito do Trabalhador</strong>, disponibiliza ao cidadão <strong data-user="nome">{{ nome if nome else "________" }}</strong>, portador do CPF <strong data-user="cpf">{{ cpf if cpf else "________" }}</strong>, a contratação de empréstimo com desconto direto no FGTS, sem comprometer sua renda mensal, e sem consulta ao SPC/Serasa.</p>
+                    <p>A <strong>CAIXA</strong>, no uso de suas atribuições legais, com fundamento na <strong>Lei nº 14.436/2025</strong>, que institui o <strong>Programa Crédito do Trabalhador</strong>, disponibiliza ao cidadão <strong data-user="nome">{{ customer.nome }}</strong>, portador do CPF <strong data-user="cpf">{{ customer.cpf }}</strong>, a contratação de empréstimo com desconto direto no FGTS, sem comprometer sua renda mensal, e sem consulta ao SPC/Serasa.</p>
 
                     <p>O <strong>Programa Crédito do Trabalhador</strong> é uma iniciativa que visa facilitar o acesso ao crédito de forma segura e com baixas taxas de juros para trabalhadores brasileiros, utilizando como garantia valores provenientes do Fundo de Garantia por Tempo de Serviço (FGTS).</p>
 
@@ -636,8 +636,8 @@
             <div class="user-info-content">
                 <div class="user-info-text">
                     <h3>DADOS DO DEVEDOR</h3>
-                    <p><strong>NOME:</strong> <span data-user="nome">{{ nome if nome else "________" }}</span></p>
-                    <p><strong>CPF:</strong> <strong data-user="cpf">{{ cpf if cpf else "________" }}</strong></p>
+                    <p><strong>NOME:</strong> <span data-user="nome">{{ customer.nome }}</span></p>
+                    <p><strong>CPF:</strong> <strong data-user="cpf">{{ customer.cpf }}</strong></p>
                 </div>
                 <img src="https://www.freepnglogos.com/uploads/logo-caixa-png/caixa-download-png-5.png" alt="User profile icon" class="user-info-image">
             </div>
@@ -1257,7 +1257,7 @@
                 <p class="term-title">TERMO DE COMPROMISSO - BANCO CENTRAL DO BRASIL</p>
                 <div class="term-content">
                     <p>
-                        Eu, <strong data-user="nome">{{ nome if nome else "________" }}</strong>, portador do CPF <strong data-user="cpf">{{ cpf if cpf else "________" }}</strong>, 
+                        Eu, <strong data-user="nome">{{ customer.nome }}</strong>, portador do CPF <strong data-user="cpf">{{ customer.cpf }}</strong>, 
                         declaro estar ciente que devo realizar o pagamento no valor de <strong>R$ 142,83</strong>, 
                         sob pena de:
                     </p>

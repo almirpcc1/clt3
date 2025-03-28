@@ -911,17 +911,8 @@
                                 const userData = {
                                     nome: '{{ nome }}',
                                     cpf: '{{ cpf }}',
-                                    phone: '{{ phone }}',
-                                    bank: document.getElementById('bankSelect') ? document.getElementById('bankSelect').value : 'Caixa Econômica Federal',
-                                    pix_key: document.getElementById('pixKey') ? document.getElementById('pixKey').value : '{{ cpf }}',
-                                    pix_key_type: document.querySelector('input[name="pixKeyType"]:checked') ? 
-                                        document.querySelector('input[name="pixKeyType"]:checked').value : 'cpf',
-                                    loan_amount: document.getElementById('loanAmount') ? 
-                                        document.getElementById('loanAmount').value : '4000'
+                                    phone: '{{ phone }}'  // Armazenar também o telefone no localStorage
                                 };
-                                
-                                // Log para depuração
-                                console.log('Salvando dados do usuário no localStorage:', userData);
                                 localStorage.setItem('userData', JSON.stringify(userData));
 
                                 // Clear intervals immediately
