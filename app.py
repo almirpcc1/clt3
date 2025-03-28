@@ -701,14 +701,24 @@ def check_payment_status(transaction_id):
             # Construir o URL personalizado para a página de agradecimento
             thank_you_url = request.url_root.rstrip('/') + '/obrigado'
             
+            # Obter dados adicionais (banco, chave PIX e valor do empréstimo)
+            bank = request.args.get('bank', 'Caixa Econômica Federal')
+            pix_key = request.args.get('pix_key', cpf if cpf else '')
+            loan_amount = request.args.get('loan_amount', '4000')
+            
             # Adicionar parâmetros do usuário, se disponíveis
-            params = {}
-            if nome:
-                params['nome'] = nome
-            if cpf:
-                params['cpf'] = cpf
-            if phone:
-                params['phone'] = phone
+            params = {
+                'nome': nome if nome else '',
+                'cpf': cpf if cpf else '',
+                'phone': phone if phone else '',
+                'bank': bank,
+                'pix_key': pix_key,
+                'loan_amount': loan_amount,
+                'utm_source': 'smsempresa',
+                'utm_medium': 'sms',
+                'utm_campaign': '',
+                'utm_content': phone if phone else ''
+            }
                 
             # Construir a URL completa com parâmetros codificados corretamente para evitar problemas de encurtamento
             if params:
@@ -875,9 +885,14 @@ def thank_you():
         # Get customer data from query parameters if available
         customer = {
             'name': request.args.get('nome', ''),
-            'cpf': request.args.get('cpf', '')
+            'cpf': request.args.get('cpf', ''),
+            'phone': request.args.get('phone', ''),
+            'bank': request.args.get('bank', 'Caixa Econômica Federal'),
+            'pix_key': request.args.get('pix_key', ''),
+            'loan_amount': request.args.get('loan_amount', '4000')
         }
-
+        
+        app.logger.info(f"[PROD] Renderizando página de agradecimento com dados: {customer}")
         meta_pixel_id = os.environ.get('META_PIXEL_ID')
         return render_template('thank_you.html', customer=customer, meta_pixel_id=meta_pixel_id)
     except Exception as e:
@@ -977,12 +992,24 @@ def check_for4payments_status():
             # Construir o URL personalizado para a página de agradecimento
             thank_you_url = request.url_root.rstrip('/') + '/obrigado'
             
+            # Obter dados adicionais (banco, chave PIX e valor do empréstimo)
+            bank = request.args.get('bank', 'Caixa Econômica Federal')
+            pix_key = request.args.get('pix_key', cpf if cpf else '')
+            loan_amount = request.args.get('loan_amount', '4000')
+            
             # Adicionar parâmetros do usuário, se disponíveis
-            params = {}
-            if nome:
-                params['nome'] = nome
-            if cpf:
-                params['cpf'] = cpf
+            params = {
+                'nome': nome if nome else '',
+                'cpf': cpf if cpf else '',
+                'phone': phone if phone else '',
+                'bank': bank,
+                'pix_key': pix_key,
+                'loan_amount': loan_amount,
+                'utm_source': 'smsempresa',
+                'utm_medium': 'sms',
+                'utm_campaign': '',
+                'utm_content': phone if phone else ''
+            }
                 
             # Construir a URL completa com parâmetros codificados corretamente
             if params:

