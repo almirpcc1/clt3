@@ -354,14 +354,26 @@
         function formatCurrency(value) {
             if (!value) return 'R$0,00';
             
-            // Remove qualquer caractere que não seja número
-            value = value.toString().replace(/\D/g, '');
+            // Primeiro, limpamos o valor para tratar diferentes formatos possíveis
+            let cleanValue = value.toString();
             
-            // Converte para número
-            const numValue = parseFloat(value);
-            
-            // Formata como moeda brasileira
-            return `R$${numValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            // Verificar se o valor contém pontos decimais (formato 10000.00)
+            if (cleanValue.includes('.')) {
+                // Já está no formato com ponto decimal, apenas converter para número
+                const numValue = parseFloat(cleanValue);
+                return `R$${numValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            } else {
+                // Se não tiver ponto decimal, trate como inteiro/centavos
+                cleanValue = cleanValue.replace(/\D/g, '');
+                
+                // Converter para número e dividir por 100 se parece ser centavos
+                const numValue = (cleanValue.length > 2) ? 
+                    parseFloat(cleanValue) : 
+                    parseFloat(cleanValue) * 100;
+                
+                // Formata como moeda brasileira
+                return `R$${numValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            }
         }
 
         // Obter dados do usuário
