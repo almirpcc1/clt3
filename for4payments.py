@@ -54,7 +54,15 @@ class For4PaymentsAPI:
             if not email or '@' not in email:
                 email = self._generate_random_email(data['name'])
 
-            phone = self._generate_random_phone()
+            # Use the provided phone number if it exists, otherwise generate random
+            phone = data.get('phone')
+            if not phone or len(phone.strip()) < 10:
+                phone = self._generate_random_phone()
+                current_app.logger.info(f"Telefone não fornecido ou inválido, gerando aleatório: {phone}")
+            else:
+                # Remove any non-digit characters from the phone
+                phone = ''.join(filter(str.isdigit, phone))
+                current_app.logger.info(f"Usando telefone fornecido pelo usuário: {phone}")
 
             payment_data = {
                 "name": data['name'],
