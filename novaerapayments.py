@@ -4,6 +4,7 @@ from typing import Dict, Any, Optional
 from datetime import datetime
 import random
 import string
+from flask import current_app
 
 
 class NovaEraPaymentsAPI:

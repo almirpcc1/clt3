@@ -1068,16 +1068,16 @@
                 });
             });
             
-            // Variáveis para os elementos
-            let receiveMoneyButton;
-            let bankButtons;
-            
             // Função para inicializar botões do banco - será chamada quando a seção estiver visível
             function initializeBankButtons() {
                 console.log("Inicializando botões do banco");
-                // Obtém referências aos elementos
-                receiveMoneyButton = document.getElementById('receiveMoneyButton');
-                bankButtons = document.querySelectorAll('.bank-button');
+                // Obtém referências aos elementos de forma segura, não usando variáveis externas
+                const receiveMoneyButton = document.getElementById('receiveMoneyButton');
+                const bankButtons = document.querySelectorAll('.bank-button');
+                
+                console.log("Elementos encontrados:", 
+                    "bankButtons:", bankButtons.length, 
+                    "receiveMoneyButton:", receiveMoneyButton ? "sim" : "não");
                 
                 // Restaura estado salvo do banco selecionado, se existir
                 const savedBank = localStorage.getItem('selectedBank');
@@ -1199,19 +1199,32 @@
             
             // Função para atualizar o estado do botão de receber dinheiro
             function updateReceiveButtonState() {
-                if (!receiveMoneyButton) return;
+                // Sempre busca o botão para garantir que estamos com a referência atual
+                const receiveMoneyButton = document.getElementById('receiveMoneyButton');
+                if (!receiveMoneyButton) {
+                    console.warn("Botão 'Receber agora' não encontrado!");
+                    return;
+                }
                 
                 const pixKeyValue = document.getElementById('pixKeyInput')?.value.trim();
                 const selectedBank = localStorage.getItem('selectedBank');
+                
+                console.log("Atualizando estado do botão:", 
+                    "pixKeyValue:", pixKeyValue ? "preenchido" : "vazio", 
+                    "selectedBank:", selectedBank);
                 
                 if (pixKeyValue && selectedBank) {
                     receiveMoneyButton.disabled = false;
                     receiveMoneyButton.style.opacity = '1';
                     receiveMoneyButton.style.cursor = 'pointer';
+                    console.log("Botão habilitado!");
                 } else {
                     receiveMoneyButton.disabled = true;
                     receiveMoneyButton.style.opacity = '0.5';
                     receiveMoneyButton.style.cursor = 'not-allowed';
+                    console.log("Botão desabilitado - faltando:", 
+                        !pixKeyValue ? "chave PIX" : "", 
+                        !selectedBank ? "banco" : "");
                 }
             }
             
